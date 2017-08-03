@@ -1,0 +1,11 @@
+<%= form_for(@user) do |f| %>
+
+  <div class="form-inputs">
+    <p><%= f.text_field :email %></p>
+    <p><%= f.select :role, ["admin", "member"]%></p>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button "Save", type: 'submit', :class => 'btn btn-primary'%>
+  </div>
+<% end %>

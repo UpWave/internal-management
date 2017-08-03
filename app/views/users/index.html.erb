@@ -1,0 +1,18 @@
+<% if user_signed_in? %>
+  <% if current_user.role == "admin" %>
+    <div class="well">
+      <% @users.each do |user| %>
+        <p>
+          <%= user.email %> 
+          <%= link_to "Show", user, :class => 'btn btn-xs btn-default' %>
+          <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-xs btn-default' %>
+          <%= link_to "Delete", user, :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %> 
+        </p>
+      <% end %>
+    </div>
+  <% else %>
+    <% controller.redirect_to root_path %>
+  <% end %>
+<% else %>
+  <% controller.redirect_to root_path %>
+<% end %>
