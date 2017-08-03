@@ -40,6 +40,7 @@ gem 'autoprefixer-rails'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'figaro'
+gem 'pundit'
 
 
 
