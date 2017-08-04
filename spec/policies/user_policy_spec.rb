@@ -20,4 +20,29 @@ describe UserPolicy do
       expect(subject).to permit(admin, other_user)
     end
   end
+
+  permissions :update? do
+    it 'prevents other users from updating' do
+      expect(subject).not_to permit(current_user, other_user)
+    end
+
+    it 'allows owner to update' do
+      expect(subject).to permit(current_user, current_user)
+    end
+
+    it 'allown an admin to update' do
+      expect(subject).to permit(admin, other_user)
+    end
+  end
+
+  permissions :destroy? do
+    it 'prevents other users to delete' do
+      expect(subject).not_to permit(current_user, other_user)
+    end 
+
+    it 'allows an admin to delete any user' do
+      expect(subject).to permit(admin, other_user)
+    end
+  end
+
 end
