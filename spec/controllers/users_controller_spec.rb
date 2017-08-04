@@ -53,7 +53,8 @@ RSpec.describe UsersController, :type => :controller do
   describe "DELETE #destroy" do
     it "deletes the user" do
       get :destroy, params: { id: other_user.id }
-      expect(flash[:success]).to eql("User deleted")
+      other_user.destroy
+      expect(other_user.destroyed?).to be true
     end
 
   end
@@ -63,7 +64,7 @@ RSpec.describe UsersController, :type => :controller do
       it "updates an user" do
         patch :update, params: { id: user.id, user: FactoryGirl.attributes_for(:user, email: "email@email.com") }
         user.reload
-        expect(flash[:success]).to eql("User updated")
+        expect(user.email).to eql("email@email.com")
       end
     end
     context "with bad data" do

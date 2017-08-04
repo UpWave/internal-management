@@ -1,7 +1,7 @@
 <%= form_for(@user) do |f| %>
   <div class="form-inputs">
     <p><%= f.text_field :email %></p>
-    <p><%= f.select(:role, User.roles.keys.map {|role| [role.titleize,role]})%></p>
+    <p><%= f.select(:role, User.roles.keys.map { |role| [role.titleize,role] })%></p>
   </div>
   <div class="form-actions">
     <%= f.button "Save", type: 'submit', :class => 'btn btn-primary'%>
