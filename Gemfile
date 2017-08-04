@@ -41,8 +41,11 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'figaro'
 gem 'pundit'
-
-
+gem 'rspec'
+gem 'rspec-rails'
+gem 'rails-helper'
+gem 'ffaker'
+gem 'factory_girl'
 
 
 group :development, :test do
