@@ -1,0 +1,13 @@
+<div class="well">
+  <% @users.each do |user| %>
+    <p>
+    <%= user.email %> 
+    <% if current_user.admin? %>
+      <%= link_to "Show", user, :class => 'btn btn-xs btn-default' %>
+      <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-xs btn-default' %>
+      <%= link_to "Delete", user, :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
+    <% end %> 
+    </p>
+  <% end %>
+  <%= link_to 'Back', root_path, :class => 'btn btn-xs btn-default' %>
+</div>

@@ -12,8 +12,8 @@ describe UserPolicy do
       expect(subject).not_to permit(current_user, other_user)    
     end
 
-    it 'allows owner to see profile' do
-      expect(subject).to permit(current_user, current_user)
+    it 'prevents owner to see profile' do
+      expect(subject).not_to permit(current_user, current_user)
     end
 
     it 'allows an admin to see profile' do
@@ -26,8 +26,8 @@ describe UserPolicy do
       expect(subject).not_to permit(current_user, other_user)
     end
 
-    it 'allows owner to update' do
-      expect(subject).to permit(current_user, current_user)
+    it 'prevents owner to update' do
+      expect(subject).not_to permit(current_user, current_user)
     end
 
     it 'allown an admin to update' do

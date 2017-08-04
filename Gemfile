@@ -41,11 +41,6 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'figaro'
 gem 'pundit'
-gem 'rspec'
-gem 'rspec-rails'
-gem 'rails-helper'
-gem 'ffaker'
-gem 'factory_girl'
 
 
 group :development, :test do
@@ -54,6 +49,12 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'rails-helper'
+  gem 'ffaker'
+  gem 'factory_girl'
+  gem 'rails-controller-testing'
 end
 
 group :development do
