@@ -1,0 +1,20 @@
+<div class="well">
+  <p>Your timelogs:</p>
+  <% @timelog.each do |timelog| %>
+    <div class="well">
+      <p><strong>Start time: <%= timelog.start_time %></strong></p>
+      <p><strong>Duration: <%= timelog.duration %> min.</strong></p>
+    </div>
+  <% end %>
+  <% if @user %>
+    <%= form_for([@user, @user.timelogs.build]) do |f| %>
+      <div class="form-inputs">
+        <p><%= f.hidden_field :user_id, value: current_user.id %></p>
+        <p><%= f.hidden_field :start_time, value: DateTime.now %></p>
+        <p><%= f.number_field :duration %></p>
+        <p><%= f.submit "Create timelog" %></p>
+      </div>
+    <% end %>
+  <% end %> 
+  <%= link_to 'Back', root_path, :class => 'btn btn-xs btn-default' %>
+</div>
