@@ -25,6 +25,16 @@ class TimelogsController < ApplicationController
   end
 
   def destroy
+    @user = User.find(params[:user_id])
+    @timelog = Timelog.find(params[:id])
+    if @timelog.destroy
+      flash[:success] = "Timelog deleted"
+      redirect_to user_timelogs_path(@user)
+    else
+      flash[:error] = "Something went wrong"
+      redirect_to user_timelogs_path(@user)
+    end
+
   end
 
 

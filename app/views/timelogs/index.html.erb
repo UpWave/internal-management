@@ -4,6 +4,7 @@
     <div class="well">
       <p><strong>Start time: <%= timelog.start_time %></strong></p>
       <p><strong>Duration: <%= timelog.duration %> min.</strong></p>
+      <%= link_to 'Destroy', [timelog.user, timelog], :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
     </div>
   <% end %>
   <% if @user %>
