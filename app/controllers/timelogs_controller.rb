@@ -1,23 +1,20 @@
 class TimelogsController < ApplicationController
-  before_action :load_user
 
   def index
-    @timelog = Timelog.where(user_id: current_user.id)
+    @timelogs = current_user.timelogs
   end
 
   def create
-    @timelog = @user.timelogs.create(timelog_params)
+    @timelog = current_user.timelogs.build(timelogs_params)
     if @timelog.save
-      redirect_to user_timelogs_path(@user)
+      redirect_to user_timelogs_path
+    else
+      render :new
     end
-
   end
 
   def update
-    @timelog = Timelog.find(params[:id])
-    if params[:timelog][:duration] == ""
-      params[:timelog][:duration] = 0
-    end
+    @timelog = Timelog.find(params[:format])
     @timelog.duration = params[:timelog][:duration]
     if @timelog.save
       flash[:success] = "Duration updated"
@@ -33,7 +30,7 @@ class TimelogsController < ApplicationController
   end
 
   def destroy
-    @timelog = Timelog.find(params[:id])
+    @timelog = Timelog.find(params[:format])
     if @timelog.destroy
       flash[:success] = "Timelog deleted"
       redirect_to user_timelogs_path(@user)
@@ -46,16 +43,8 @@ class TimelogsController < ApplicationController
 
 
   private
-    def timelog_params
-      if params[:timelog][:duration] == ""
-        params[:timelog][:duration] = 0
-      end
+    def timelogs_params
       params.require(:timelog).permit(:start_time, :duration, :user_id)
     end
-
-    def load_user
-      @user = User.find(params[:user_id])
-    end
-
 
 end

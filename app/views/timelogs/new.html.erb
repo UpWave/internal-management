@@ -1,0 +1,17 @@
+<%= form_for([current_user, @timelog]) do |f| %>
+  <% if @timelog.errors.any? %>
+    <div class="error_explanation">
+      <ul>
+      <% @timelog.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-inputs">
+    <p><%= f.hidden_field :user_id, value: current_user.id %></p>
+    <p><%= f.datetime_select :start_time, :order => [:month, :day, :year, :hour, :minute] %></p>
+    <p><%= f.number_field :duration %></p>
+    <p><%= f.submit "Create timelog" %></p>
+  </div>
+<% end %>
