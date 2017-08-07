@@ -1,4 +1,5 @@
 class TimelogsController < ApplicationController
+  before_action :authenticate_user!
 
   def index
     @timelogs = current_user.timelogs
