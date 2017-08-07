@@ -18,6 +18,19 @@ class TimelogsController < ApplicationController
   end
 
   def update
+    @user = User.find(params[:user_id])
+    @timelog = Timelog.find(params[:id])
+    if params[:timelog][:duration] == ""
+      params[:timelog][:duration] = 0
+    end
+    @timelog.duration = params[:timelog][:duration]
+    if @timelog.save
+      flash[:success] = "Duration updated"
+      redirect_to user_timelogs_path(@user)
+    else
+      flash[:error] = "Something went wrong"
+      redirect_to user_timelogs_path(@user)
+    end
   end
 
   def new
@@ -40,6 +53,9 @@ class TimelogsController < ApplicationController
 
   private
     def timelog_params
+      if params[:timelog][:duration] == ""
+        params[:timelog][:duration] = 0
+      end
       params.require(:timelog).permit(:start_time, :duration, :user_id)
     end
 

@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20170807145023) do
 
   create_table "timelogs", force: :cascade do |t|
     t.datetime "start_time"
-    t.integer "duration"
+    t.integer "duration", null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

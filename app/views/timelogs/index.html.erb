@@ -1,9 +1,22 @@
 <div class="well">
   <p>Your timelogs:</p>
-  <% @timelog.each do |timelog| %>
+  <% @timelog.each_with_index do |timelog, index| %>
     <div class="well">
       <p><strong>Start time: <%= timelog.start_time %></strong></p>
       <p><strong>Duration: <%= timelog.duration %> min.</strong></p>
+      <% string = "updateDuration#{index}" %>
+      <button class="btn btn-xs btn-primary" type="button" data-toggle="collapse" data-target=<%="#"+string %> aria-expanded="false" aria-controls=<%= string %>>
+      Update duration
+      </button>
+      <div class="collapse" id=<%= string %>>
+        <div class="well">
+          <%= form_for [timelog.user, timelog] do |f| %>
+            <p><%= f.number_field :duration %></p>
+            <p><%= f.submit "Update" %></p>
+          <% end %>
+        </div>
+      </div>
+      <br>
       <%= link_to 'Destroy', [timelog.user, timelog], :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
     </div>
   <% end %>
