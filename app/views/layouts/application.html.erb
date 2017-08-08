@@ -23,6 +23,9 @@
             </li>
           <% end %>
           <li>
+            <%= link_to('Timelogs', user_timelogs_path(current_user)) %>        
+          </li>
+          <li>
             <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
           </li>
         <% else %>

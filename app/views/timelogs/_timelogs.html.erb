@@ -1,0 +1,20 @@
+<% @timelogs.each_with_index do |timelog, index| %>
+  <div class="well">
+    <p><strong>Start time: <%= timelog.start_time %></strong></p>
+    <p><strong>Duration: <%= timelog.duration %> min.</strong></p>
+    <button class="btn btn-xs btn-primary" type="button" data-toggle="collapse" data-target=<%= sharp_update_string(index) %> aria-expanded="false" aria-controls=<%= base_update_string(index) %>>
+      Edit timelog
+    </button>
+    <div class="collapse" id=<%= base_update_string(index) %>>
+      <div class="well">
+        <%= form_for [timelog.user, timelog] do |f| %>
+          <p><%= f.datetime_select :start_time, :order => [:month, :day, :year, :hour, :minute] %></p>
+          <p><%= f.number_field :duration %></p>
+          <p><%= f.submit "Update" %></p>
+        <% end %>
+      </div>
+    </div>
+    <br>
+    <%= link_to 'Destroy', [timelog.user, timelog], class: 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
+<% end %>
