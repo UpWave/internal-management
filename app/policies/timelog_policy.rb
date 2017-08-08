@@ -15,17 +15,15 @@ class TimelogPolicy
   end
 
   def update?
-    current_user && timelog.try(:user_id) == current_user.id 
+    current_user.admin? || (timelog.try(:user_id) == current_user.id) 
   end
 
   def destroy?
-    current_user && timelog.try(:user_id) == current_user.id
+    current_user.admin? || (timelog.try(:user_id) == current_user.id)
   end
 
   def new?
     current_user
   end
-
-
 
 end
