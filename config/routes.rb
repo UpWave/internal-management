@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :timelogs 
   end
   get 'pages/index'
+  get '/auth/:provider/callback', to: 'sessions#create'
   root to: "pages#index"
+  resources :trello
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

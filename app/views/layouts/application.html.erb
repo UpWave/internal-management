@@ -17,6 +17,7 @@
           <p>
             <%= "Signed in as " %> <%= link_to("#{current_user.email}", edit_user_registration_path(current_user))  %> 
           </p>
+          <%= link_to 'Connect to Trello', '/auth/trello' %>
           <% if current_user.admin? %>      
             <li>
               <%= link_to "Users", users_path %>

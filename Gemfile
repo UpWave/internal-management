@@ -42,6 +42,8 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'figaro'
 gem 'pundit'
+gem 'ruby-trello'
+gem 'omniauth-trello'
 
 
 group :development, :test do
