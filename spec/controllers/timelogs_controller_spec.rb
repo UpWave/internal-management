@@ -10,8 +10,7 @@ RSpec.describe TimelogsController, type: :controller do
   let(:admin) { FactoryGirl.create(:user, role: 'admin') }
   let(:other_user) { FactoryGirl.create(:user) }
   
-  describe "GET #index" do
-    
+  describe "GET #index" do    
     it "renders the index template" do
       get :index, params: { user_id: user.id }
       expect(response).to render_template("index")
@@ -23,11 +22,9 @@ RSpec.describe TimelogsController, type: :controller do
       get :index, params: { user_id: user.id }
       expect(assigns[:timelogs].size).to eq 5
     end
-
   end
   
   describe "GET #create" do
-     
     it "creates timelog with valid data" do
       timelog = FactoryGirl.build(:timelog, user_id: user.id)
       expect{
@@ -63,12 +60,10 @@ RSpec.describe TimelogsController, type: :controller do
       expect{
         get :destroy, params: { id: admin.id, format: timelog.id }
         }.to change(Timelog, :count).by(-1)
-    end
-    
+    end   
   end
 
   describe "PATCH #update" do
-    
     it "updates your timelog with valid data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       other_timelog = FactoryGirl.create(:timelog, user_id: user.id)
@@ -108,7 +103,6 @@ RSpec.describe TimelogsController, type: :controller do
       timelog.reload
       expect(timelog.start_time).to_not eql(bad_timelog.start_time)
     end
-    
   end
   
 end

@@ -20,11 +20,9 @@ RSpec.describe UsersController, :type => :controller do
       get :index
       expect(response).to render_template("index")
     end
-
   end
 
   describe "GET #show" do
-
     it "allows authenticated access" do
       get :show,  params: { id: user.id }
       expect(response).to be_success
@@ -34,7 +32,6 @@ RSpec.describe UsersController, :type => :controller do
       get :show, params: { id: user.id }
       expect(response).to render_template("show")
     end
-  
   end
 
   describe "GET #edit" do
@@ -47,7 +44,6 @@ RSpec.describe UsersController, :type => :controller do
       get :edit, params: { id: user.id }
       expect(response).to render_template("edit")
     end
-
   end
 
   describe "DELETE #destroy" do
@@ -56,7 +52,6 @@ RSpec.describe UsersController, :type => :controller do
       other_user.destroy
       expect(other_user.destroyed?).to be true
     end
-
   end
 
   describe "PATCH #update" do
@@ -67,6 +62,7 @@ RSpec.describe UsersController, :type => :controller do
         expect(user.email).to eql("email@email.com")
       end
     end
+
     context "with bad data" do
       it "updates an user" do
         patch :update, params: { id: user.id, user: FactoryGirl.attributes_for(:user, email: "sometext") }
@@ -74,7 +70,6 @@ RSpec.describe UsersController, :type => :controller do
         expect(flash[:error]).to eql("Something went wrong")
       end
     end
-    
   end
-
+  
 end

@@ -25,5 +25,5 @@ class TimelogPolicy
   def new?
     current_user
   end
-
+  
 end

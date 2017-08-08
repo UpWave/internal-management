@@ -6,5 +6,5 @@ module TimelogsHelper
   def sharp_update_string(index)
     "#update#{index}"
   end
-
+  
 end

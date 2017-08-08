@@ -50,5 +50,5 @@ class TimelogsController < ApplicationController
       @timelog = Timelog.find(params[:format])
       authorize @timelog
     end
-
+    
 end
