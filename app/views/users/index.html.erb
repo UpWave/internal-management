@@ -1,4 +1,4 @@
 <div class="well">
-  <%= render 'users/users' %>
+  <%= render @users || "There are no users yet." %>
   <%= link_to 'Back', root_path, :class => 'btn btn-xs btn-default' %>
 </div>
