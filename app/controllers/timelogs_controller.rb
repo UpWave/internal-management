@@ -7,7 +7,9 @@ class TimelogsController < ApplicationController
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
+    authorize @timelog
     if @timelog.save
+      flash[:success] = "Timelog created"
       redirect_to user_timelogs_path
     else
       render :new
@@ -16,6 +18,7 @@ class TimelogsController < ApplicationController
 
   def update
     @timelog = Timelog.find(params[:format])
+    authorize @timelog
     if @timelog.update(timelogs_params)
       flash[:success] = "Duration updated"
       redirect_to user_timelogs_path(current_user)
@@ -31,6 +34,7 @@ class TimelogsController < ApplicationController
 
   def destroy
     @timelog = Timelog.find(params[:format])
+    authorize @timelog
     if @timelog.destroy
       flash[:success] = "Timelog deleted"
       redirect_to user_timelogs_path(current_user)
