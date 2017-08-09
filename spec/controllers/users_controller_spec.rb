@@ -16,10 +16,13 @@ RSpec.describe UsersController, :type => :controller do
       expect(response).to be_success
     end
 
-    it "renders the index template" do
+    it "renders the index template with all users" do
+      5.times do FactoryGirl.create(:user)
+      end
       get :index
       expect(response).to render_template("index")
-    end
+      expect(assigns[:users].size).to eq 6 #admin user + 5 users created above 
+      end
   end
 
   describe "GET #show" do
@@ -28,9 +31,10 @@ RSpec.describe UsersController, :type => :controller do
       expect(response).to be_success
     end
     
-    it "renders the show template" do
-      get :show, params: { id: user.id }
+    it "renders the show template with user" do
+      get :show, params: { id: other_user.id }
       expect(response).to render_template("show")
+      expect(assigns[:user]).to eq(other_user)
     end
   end
 
@@ -43,6 +47,7 @@ RSpec.describe UsersController, :type => :controller do
     it "renders the edit template" do
       get :edit, params: { id: user.id }
       expect(response).to render_template("edit")
+      expect(assigns[:user]).to eq(user)
     end
   end
 
