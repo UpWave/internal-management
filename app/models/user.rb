@@ -3,7 +3,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
          :validatable, :omniauthable
-  after_create :first_identity
+  #after_create :first_identity
 
   has_many :timelogs, dependent: :destroy
   has_many :identities, dependent: :destroy
@@ -22,10 +22,10 @@ class User < ApplicationRecord
   # end
   
 
-  def first_identity
-    self.identities.first_or_create!(:uid => self.uid, :provider => self.provider, :user_id => self.id)
-    Identity.where(:user_id => nil).destroy_all
-  end
+  # def first_identity
+  #   self.identities.first_or_create!(:uid => self.uid, :provider => self.provider, :user_id => self.id)
+  #   Identity.where(:user_id => nil).destroy_all
+  # end
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|

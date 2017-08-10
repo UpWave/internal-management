@@ -25,6 +25,15 @@
           <li>
             <%= link_to('Timelogs', user_timelogs_path(current_user)) %>        
           </li>
+          <% if current_user.trello? %>
+            <li>
+              <%= link_to 'Trello', root_path %>
+            </li>
+          <% else %>
+            <li>
+              <%= link_to 'Connect to Trello', user_trello_omniauth_authorize_path %>
+            </li>
+          <% end %>
           <li>
             <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
           </li>
@@ -38,13 +47,7 @@
           <li>
             <%= link_to 'Sign In with Google', user_google_oauth2_omniauth_authorize_path %>
           </li>
-          <li>
-            <%= link_to 'Sign In with Facebook', user_facebook_omniauth_authorize_path %>
-          </li>
-          <li>
-            <%= link_to 'Sign In with Trello', user_trello_omniauth_authorize_path %>
-          </li>
-        <% end %>
+          <% end %>
       </ul>
     </div>
     <%= yield %>
