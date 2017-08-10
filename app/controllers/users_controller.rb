@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:email, :role, :trello_token)
+      params.require(:user).permit(:email, :role)
     end
 
     def load_user

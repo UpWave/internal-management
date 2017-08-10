@@ -12,7 +12,6 @@ Devise.setup do |config|
 
   config.omniauth :trello, ENV['TRELLO_DEVELOPER_PUBLIC_KEY'], ENV['TRELLO_SECRET'], app_name: "Internal Managment App", scope: 'read,write,account', expiration: 'never', setup: true
 
-  config.omniauth :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], scope: "email", setup: true
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class

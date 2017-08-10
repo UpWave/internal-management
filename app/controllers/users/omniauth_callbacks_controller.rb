@@ -1,72 +1,54 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
-    @user = User.from_omniauth(request.env['omniauth.auth'])
-    if @user.persisted?
-      flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
-      sign_in_and_redirect @user, event: :authentication
+    auth = request.env["omniauth.auth"]
+    if current_user
+      @identity = Identity.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+      if @identity.nil?
+        Identity.create(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+        redirect_to root_path, notice: "Successfully linked Google account!"
+      else
+        redirect_to root_path, notice: "Google account already linked!"
+      end
     else
-      session['devise.google_data'] = request.env['omniauth.auth'].except(:extra) 
-      redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
+      @user = User.from_omniauth(request.env['omniauth.auth'])
+      if @user.persisted?
+        flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
+        sign_in_and_redirect @user, event: :authentication
+        if Identity.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id).nil?
+          Identity.create(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+        end     
+      else
+        session['devise.google_data'] = request.env['omniauth.auth'].except(:extra) 
+        redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
+      end
     end
   end
 
   def trello
     auth = request.env["omniauth.auth"]
-    @identity = Identity.all.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
-    if @identity.nil?
-      @identity = Identity.create(:uid => auth.uid, :provider => auth.provider, :trello_auth_token => auth.extra.access_token.token, :trello_auth_secret => auth.extra.access_token.secret, :user_id => current_user.id)
-      current_user.update_attribute(:trello, auth.uid)
-      redirect_to root_path, notice: "Successfully linked Trello account!"
+    if current_user
+      @identity = Identity.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+      if @identity.nil?
+        Identity.create(:uid => auth.uid, :provider => auth.provider, :access_token => auth.extra.access_token.token, :secret_token => auth.extra.access_token.secret, :user_id => current_user.id)
+        redirect_to root_path, notice: "Successfully linked Trello account!"
+      else
+        redirect_to root_path, notice: "Trello account already linked!"
+      end
     else
-      redirect_to root_path, notice: "Trello account already linked!"
+      @user = User.from_omniauth(request.env['omniauth.auth'])
+      if @user.persisted?
+        flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Trello'
+        sign_in_and_redirect @user, event: :authentication
+        if Identity.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id).nil?
+          Identity.create(:uid => auth.uid, :provider => auth.provider, :access_token => auth.extra.access_token.token, :secret_token => auth.extra.access_token.secret, :user_id => current_user.id)     
+        else 
+          Identity.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id).update_attributes(:access_token => auth.extra.access_token.token, :secret_token => auth.extra.access_token.secret)
+        end
+      else
+        session['devise.trello_data'] = request.env['omniauth.auth'].except(:extra) 
+        redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
+      end
     end
   end
-
-  # def all
-  #   auth = request.env["omniauth.auth"]
-  #   # Find an identity here
-  #   @identity = Identity.all.find_by(:uid => auth.uid, :provider => auth.provider)
-
-  #   if @identity.nil?
-  #   # If no identity was found, create a brand new one here
-  #     @identity = Identity.create(:uid => auth.uid, :provider => auth.provider)
-  #   end
-  #   if signed_in?
-  #     if @identity.user == current_user
-  #       # User is signed in so they are trying to link an identity with their
-  #       # account. But we found the identity and the user associated with it 
-  #       # is the current user. So the identity is already associated with 
-  #       # this user. So let's display an error message.
-  #       redirect_to user_url, notice: "Already linked that account!"
-  #     else
-  #       # The identity is not associated with the current_user so lets 
-  #       # associate the identity
-  #       @identity.user = current_user
-  #       @identity.save()
-  #       redirect_to user_url, notice: "Successfully linked that account!"
-  #     end
-  #   else
-  #     if @identity.user.present?
-  #       # The identity we found had a user associated with it so let's 
-  #       # just log them in here
-  #       user = @identity.user
-  #       flash.notice = "Signed in!"
-  #       sign_in_and_redirect user
-  #     else
-  #       # Logic for the case when we actually need to create a new user
-  #         user = User.from_omniauth(auth)
-  #         if user.persisted?
-  #           flash.notice = "Signed in!"
-  #           sign_in_and_redirect user
-  #         else
-  #           session["devise.user_attributes"] = user.attributes
-  #           redirect_to new_user_registration_url
-  #         end
-  #       end
-  #     end
-  #   end
-  # alias_method :facebook, :all
-  # alias_method :google_oauth2, :all 
-  # alias_method :trello, :all 
 
 end

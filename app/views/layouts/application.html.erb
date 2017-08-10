@@ -25,13 +25,21 @@
           <li>
             <%= link_to('Timelogs', user_timelogs_path(current_user)) %>        
           </li>
-          <% if current_user.trello? %>
+          <% if Identity.find_by(:provider => "google_oauth2", :user_id => current_user.id) && Identity.find_by(:provider => "trello", :user_id => current_user.id) %>
+          <% elsif Identity.find_by(:provider => "trello", :user_id => current_user.id) %>
             <li>
-              <%= link_to 'Trello', trello_index_path %>
+              <%= link_to 'Connect to Google', user_google_oauth2_omniauth_authorize_path %>
+            </li>
+          <% elsif Identity.find_by(:provider => "google_oauth2", :user_id => current_user.id) %>
+            <li>
+              <%= link_to 'Connect to Trelo', user_trello_omniauth_authorize_path %>
             </li>
           <% else %>
             <li>
-              <%= link_to 'Connect to Trello', user_trello_omniauth_authorize_path %>
+              <%= link_to 'Connect to Google', user_google_oauth2_omniauth_authorize_path %>
+            </li>
+            <li>
+              <%= link_to 'Connect to Trelo', user_trello_omniauth_authorize_path %>
             </li>
           <% end %>
           <li>
@@ -46,6 +54,9 @@
           </li>
           <li>
             <%= link_to 'Sign In with Google', user_google_oauth2_omniauth_authorize_path %>
+          </li>
+          <li>
+            <%= link_to 'Sign In with Trello', user_trello_omniauth_authorize_path %>
           </li>
           <% end %>
       </ul>
