@@ -3,7 +3,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"]
     if current_user
       unless current_user.has_google?
-        User.connect_google(auth, current_user)
+        current_user.connect_google(auth)
         redirect_to root_path, notice: "Successfully linked Google account!"
       else
         redirect_to root_path, notice: "Google account already linked!"
@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
         sign_in_and_redirect @user, event: :authentication
         unless current_user.has_google?
-          User.connect_google(auth, current_user)
+          current_user.connect_google(auth)
         end
       else
         session['devise.google_data'] = auth.except(:extra) 
@@ -27,7 +27,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"]
     if current_user
       unless current_user.has_trello?
-        User.connect_trello(auth, current_user)
+        current_user.connect_trello(auth)
         redirect_to root_path, notice: "Successfully linked Trello account!"
       else
         redirect_to root_path, notice: "Trello account already linked!"
@@ -38,9 +38,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Trello'
         sign_in_and_redirect @user, event: :authentication
         if current_user.has_trello?
-          User.update_trello(auth, current_user)    
+          current_user.update_trello(auth)    
         else 
-          User.connect_trello(auth, current_user)
+          current_user.connect_trello(auth)
         end
       else
         session['devise.trello_data'] = auth 
