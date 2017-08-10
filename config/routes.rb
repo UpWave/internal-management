@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   end
   get 'pages/index'
   root to: "pages#index"
-
+  resources :trello
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

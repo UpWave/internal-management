@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"]
     @identity = Identity.all.find_by(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
     if @identity.nil?
-      @identity = Identity.create(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+      @identity = Identity.create(:uid => auth.uid, :provider => auth.provider, :trello_auth_token => auth.extra.access_token.token, :trello_auth_secret => auth.extra.access_token.secret, :user_id => current_user.id)
       current_user.update_attribute(:trello, auth.uid)
       redirect_to root_path, notice: "Successfully linked Trello account!"
     else

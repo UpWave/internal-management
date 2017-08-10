@@ -1,0 +1,8 @@
+<div class="well">
+  <p>Your boards:</p>
+  <% @me.boards.each do |board| %>
+    <%= link_to("#{board.name}", board.url) %><br>
+  <% end %>
+  <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
+  <%= link_to 'Back', root_path, class: 'btn btn-xs btn-default' %>
+</div>
