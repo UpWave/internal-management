@@ -15,6 +15,8 @@ class TrelloController < ApplicationController
     #ouath_token and secret it's extra access tokens given by omniauth
 
     @me = Trello::Member.find(current_user.trello)
+    @boards = @me.boards
+    @cards = @me.cards
   end
 
 end

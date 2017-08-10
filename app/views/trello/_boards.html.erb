@@ -1,0 +1,5 @@
+<% @boards.each do |board| %>
+  <p>
+    <%= link_to("#{board.name}", board.url) %> 
+  </p>
+<% end %>

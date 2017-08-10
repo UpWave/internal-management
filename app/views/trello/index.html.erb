@@ -1,8 +1,17 @@
 <div class="well">
-  <p>Your boards:</p>
-  <% @me.boards.each do |board| %>
-    <%= link_to("#{board.name}", board.url) %><br>
-  <% end %>
-  <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
+  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#boards" aria-expanded="false" aria-controls="boards">
+    My boards
+  </button>
+  <br>
+  <div class="collapse" id="boards">
+    <%= render 'trello/boards' || "There are no boards yet." %>
+  </div>
+  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#cards" aria-expanded="false" aria-controls="cards">
+    My cards
+  </button>
+  <br>
+  <div class="collapse" id="cards">
+    <%= render 'trello/cards' || "There are no cards yet." %>
+  </div>
   <%= link_to 'Back', root_path, class: 'btn btn-xs btn-default' %>
 </div>
