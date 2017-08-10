@@ -25,22 +25,17 @@
           <li>
             <%= link_to('Timelogs', user_timelogs_path(current_user)) %>        
           </li>
-          <% if current_user.has_all? %>
-          <% elsif current_user.has_trello? %>
-            <li>
-              <%= link_to 'Connect to Google', user_google_oauth2_omniauth_authorize_path %>
-            </li>
-          <% elsif current_user.has_google? %>
-            <li>
-              <%= link_to 'Connect to Trelo', user_trello_omniauth_authorize_path %>
-            </li>
-          <% else %>
-            <li>
-              <%= link_to 'Connect to Google', user_google_oauth2_omniauth_authorize_path %>
-            </li>
-            <li>
-              <%= link_to 'Connect to Trelo', user_trello_omniauth_authorize_path %>
-            </li>
+          <% unless current_user.has_all? %>
+            <% unless current_user.has_google? %>
+              <li>
+                <%= link_to 'Connect to Google', user_google_oauth2_omniauth_authorize_path %>
+              </li>
+            <% end %>
+            <% unless current_user.has_trello? %>
+              <li>
+                <%= link_to 'Connect to Trelo', user_trello_omniauth_authorize_path %>
+              </li>
+            <% end %>
           <% end %>
           <li>
             <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
