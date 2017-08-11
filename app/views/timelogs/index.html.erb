@@ -1,6 +1,9 @@
 <div class="well">
   <% if current_user.has_trello? %>
-    <p>Your timelogs:</p>
+    <h3>Timelogs</h3>
+    Filter by:<%= link_to "Start time", user_timelogs_path(:filter=>"start_time") %>
+    <%= link_to "Duration", user_timelogs_path(:filter=>"duration") %>
+    <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %><br>
     <%= render 'timelogs/timelogs' %>
     <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
   <% else %>
