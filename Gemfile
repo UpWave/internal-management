@@ -38,10 +38,11 @@ gem 'pg'
 gem 'jquery-rails'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
-gem 'omniauth'
+gem 'omniauth-trello'
 gem 'omniauth-google-oauth2'
 gem 'figaro'
 gem 'pundit'
+gem 'ruby-trello'
 
 
 group :development, :test do

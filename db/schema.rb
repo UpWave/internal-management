@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170808211127) do
+ActiveRecord::Schema.define(version: 20170811152958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "identities", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "provider"
+    t.string "access_token"
+    t.string "refresh_token"
+    t.string "secret_token"
+    t.string "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_identities_on_user_id"
+  end
 
   create_table "timelogs", force: :cascade do |t|
     t.datetime "start_time"
@@ -21,6 +33,7 @@ ActiveRecord::Schema.define(version: 20170808211127) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "trello_card", null: false
     t.index ["user_id"], name: "index_timelogs_on_user_id"
   end
 
@@ -37,12 +50,11 @@ ActiveRecord::Schema.define(version: 20170808211127) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
-    t.string "uid"
     t.integer "role", default: 1, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "identities", "users"
   add_foreign_key "timelogs", "users"
 end

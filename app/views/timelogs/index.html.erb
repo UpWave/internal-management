@@ -1,6 +1,10 @@
 <div class="well">
-  <p>Your timelogs:</p>
-  <%= render 'timelogs/timelogs' %>
-  <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
+  <% if current_user.has_trello? %>
+    <p>Your timelogs:</p>
+    <%= render 'timelogs/timelogs' %>
+    <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
+  <% else %>
+    <h3>To continue, please connect your <%= link_to 'Trello', user_trello_omniauth_authorize_path %> account</h3>
+  <% end %>
   <%= link_to 'Back', root_path, class: 'btn btn-xs btn-default' %>
 </div>

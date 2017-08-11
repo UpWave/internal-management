@@ -1,21 +1,27 @@
 class User < ApplicationRecord
   enum role: { admin: 0, member: 1 }
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :recoverable, :rememberable, :trackable,
+         :validatable, :omniauthable
 
   has_many :timelogs, dependent: :destroy
+  has_many :identities, dependent: :destroy
 
-  def self.from_omniauth(access_token)
-    data = access_token.info
-    user = User.where(email: data['email']).first
+  def has_trello?
+    identities.pluck("provider").include?("trello")
+  end
 
-    unless user
-      user = User.create(
-            email: data['email'],
-            password: Devise.friendly_token[0,20]
-            )
+  def has_google?
+    identities.pluck("provider").include?("google_oauth2")
+  end
+
+  def has_all?
+    identities.pluck("provider").count == 2
+  end
+
+  def self.from_omniauth(auth)
+    where(email: auth.info.email).first_or_create do |user|  
+      user.password = Devise.friendly_token[0,20]
     end
-    user
   end
 end

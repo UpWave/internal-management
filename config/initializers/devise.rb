@@ -9,6 +9,9 @@ Devise.setup do |config|
   # config.secret_key = '3673800e6c4507b9d04b5605c6bb89f41bf8d41b44837d6f0572ff543fdd6076e3fb5642f4af9807774abc413867a5b17290f827dca20913d65eb0d9fa2d539a'
 
   config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"], skip_jwt: true
+
+  config.omniauth :trello, ENV['TRELLO_DEVELOPER_PUBLIC_KEY'], ENV['TRELLO_SECRET'], app_name: "Internal Managment App", scope: 'read,write,account', expiration: 'never', setup: true
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class

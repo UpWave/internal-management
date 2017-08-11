@@ -4,6 +4,7 @@ RSpec.describe TimelogsController, type: :controller do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:load_trello_service).and_return(true)
   end
 
   let(:user) { FactoryGirl.create(:user) }
@@ -34,6 +35,13 @@ RSpec.describe TimelogsController, type: :controller do
 
     it "refuses to create timelog with bad data" do
       timelog = FactoryGirl.build(:timelog, user_id: user.id, start_time: "text")
+      expect{
+        post :create, params: { timelog: timelog.attributes }
+        }.to_not change(Timelog, :count)
+    end
+
+    it "refuses to create timelog without trello card" do
+      timelog = FactoryGirl.build(:timelog, user_id: user.id, trello_card: nil)
       expect{
         post :create, params: { timelog: timelog.attributes }
         }.to_not change(Timelog, :count)

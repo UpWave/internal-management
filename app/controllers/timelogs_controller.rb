@@ -1,9 +1,12 @@
+require 'trello'
 class TimelogsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
+  before_action :load_trello_service
+
 
   def index
-    @timelogs = current_user.timelogs
+    @timelogs = current_user.timelogs 
   end
 
   def create
@@ -43,7 +46,11 @@ class TimelogsController < ApplicationController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :user_id)
+      params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card)
+    end
+
+    def load_trello_service
+      @trello_service = TrelloService.new(current_user)
     end
 
     def load_timelog
