@@ -11,7 +11,7 @@
         <%= form_for [timelog.user, timelog] do |f| %>
           <p><%= f.datetime_select :start_time, :order => [:month, :day, :year, :hour, :minute] %></p>
           <p><%= f.number_field :duration %></p>
-          <p><%= f.select :trello_card, @trello_cards %></p>
+          <p><%= f.select :trello_card, @trello_service.cards %></p>
           <p><%= f.submit "Update" %></p>
         <% end %>
       </div>

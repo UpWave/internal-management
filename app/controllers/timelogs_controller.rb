@@ -2,7 +2,7 @@ require 'trello'
 class TimelogsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_user_trello
+  before_action :load_trello_service
 
 
   def index
@@ -49,18 +49,8 @@ class TimelogsController < ApplicationController
       params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card)
     end
 
-    def load_user_trello
-      if current_user.has_trello?
-        Trello.configure do |config|
-          config.consumer_key = ENV['TRELLO_DEVELOPER_PUBLIC_KEY'] 
-          config.consumer_secret = ENV['TRELLO_SECRET']
-          config.oauth_token = current_user.identities.pluck("access_token").first
-          config.oauth_token_secret = current_user.identities.pluck("secret_token").first
-        end
-      end
-      @trello = Trello::Member.find(current_user.identities.where(:provider => "trello").pluck("uid").first)
-      @trello_cards = []
-      @trello.cards.each { |card| @trello_cards << card.name }
+    def load_trello_service
+      @trello_service = TrelloService.new(current_user)
     end
 
     def load_timelog
