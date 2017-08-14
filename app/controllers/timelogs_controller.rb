@@ -6,12 +6,22 @@ class TimelogsController < ApplicationController
 
 
   def index
-    if params[:filter]
-      @timelogs = current_user.timelogs.sort_by &params[:filter].to_sym
-    else
+    unless params[:filter]
       @timelogs = current_user.timelogs
+    else
+      if params[:start_date]
+        @timelogs = current_user.timelogs.where("start_time >= :start_date AND end_time <= :end_date",
+    {start_date: params[:start_date], end_date: params[:end_date]})
+      end
+      if params[:filter] == "ends_week"
+        @timelogs = current_user.timelogs.where(end_time: (Date.today..(Date.today + 7.days)))
+      elsif params[:filter] == "ends_month"
+        @timelogs = current_user.timelogs.where(end_time: (Date.today..(Date.today + 1.months)))
+      else
+        @timelogs = current_user.timelogs.sort_by &params[:filter].to_sym
+      end
     end
-  end
+    end
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)

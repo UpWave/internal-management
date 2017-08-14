@@ -3,7 +3,14 @@
     <h3>Timelogs</h3>
     Filter by:<%= link_to "Start time", user_timelogs_path(:filter=>"start_time") %>
     <%= link_to "Duration", user_timelogs_path(:filter=>"duration") %>
-    <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %><br>
+    <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %>
+    <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_week") %>
+    <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_month") %><br>
+    <%= form_for :timelog, url: { action: "index" } do |f| %>
+      <p><%= f.datetime_select :start_date, :order => [:month, :day, :year, :hour, :minute] %></p>
+      <p><%= f.datetime_select :end_date, :order => [:month, :day, :year, :hour, :minute] %></p>
+      <p><%= f.submit %></p>
+    <% end %>
     <%= render 'timelogs/timelogs' %>
     <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
   <% else %>
