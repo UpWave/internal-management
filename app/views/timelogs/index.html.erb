@@ -1,20 +1,26 @@
 <div class="well">
   <% if current_user.has_trello? %>
-    <h3>Timelogs</h3>
-    Filter by:<%= link_to "Start time", user_timelogs_path(:filter=>"start_time") %>
-    <%= link_to "Duration", user_timelogs_path(:filter=>"duration") %>
-    <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %>
-    <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_week") %>
-    <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_month") %><br>
-    <%= form_for :timelog, url: { action: "index" } do |f| %>
-      <p><%= f.datetime_select :start_date, :order => [:month, :day, :year, :hour, :minute] %></p>
-      <p><%= f.datetime_select :end_date, :order => [:month, :day, :year, :hour, :minute] %></p>
-      <p><%= f.submit %></p>
+    <% if current_user.timelogs.empty? %>
+      <h4>You have no timelogs yet</h4>
+      <%= link_to 'Create timelog', new_user_timelog_path, class: 'btn btn-default' %><br>
+    <% else %>
+      <h3>Timelogs</h3>
+      <strong>Filter by:</strong><p><%= link_to "Start time", user_timelogs_path(:filter=>"start_time") %>
+      <%= link_to "Duration", user_timelogs_path(:filter=>"duration") %>
+      <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %>
+      <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_week") %>
+      <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_month") %></p>
+      <p><strong>Or select date range</strong></p>
+      <%= form_tag(user_timelogs_path, :method => "get") do %>
+        <p><%= date_field_tag :start_date %></p>
+        <p><%= date_field_tag :end_date %></p>
+        <p><%= submit_tag "Apply"%></p>
+      <% end %>
+      <%= render 'timelogs/timelogs' %>
+      <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-default' %>
     <% end %>
-    <%= render 'timelogs/timelogs' %>
-    <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-xs btn-default' %>
   <% else %>
     <h3>To continue, please connect your <%= link_to 'Trello', user_trello_omniauth_authorize_path %> account</h3>
   <% end %>
-  <%= link_to 'Back', root_path, class: 'btn btn-xs btn-default' %>
+  <%= link_to 'Back', user_timelogs_path, class: 'btn btn-default' %>
 </div>
