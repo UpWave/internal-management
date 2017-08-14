@@ -1,4 +1,5 @@
 require 'trello'
+require 'will_paginate/array' 
 class TimelogsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
@@ -7,11 +8,11 @@ class TimelogsController < ApplicationController
 
   def index
     if params[:filter]
-      @timelogs = current_user.timelogs.send params[:filter] 
+      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).send params[:filter] 
     else
-      @timelogs = current_user.timelogs
+      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)
       if (params[:start_date] && params[:end_date]) 
-        @timelogs = current_user.timelogs.date_range(params[:start_date], params[:end_date])
+        @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
       end
     end
   end

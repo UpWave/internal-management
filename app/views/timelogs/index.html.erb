@@ -16,7 +16,9 @@
         <p><%= date_field_tag :end_date %></p>
         <p><%= submit_tag "Apply"%></p>
       <% end %>
+      <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %>
       <%= render 'timelogs/timelogs' %>
+      <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %><br>
       <%= link_to 'New timelog', new_user_timelog_path, class: 'btn btn-default' %>
     <% end %>
   <% else %>
