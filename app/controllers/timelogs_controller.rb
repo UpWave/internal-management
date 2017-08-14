@@ -9,18 +9,16 @@ class TimelogsController < ApplicationController
   def index
     if params[:filter]
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).send params[:filter] 
+    elsif (params[:start_date] && params[:end_date]) 
+      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
     else
-      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)
-      if (params[:start_date] && params[:end_date]) 
-        @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
-      end
+      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)  
     end
   end
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
     if @timelog.save
-      @timelog.update_attribute(:end_time, @timelog.start_time + @timelog.duration.to_i.minutes)
       flash[:success] = "Timelog created"
       redirect_to user_timelogs_path
     else
@@ -30,8 +28,7 @@ class TimelogsController < ApplicationController
 
   def update
     if @timelog.update(timelogs_params)
-      @timelog.update_attribute(:end_time, @timelog.start_time + @timelog.duration.to_i.minutes)
-      flash[:success] = "Duration updated"
+      flash[:success] = "Timelog updated"
       redirect_to user_timelogs_path(current_user)
     else
       flash[:error] = "Something went wrong"
