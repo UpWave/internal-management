@@ -6,22 +6,13 @@ class TimelogsController < ApplicationController
 
 
   def index
-    unless params[:filter]
+    if params[:filter]
+      @timelogs = current_user.timelogs.send params[:filter] 
+    else
       @timelogs = current_user.timelogs
-    else
-      if params[:filter] == "ends_week"
-        @timelogs = current_user.timelogs.where(end_time: (Date.today..(Date.today + 7.days)))
-      elsif params[:filter] == "ends_month"
-        @timelogs = current_user.timelogs.where(end_time: (Date.today..(Date.today + 1.months)))
-      else
-        @timelogs = current_user.timelogs.sort_by &params[:filter].to_sym
+      if (params[:start_date] && params[:end_date]) 
+        @timelogs = current_user.timelogs.date_range(params[:start_date], params[:end_date])
       end
-    end
-    unless (params[:start_date].empty? || params[:end_date].empty?) 
-      @timelogs = current_user.timelogs.where("start_time >= :start_date AND end_time <= :end_date",
-      {start_date: params[:start_date], end_date: params[:end_date]})
-    else
-      flash[:error] = "Invalid date input"
     end
   end
 

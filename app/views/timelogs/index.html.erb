@@ -8,8 +8,8 @@
       <strong>Filter by:</strong><p><%= link_to "Start time", user_timelogs_path(:filter=>"start_time") %>
       <%= link_to "Duration", user_timelogs_path(:filter=>"duration") %>
       <%= link_to "End time", user_timelogs_path(:filter=>"end_time") %>
-      <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_week") %>
-      <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_month") %></p>
+      <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_this_week") %>
+      <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_this_month") %></p>
       <p><strong>Or select date range</strong></p>
       <%= form_tag(user_timelogs_path, :method => "get") do %>
         <p><%= date_field_tag :start_date %></p>
