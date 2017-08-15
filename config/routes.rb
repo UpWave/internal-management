@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :timelogs 
   end
   namespace :admin do
-    resources :timelogs
+    resources :users, only: [] do
+      resources :timelogs
+    end
   end
   get 'pages/index'
   root to: "pages#index"
