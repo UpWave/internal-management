@@ -11,11 +11,13 @@
       <%= link_to "Ends this week", user_timelogs_path(:filter=>"ends_this_week") %>
       <%= link_to "Ends this month", user_timelogs_path(:filter=>"ends_this_month") %></p>
       <p><strong>Or select date range</strong></p>
-      <%= form_tag(user_timelogs_path, :method => "get") do %>
-        <p><%= date_field_tag :start_date %></p>
-        <p><%= date_field_tag :end_date %></p>
-        <p><%= submit_tag "Apply"%></p>
-      <% end %>
+      <form id="dateForm">
+        <%= form_tag(user_timelogs_path, :method => "get") do %>
+          <p><%= date_field_tag :start_date %></p>
+          <p><%= date_field_tag :end_date %></p>
+          <p><%= submit_tag "Apply", :id => "applyDateButton", :style => 'visibility: hidden' %></p>
+        <% end %>
+      </form>
       <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %>
       <%= render 'timelogs/timelogs' %>
       <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %><br>

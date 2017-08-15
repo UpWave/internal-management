@@ -10,12 +10,7 @@ class TimelogsController < ApplicationController
     if params[:filter]
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).send params[:filter] 
     elsif (params[:start_date] && params[:end_date])
-      unless (params[:start_date].empty? || params[:end_date].empty?)
-        @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
-      else
-        flash[:error] = "Invalid date input"
-        @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)
-      end
+      @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
     else
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)  
     end
