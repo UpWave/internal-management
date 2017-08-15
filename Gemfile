@@ -43,6 +43,8 @@ gem 'omniauth-google-oauth2'
 gem 'figaro'
 gem 'pundit'
 gem 'ruby-trello'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 
 
 group :development, :test do
