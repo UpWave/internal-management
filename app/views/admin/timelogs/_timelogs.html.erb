@@ -1,0 +1,23 @@
+<% @timelogs.each_with_index do |timelog, index| %>
+  <div class="well">
+    <p><strong>Start time: <%= timelog.start_time %></strong></p>
+    <p><strong>Duration: <%= timelog.duration %> min.</strong></p>
+    <p><strong>Trello card: <%= timelog.trello_card %></strong></p>
+    <p><strong>End time: <%= timelog.end_time %></strong></p>
+    <button class="btn btn-xs btn-primary" type="button" data-toggle="collapse" data-target=<%= sharp_update_string(index) %> aria-expanded="false" aria-controls=<%= base_update_string(index) %>>
+      Edit timelog
+    </button>
+    <div class="collapse" id=<%= base_update_string(index) %>>
+      <div class="well">
+        <%= form_for @timelog, :url => edit_admin_timelog_path(@timelog) do |f| %>
+          <p><%= f.datetime_select :start_time, :order => [:month, :day, :year, :hour, :minute] %></p>
+          <p><%= f.number_field :duration %></p>
+          <p><%= f.select :trello_card, @trello_service.cards %></p>
+          <p><%= f.submit "Update" %></p>
+        <% end %>
+      </div>
+    </div>
+    <br>
+    <%= link_to 'Destroy', [:admin, @timelog], class: 'btn btn-xs btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
+<% end %>

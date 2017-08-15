@@ -1,0 +1,30 @@
+<div class="well">
+  <% if User.find(params[:format]).has_trello? %>
+    <% if User.find(params[:format]).timelogs.empty? %>
+      <h4>This user have no timelogs yet</h4>
+      <%= link_to 'Create timelog', new_admin_timelog_path(params[:format]), class: 'btn btn-default' %><br>
+    <% else %>
+      <h3>Timelogs</h3>
+      <strong>Filter by:</strong><p><%= link_to "Start time", admin_timelogs_path(:filter=>"start_time") %>
+      <%= link_to "Duration", admin_timelogs_path(:filter=>"duration") %>
+      <%= link_to "End time", admin_timelogs_path(:filter=>"end_time") %>
+      <%= link_to "Ends this week", admin_timelogs_path(:filter=>"ends_this_week") %>
+      <%= link_to "Ends this month", admin_timelogs_path(:filter=>"ends_this_month") %></p>
+      <p><strong>Or select date range</strong></p>
+      <form id="dateForm">
+        <%= form_tag(admin_timelogs_path(params[:format]), :method => "get") do %>
+          <p><%= date_field_tag :start_date %></p>
+          <p><%= date_field_tag :end_date %></p>
+          <p><%= submit_tag "Apply", :id => "applyDateButton", :style => 'visibility: hidden' %></p>
+        <% end %>
+      </form>
+      <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %>
+      <%= render 'timelogs/timelogs' %>
+      <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %><br>
+      <%= link_to 'New timelog', new_admin_timelog_path(params[:format]), class: 'btn btn-default' %>
+    <% end %>
+  <% else %>
+    <h3>This user haven't synced his account with Trello yet</h3>
+  <% end %>
+  <%= link_to 'Back', admin_timelogs_path(params[:format]), class: 'btn btn-default' %>
+</div>

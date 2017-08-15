@@ -4,5 +4,6 @@
   <%= link_to "Show", user, :class => 'btn btn-xs btn-default' %>
   <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-xs btn-default' %>
   <%= link_to "Delete", user, :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
+  <%= link_to "Timelogs", admin_timelogs_path(user), :class => 'btn btn-xs btn-default' %>
 <% end %> 
 </p>
