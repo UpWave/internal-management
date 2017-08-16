@@ -4,6 +4,12 @@
   <%= link_to "Show", user, :class => 'btn btn-xs btn-default' %>
   <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-xs btn-default' %>
   <%= link_to "Delete", user, :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
-  <%= link_to "Timelogs", admin_user_timelogs_path(user), :class => 'btn btn-xs btn-default' %>
+  <% if user.has_trello? %>
+    <% if user.timelogs.empty? %>   
+      <%= link_to "Timelogs", admin_user_timelogs_path(user, timelogs: 'false'), :class => 'btn btn-xs btn-default' %>
+    <% else %>
+      <%= link_to "Timelogs", admin_user_timelogs_path(user), :class => 'btn btn-xs btn-default' %>
+    <% end %>
+  <% end %>
 <% end %> 
 </p>
