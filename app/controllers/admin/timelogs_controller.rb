@@ -51,6 +51,19 @@ module Admin
       end
     end
 
+    def download_pdf
+      if params[:filter]
+        @timelogs = User.find(params[:user_id]).timelogs.send params[:filter] 
+      elsif (params[:start_date] && params[:end_date])
+        @timelogs = User.find(params[:user_id]).timelogs.date_range(params[:start_date], params[:end_date])
+      else
+        @timelogs = User.find(params[:user_id]).timelogs  
+      end
+      pdf = TimelogsPdf.new(@timelogs)
+      send_data pdf.render, filename: "Timelogs #{User.find(@timelogs.first.user_id).email.to_s}", type: "application/pdf", disposition: "inline"
+    end
+
+
 
     private
       def timelogs_params
@@ -71,6 +84,5 @@ module Admin
           redirect_to root_path
         end
       end
-
   end    
 end
