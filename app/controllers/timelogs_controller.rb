@@ -29,10 +29,10 @@ class TimelogsController < ApplicationController
   def update
     if @timelog.update(timelogs_params)
       flash[:success] = "Timelog updated"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     else
       flash[:error] = "Something went wrong"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     end
   end
 
@@ -43,10 +43,10 @@ class TimelogsController < ApplicationController
   def destroy
     if @timelog.destroy
       flash[:success] = "Timelog deleted"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     else
       flash[:error] = "Something went wrong"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     end
   end
 
@@ -61,7 +61,7 @@ class TimelogsController < ApplicationController
     end
 
     def load_timelog
-      @timelog = Timelog.find(params[:format])
+      @timelog = current_user.timelogs.find(params[:id])
       authorize @timelog
     end
     

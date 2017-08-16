@@ -150,7 +150,11 @@ GEM
       omniauth (~> 1.0)
       omniauth-oauth (~> 1.0)
     orm_adapter (0.5.0)
+    pdf-core (0.7.0)
     pg (0.21.0)
+    prawn (2.2.2)
+      pdf-core (~> 0.7.0)
+      ttfunk (~> 1.5)
     public_suffix (2.0.5)
     puma (3.9.1)
     pundit (1.1.0)
@@ -255,6 +259,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.8)
+    ttfunk (1.5.1)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.3)
@@ -303,6 +308,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-trello
   pg
+  prawn
   puma (~> 3.7)
   pundit
   rails (~> 5.1.2)

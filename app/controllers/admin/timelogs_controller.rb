@@ -62,7 +62,7 @@ module Admin
       end
 
       def load_timelog
-        @timelog = Timelog.find(params[:user_id])
+        @timelog = Timelog.find(params[:id])
         authorize @timelog
       end
 

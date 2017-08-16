@@ -19,7 +19,7 @@
         <% end %>
       </form>
       <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %>
-      <%= render 'timelogs/timelogs' %>
+      <%= render 'admin/timelogs/timelogs' %>
       <%= will_paginate(@timelogs, :renderer => WillPaginate::ActionView::LinkRenderer) %><br>
       <%= link_to 'New timelog', new_admin_user_timelog_path(params[:user_id]), class: 'btn btn-default' %>
     <% end %>
