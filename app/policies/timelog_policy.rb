@@ -1,4 +1,4 @@
-class TimelogPolicy
+ class TimelogPolicy
   attr_reader :current_user, :timelog
 
   def initialize(current_user, timelog)
@@ -7,11 +7,11 @@ class TimelogPolicy
   end
 
   def index?
-    @current_user.admin?
+    @current_user.admin? || @timelog.empty? || (@timelog.first.user_id == @current_user.id)
   end
 
   def create?
-    @current_user.admin?
+    @current_user.admin? || (@timelog.user_id == @current_user.id)
   end
 
   def update?
@@ -23,7 +23,7 @@ class TimelogPolicy
   end
 
   def new?
-    @current_user.admin?
+    @current_user.admin? || (@timelog.user_id == @current_user.id)
   end
   
 end

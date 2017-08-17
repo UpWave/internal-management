@@ -14,10 +14,12 @@ class TimelogsController < ApplicationController
     else
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)  
     end 
+    authorize @timelogs
   end
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
+    authorize @timelog
     if @timelog.save
       flash[:success] = "Timelog created"
       redirect_to user_timelogs_path
@@ -38,6 +40,7 @@ class TimelogsController < ApplicationController
 
   def new
     @timelog = current_user.timelogs.build
+    authorize @timelog
   end
 
   def destroy
