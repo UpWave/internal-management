@@ -18,7 +18,7 @@ module Admin
         format.html
         format.pdf do
           pdf = TimelogsPdf.new(@timelogs.paginate(page: params[:page], per_page: @timelogs.count))
-          send_data pdf.render, filename: "Timelogs #{User.find(@timelogs.first.user_id).email.to_s}", type: "application/pdf", disposition: "inline"
+          send_data pdf.render, filename: "Timelogs of user_id #{params[:user_id]}", type: "application/pdf", disposition: "inline"
         end
       end
     end

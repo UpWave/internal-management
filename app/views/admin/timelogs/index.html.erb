@@ -1,6 +1,6 @@
 <div class="well">
   <% if @timelogs.empty? %>
-    <h4>This user have no timelogs yet</h4>
+    <h4>This user has no timelogs yet</h4>
     <%= link_to 'Create timelog', new_admin_user_timelog_path(params[:user_id]), class: 'btn btn-default' %><br>
   <% else %>
     <h3>Timelogs</h3>

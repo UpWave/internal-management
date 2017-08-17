@@ -5,19 +5,23 @@ class TimelogsPdf < Prawn::Document
   def initialize(timelogs)
     super()
     @timelogs = timelogs
-    header
-    fill_document
+    unless @timelogs.empty?
+      header
+      fill_document
+    else
+      text("This user has no timelogs yet")
+    end
   end
 
   private
     def header
-      text "Timelogs\n" + "Owner: " + User.find(@timelogs.first.user_id).email.to_s
+      text("Timelogs\nOwner: #{@timelogs.first.user.email}")
     end
 
     def fill_document
       data = [["ID", "Start time", "Duration", "End time", "Trello card"]]
       @timelogs.each do |timelog|
-        data.push([timelog.id.to_s, timelog.start_time.to_s, timelog.duration.to_s + " min", timelog.end_time.to_s, timelog.trello_card.to_s])
+        data.push([timelog.id.to_s, timelog.start_time.to_s, "#{timelog.duration.to_s} min", timelog.end_time.to_s, timelog.trello_card])
       end
       table(data, :column_widths => [40, 100, 70, 100, 200])
     end
