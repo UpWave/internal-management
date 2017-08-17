@@ -13,7 +13,7 @@ class TimelogsController < ApplicationController
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
     else
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)  
-    end
+    end 
   end
 
   def create

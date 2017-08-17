@@ -7,23 +7,23 @@ class TimelogPolicy
   end
 
   def index?
-    current_user
+    @current_user.admin?
   end
 
   def create?
-    current_user
+    @current_user.admin?
   end
 
   def update?
-    current_user.admin? || (timelog.try(:user_id) == current_user.id) 
+    @current_user.admin? || (@timelog.try(:user_id) == @current_user.id)
   end
 
   def destroy?
-    current_user.admin? || (timelog.try(:user_id) == current_user.id)
+    @current_user.admin? || (@timelog.try(:user_id) == @current_user.id)
   end
 
   def new?
-    current_user
+    @current_user.admin?
   end
   
 end

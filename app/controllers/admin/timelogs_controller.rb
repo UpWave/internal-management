@@ -5,7 +5,6 @@ module Admin
     before_action :authenticate_user!
     before_action :load_timelog, only: [:update, :destroy]
     before_action :load_trello_service, only: [:index, :new]
-    before_action :is_admin
 
     def index
       if params[:filter]
@@ -15,6 +14,7 @@ module Admin
       else
         @timelogs = User.find(params[:user_id]).timelogs.paginate(:page => params[:page], :per_page => 5)  
       end
+      authorize @timelogs
     end
 
     def create
@@ -39,6 +39,7 @@ module Admin
 
     def new
       @timelog = User.find(params[:user_id]).timelogs.build
+      authorize @timelog
     end
 
     def destroy
@@ -79,10 +80,5 @@ module Admin
         authorize @timelog
       end
 
-      def is_admin
-        unless current_user.admin?
-          redirect_to root_path
-        end
-      end
   end    
 end
