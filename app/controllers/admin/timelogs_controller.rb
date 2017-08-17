@@ -1,6 +1,5 @@
 module Admin
-  require 'trello'
-  require 'will_paginate/array' 
+  require 'trello' 
   class Admin::TimelogsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_timelog, only: [:update, :destroy]
@@ -8,17 +7,25 @@ module Admin
 
     def index
       if params[:filter]
-        @timelogs = User.find(params[:user_id]).timelogs.paginate(:page => params[:page], :per_page => 5).send params[:filter] 
+        @timelogs = User.find(params[:user_id]).timelogs.paginate(page: params[:page], per_page: 5).send params[:filter] 
       elsif (params[:start_date] && params[:end_date])
-        @timelogs = User.find(params[:user_id]).timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
+        @timelogs = User.find(params[:user_id]).timelogs.paginate(page: params[:page], per_page: 5).date_range(params[:start_date], params[:end_date])
       else
-        @timelogs = User.find(params[:user_id]).timelogs.paginate(:page => params[:page], :per_page => 5)  
+        @timelogs = User.find(params[:user_id]).timelogs.paginate(page: params[:page], per_page: 5)  
       end
       authorize @timelogs
+      respond_to do |format|
+        format.html
+        format.pdf do
+          pdf = TimelogsPdf.new(@timelogs.paginate(page: params[:page], per_page: @timelogs.count))
+          send_data pdf.render, filename: "Timelogs #{User.find(@timelogs.first.user_id).email.to_s}", type: "application/pdf", disposition: "inline"
+        end
+      end
     end
 
     def create
       @timelog = User.find(params[:user_id]).timelogs.build(timelogs_params)
+      authorize @timelog
       if @timelog.save
         flash[:success] = "Timelog created"
         redirect_to admin_user_timelogs_path(User.find(params[:user_id]))
@@ -51,20 +58,6 @@ module Admin
         redirect_to admin_user_timelogs_path(User.find(params[:user_id]))
       end
     end
-
-    def download_pdf
-      if params[:filter]
-        @timelogs = User.find(params[:user_id]).timelogs.send params[:filter] 
-      elsif (params[:start_date] && params[:end_date])
-        @timelogs = User.find(params[:user_id]).timelogs.date_range(params[:start_date], params[:end_date])
-      else
-        @timelogs = User.find(params[:user_id]).timelogs  
-      end
-      pdf = TimelogsPdf.new(@timelogs)
-      send_data pdf.render, filename: "Timelogs #{User.find(@timelogs.first.user_id).email.to_s}", type: "application/pdf", disposition: "inline"
-    end
-
-
 
     private
       def timelogs_params

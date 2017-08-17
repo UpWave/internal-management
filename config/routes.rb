@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     end
   end
   get 'pages/index'
-  post "admin/timelogs/download_pdf" => "admin/timelogs#download_pdf"
   root to: "pages#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

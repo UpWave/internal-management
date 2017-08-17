@@ -10,7 +10,6 @@
   <% end %>
   <% unless @trello_service.cards.empty? %>
     <div class="form-inputs">
-      <p><%= f.hidden_field :user_id, value: params[:user_id] %></p>
       <p><%= f.datetime_select :start_time, :order => [:month, :day, :year, :hour, :minute] %></p>
       <p><%= f.number_field :duration %></p>
       <p><%= f.select :trello_card, @trello_service.cards %></p>
