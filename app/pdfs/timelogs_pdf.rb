@@ -1,6 +1,7 @@
 require 'prawn'
 require 'prawn/table'
 class TimelogsPdf < Prawn::Document
+  COLUMNS = ["ID", "Start time", "Duration", "End time", "Trello card"]
 
   def initialize(timelogs)
     super()
@@ -19,11 +20,12 @@ class TimelogsPdf < Prawn::Document
     end
 
     def fill_document
-      data = [["ID", "Start time", "Duration", "End time", "Trello card"]]
+      content = [[]]
+      content.push(COLUMNS)
       @timelogs.each do |timelog|
-        data.push([timelog.id.to_s, timelog.start_time.to_s, "#{timelog.duration.to_s} min", timelog.end_time.to_s, timelog.trello_card])
+        content.push([timelog.id.to_s, timelog.start_time.to_s, "#{timelog.duration.to_s} min", timelog.end_time.to_s, timelog.trello_card])
       end
-      table(data, :column_widths => [40, 100, 70, 100, 200])
+      table(content, :column_widths => [40, 100, 70, 100, 200])
     end
 
 end

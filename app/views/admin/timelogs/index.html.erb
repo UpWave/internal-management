@@ -4,19 +4,22 @@
     <%= link_to 'Create timelog', new_admin_user_timelog_path(params[:user_id]), class: 'btn btn-default' %><br>
   <% else %>
     <h3>Timelogs</h3>
-    <strong>Filter by:</strong><p><%= link_to "Start time", admin_user_timelogs_path(filter: "start_time") %>
-    <%= link_to "Duration", admin_user_timelogs_path(filter: "duration") %>
-    <%= link_to "End time", admin_user_timelogs_path(filter: "end_time") %>
-    <%= link_to "Ends this week", admin_user_timelogs_path(filter: "ends_this_week") %>
-    <%= link_to "Ends this month", admin_user_timelogs_path(filter: "ends_this_month") %></p>
+    <strong>Filter by:</strong>
     <p>
+      <%= link_to "Start time", admin_user_timelogs_path(filter: "start_time") %>
+      <%= link_to "Duration", admin_user_timelogs_path(filter: "duration") %>
+      <%= link_to "End time", admin_user_timelogs_path(filter: "end_time") %>
+      <%= link_to "Ends this week", admin_user_timelogs_path(filter: "ends_this_week") %>
+      <%= link_to "Ends this month", admin_user_timelogs_path(filter: "ends_this_month") %><br> 
       <strong>Or select date range</strong>
     </p>
     <form id="dateForm">
-      <%= form_tag(admin_user_timelogs_path(params[:user_id]), method: "get") do %>
-        <p><%= date_field_tag :start_date %></p>
-        <p><%= date_field_tag :end_date %></p>
-        <p><%= submit_tag "Apply", id: "applyDateButton", style: 'visibility: hidden' %></p>
+      <%= form_tag(admin_user_timelogs_path(params[:user_id])) do %>
+        <p>
+          <%= date_field_tag :start_date %>
+          <%= date_field_tag :end_date %>
+          <%= submit_tag "Apply", id: "applyDateButton", style: 'visibility: hidden' %>
+        </p>
       <% end %>
     </form>
     <%= link_to "Download PDF", admin_user_timelogs_path(format: 'pdf', user_id: params[:user_id], filter: params[:filter], start_date: params[:start_date], end_date: params[:end_date]), class: 'btn btn-default', target: "_blank" %><br>
