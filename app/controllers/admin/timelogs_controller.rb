@@ -15,6 +15,9 @@ module Admin
           pdf = TimelogsPdf.new(filtered_timelogs, @user)
           send_data pdf.render, filename: "Timelogs of #{@user.email}", type: "application/pdf", disposition: "inline"
         end
+        format.csv do
+          send_data filtered_timelogs.to_csv, filename: "CSV Timelogs of #{@user.email}"
+        end
       end
     end
 
