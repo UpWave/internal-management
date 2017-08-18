@@ -1,4 +1,6 @@
+require 'csv'
 class Timelog < ApplicationRecord
+  ATTRIBUTES = %w{id start_time duration end_time trello_card}
   belongs_to  :user
   validates :user_id, presence: true
   validates :start_time, presence: true
@@ -17,5 +19,15 @@ class Timelog < ApplicationRecord
 
   def set_end_time
     self.end_time = self.start_time + self.duration.to_i.minutes 
+  end
+
+  def self.to_csv
+    CSV.generate(headers: true) do |csv|
+      csv << ATTRIBUTES
+
+      all.each do |timelog|
+        csv << ATTRIBUTES.map{ |attr| timelog.send(attr) }
+      end
+    end
   end
 end

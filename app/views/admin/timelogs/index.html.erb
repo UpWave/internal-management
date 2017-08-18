@@ -23,6 +23,7 @@
       <% end %>
     </form>
     <%= link_to "Download PDF", admin_user_timelogs_path(format: 'pdf', user_id: params[:user_id], filter: params[:filter], start_date: params[:start_date], end_date: params[:end_date]), class: 'btn btn-default', target: "_blank" %><br>
+    <%= link_to "Download CSV", admin_user_timelogs_path(format: 'csv', user_id: params[:user_id], filter: params[:filter], start_date: params[:start_date], end_date: params[:end_date]), class: 'btn btn-default', target: "_blank" %><br>
     <%= will_paginate(@timelogs, renderer: WillPaginate::ActionView::LinkRenderer) %>
     <%= render 'admin/timelogs/timelogs' %>
     <%= will_paginate(@timelogs, renderer: WillPaginate::ActionView::LinkRenderer) %><br>
