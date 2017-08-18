@@ -13,11 +13,13 @@ class TimelogsController < ApplicationController
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5).date_range(params[:start_date], params[:end_date])
     else
       @timelogs = current_user.timelogs.paginate(:page => params[:page], :per_page => 5)  
-    end
+    end 
+    authorize @timelogs
   end
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
+    authorize @timelog
     if @timelog.save
       flash[:success] = "Timelog created"
       redirect_to user_timelogs_path
@@ -29,24 +31,25 @@ class TimelogsController < ApplicationController
   def update
     if @timelog.update(timelogs_params)
       flash[:success] = "Timelog updated"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     else
       flash[:error] = "Something went wrong"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     end
   end
 
   def new
     @timelog = current_user.timelogs.build
+    authorize @timelog
   end
 
   def destroy
     if @timelog.destroy
       flash[:success] = "Timelog deleted"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     else
       flash[:error] = "Something went wrong"
-      redirect_to user_timelogs_path(current_user)
+      redirect_to user_timelogs_path
     end
   end
 
@@ -61,7 +64,7 @@ class TimelogsController < ApplicationController
     end
 
     def load_timelog
-      @timelog = Timelog.find(params[:format])
+      @timelog = current_user.timelogs.find(params[:id])
       authorize @timelog
     end
     

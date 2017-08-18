@@ -1,8 +1,11 @@
 <p>
 <%= user.email %> 
 <% if current_user.admin? %>
-  <%= link_to "Show", user, :class => 'btn btn-xs btn-default' %>
-  <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-xs btn-default' %>
-  <%= link_to "Delete", user, :class => 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
+  <%= link_to "Show", user, class: 'btn btn-xs btn-default' %>
+  <%= link_to "Edit", edit_user_path(user), class: 'btn btn-xs btn-default' %>
+  <%= link_to "Delete", user, class: 'btn btn-xs btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
+  <% if user.has_trello? %>   
+    <%= link_to "Timelogs", admin_user_timelogs_path(user), class: 'btn btn-xs btn-default' %>
+  <% end %>
 <% end %> 
 </p>

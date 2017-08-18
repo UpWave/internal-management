@@ -15,7 +15,7 @@
         <% end %>
         <% if user_signed_in? %>
           <p>
-            <%= "Signed in as " %> <%= link_to("#{current_user.email}", edit_user_registration_path(current_user))  %> 
+            <%= "Signed in as " %> <%= link_to("#{current_user.email}", edit_user_registration_path)  %> 
           </p>
           <% if current_user.admin? %>      
             <li>
@@ -23,7 +23,7 @@
             </li>
           <% end %>
           <li>
-            <%= link_to('Timelogs', user_timelogs_path(current_user)) %>        
+            <%= link_to('Timelogs', user_timelogs_path) %>        
           </li>
           <% unless current_user.has_all? %>
             <% unless current_user.has_google? %>

@@ -52,21 +52,21 @@ RSpec.describe TimelogsController, type: :controller do
     it "destroys your timelog" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       expect{
-        get :destroy, params: { id: user.id, format: timelog.id }
+        get :destroy, params: { id: timelog.id }
         }.to change(Timelog, :count).by(-1)
     end
 
     it "prevents destroying other timelog" do
       timelog = FactoryGirl.create(:timelog, user_id: other_user.id)
       expect{
-        get :destroy, params: { id: user.id, format: timelog.id }
-        }.to_not change(Timelog, :count)
+        get :destroy, params: { id: timelog.id }
+        }.to raise_error(ActiveRecord::RecordNotFound)
     end
     
     it "allows admin to destroy any timelog" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       expect{
-        get :destroy, params: { id: admin.id, format: timelog.id }
+        get :destroy, params: { user_id: admin.id, id: timelog.id }
         }.to change(Timelog, :count).by(-1)
     end   
   end
@@ -75,7 +75,7 @@ RSpec.describe TimelogsController, type: :controller do
     it "updates your timelog with valid data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       other_timelog = FactoryGirl.create(:timelog, user_id: user.id)
-      patch :update, params: { id: user.id, format: timelog.id, timelog: other_timelog.attributes }
+      patch :update, params: { id: timelog.id, timelog: other_timelog.attributes }
       timelog.reload
       expect(timelog.start_time).to eql(other_timelog.start_time)
     end
@@ -83,7 +83,7 @@ RSpec.describe TimelogsController, type: :controller do
     it "admin can update any timelog with valid data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       other_timelog = FactoryGirl.create(:timelog, user_id: user.id)
-      patch :update, params: { id: admin.id, format: timelog.id, timelog: other_timelog.attributes }
+      patch :update, params: { user_id: admin.id, id: timelog.id, timelog: other_timelog.attributes }
       timelog.reload
       expect(timelog.start_time).to eql(other_timelog.start_time)
     end
@@ -91,15 +91,15 @@ RSpec.describe TimelogsController, type: :controller do
     it "won't update not your timelog with valid data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       other_timelog = FactoryGirl.create(:timelog, user_id: other_user.id)
-      patch :update, params: { id: user.id, format: other_timelog.id, timelog: timelog.attributes }
-      other_timelog.reload
-      expect(other_timelog).to eql(other_timelog)
+      expect {
+        patch :update, params: { id: other_timelog.id, timelog: timelog.attributes }
+        }.to raise_error(ActiveRecord::RecordNotFound)      
     end
 
     it "won't update your timelog with bad data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       bad_timelog = FactoryGirl.build(:timelog, user_id: user.id, start_time: "text")
-      patch :update, params: { id: user.id, format: timelog.id, timelog: bad_timelog.attributes }
+      patch :update, params: { id: timelog.id, timelog: bad_timelog.attributes }
       timelog.reload
       expect(timelog.start_time).to_not eql(bad_timelog.start_time)
     end
@@ -107,7 +107,7 @@ RSpec.describe TimelogsController, type: :controller do
     it "admin won't update timelog with bad data" do
       timelog = FactoryGirl.create(:timelog, user_id: user.id)
       bad_timelog = FactoryGirl.build(:timelog, user_id: user.id, start_time: "text")
-      patch :update, params: { id: admin.id, format: timelog.id, timelog: bad_timelog.attributes }
+      patch :update, params: { user_id: admin.id, id: timelog.id, timelog: bad_timelog.attributes }
       timelog.reload
       expect(timelog.start_time).to_not eql(bad_timelog.start_time)
     end

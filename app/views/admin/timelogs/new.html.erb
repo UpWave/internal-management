@@ -1,4 +1,4 @@
-<%= form_for([current_user, @timelog]) do |f| %>
+<%= form_for [:admin, :user, @timelog] do |f| %>
   <% if @timelog.errors.any? %>
     <div class="error_explanation">
       <ul>
@@ -16,6 +16,6 @@
       <p><%= f.submit "Create timelog" %></p>
     </div>
   <% else %>
-    <h3>For creating new timelog you must have cards in Trello</h3>
+    <h3>For creating new timelog user must have cards in Trello</h3>
   <% end %> 
 <% end %>
