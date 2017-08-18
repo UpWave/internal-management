@@ -12,7 +12,7 @@ module Admin
           @timelogs = filtered_timelogs.paginate(page: params[:page], per_page: 5)
         end
         format.pdf do
-          pdf = TimelogsPdf.new(filtered_timelogs)
+          pdf = TimelogsPdf.new(filtered_timelogs, @user)
           send_data pdf.render, filename: "Timelogs of #{@user.email}", type: "application/pdf", disposition: "inline"
         end
       end

@@ -14,9 +14,9 @@ describe TimelogPolicy do
   # policy will crash on method empty? for @timelogs 
   permissions :index? do    
     it 'allows user to access your timelogs' do
-      timelogs_arr = []
-      timelogs_arr.push(user_timelog)
-      expect(subject).to permit(current_user, timelogs_arr)    
+      timelogs = []
+      timelogs.push(user_timelog)
+      expect(subject).to permit(current_user, timelogs)    
     end
 
     it 'allows admin to access any timelog' do
@@ -24,9 +24,9 @@ describe TimelogPolicy do
     end
     
     it 'forbids user to access other timelog' do
-      timelogs_arr = []
-      timelogs_arr.push(other_timelog)
-      expect(subject).not_to permit(current_user, timelogs_arr)
+      timelogs = []
+      timelogs.push(other_timelog)
+      expect(subject).not_to permit(current_user, timelogs)
     end
   end
 
