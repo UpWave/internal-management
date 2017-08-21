@@ -1,0 +1,9 @@
+<% @vacations.each do |vacation| %>
+  <div class="well">
+    <p>
+      Start date: <%= vacation.start_date %><br>
+      End date: <%= vacation.end_date %><br>
+      Status: <%= vacation.status %>
+    </p>
+  </div>
+<% end %>
