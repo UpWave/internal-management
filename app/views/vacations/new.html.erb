@@ -13,7 +13,6 @@
     <%= f.date_select :start_date, order: [:day, :month, :year] %><br>
     End date:
     <%= f.date_select :end_date, order: [:day, :month, :year] %><br>
-    <%= f.hidden_field :status, value: 'pending' %>
     <%= f.submit "Request a vacation" %> 
   </div> 
 <% end %>
