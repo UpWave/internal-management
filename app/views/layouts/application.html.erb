@@ -21,12 +21,15 @@
             <li>
               <%= link_to "Users", users_path %>
             </li>
+            <li>
+              <%= link_to "User's vacations", admin_vacations_path %>
+            </li>
           <% end %>
           <li>
             <%= link_to('Timelogs', user_timelogs_path) %>        
           </li>
           <li>
-            <%= link_to('Vacations', user_vacations_path) %>        
+            <%= link_to('My vacations', user_vacations_path) %>        
           </li>
           <% unless current_user.has_all? %>
             <% unless current_user.has_google? %>
