@@ -3,7 +3,7 @@
     User: <%= vacation.user.email %><br>
     Start date: <%= vacation.start_date %><br>
     End date: <%= vacation.end_date %><br>
-    <%= link_to 'Approve request', admin_vacation_path(vacation, vacation: { status: Vacation.get_status(1) }), class: 'btn btn-xs', method: :patch, data: { confirm: "Are you sure?" } %><br>
-    <%= link_to 'Cancel request', admin_vacation_path(vacation, vacation: { status: Vacation.get_status(2) }), class: 'btn btn-xs btn-danger', method: :patch, data: { confirm: "Are you sure?" } %>
+    <%= link_to 'Approve request', admin_vacation_path(vacation, vacation: { status: Vacation.get_approved_status }), class: 'btn btn-xs', method: :patch, data: { confirm: "Are you sure?" } %><br>
+    <%= link_to 'Cancel request', admin_vacation_path(vacation, vacation: { status: Vacation.get_rejected_status }), class: 'btn btn-xs btn-danger', method: :patch, data: { confirm: "Are you sure?" } %>
   </p>
 </div>

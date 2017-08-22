@@ -6,8 +6,12 @@ class Vacation < ApplicationRecord
 
   private
 
-    def self.get_status(input)
-      Vacation.statuses.key(input)
+    def self.get_approved_status
+      Vacation.statuses.key(1)
+    end
+
+    def self.get_rejected_status
+      Vacation.statuses.key(2)
     end
 
     def date_is_valid?
