@@ -45,7 +45,7 @@ class VacationsController < ApplicationController
 
 
   private
-    def vacation_params
+    def vacation_params 
       params.require(:vacation).permit(:start_date, :end_date)
     end
 

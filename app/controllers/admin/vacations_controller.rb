@@ -4,7 +4,7 @@ module Admin
     before_action :load_vacation, only: [:update, :destroy]
 
     def index
-      @vacations = Vacation.where(status: 'pending')
+      @vacations = Vacation.pending
       authorize @vacations
     end
 

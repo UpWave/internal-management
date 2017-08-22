@@ -7,7 +7,6 @@ RSpec.describe VacationsController, type: :controller do
   end
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:admin) { FactoryGirl.create(:user, role: 'admin') }
   let(:other_user) { FactoryGirl.create(:user) }
   
   describe "GET #index" do    
@@ -28,15 +27,15 @@ RSpec.describe VacationsController, type: :controller do
     it "creates your vacation" do
       vacation = FactoryGirl.build(:vacation, user_id: user.id)
       expect{
-        post :create, params: { vacation: vacation.attributes }
-        }.to change(Vacation, :count).by(1)
+            post :create, params: { vacation: vacation.attributes }
+            }.to change(Vacation, :count).by(1)
     end
 
     it "refuses to create vacation with bad data" do
       vacation = FactoryGirl.build(:vacation, user_id: other_user.id, end_date: Date.today - 1.year)
       expect{
-        post :create, params: { vacation: vacation.attributes }
-        }.to_not change(Vacation, :count)
+            post :create, params: { vacation: vacation.attributes }
+            }.to_not change(Vacation, :count)
     end
   end
 
@@ -44,23 +43,16 @@ RSpec.describe VacationsController, type: :controller do
     it "destroys your vacation" do
       vacation = FactoryGirl.create(:vacation, user_id: user.id)
       expect{
-        get :destroy, params: { id: vacation.id }
-        }.to change(Vacation, :count).by(-1)
+            get :destroy, params: { id: vacation.id }
+            }.to change(Vacation, :count).by(-1)
     end
 
     it "prevents destroying other vacation" do
       vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
       expect{
-        get :destroy, params: { id: vacation.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    
-    it "allows admin to destroy any vacation" do
-      vacation = FactoryGirl.create(:vacation, user_id: user.id)
-      expect{
-        get :destroy, params: { user_id: admin.id, id: vacation.id }
-        }.to change(Vacation, :count).by(-1)
-    end   
+            get :destroy, params: { id: vacation.id }
+            }.to raise_error(ActiveRecord::RecordNotFound)
+    end  
   end
 
   describe "PATCH #update" do
@@ -72,20 +64,12 @@ RSpec.describe VacationsController, type: :controller do
       expect(vacation.start_date).not_to eql(other_vacation.start_date)
     end
 
-    it "admin can update any vacation" do
-      vacation = FactoryGirl.create(:vacation, user_id: user.id)
-      other_vacation = FactoryGirl.create(:vacation, user_id: user.id)
-      patch :update, params: { user_id: admin.id, id: vacation.id, vacation: other_vacation.attributes }
-      vacation.reload
-      expect(vacation.start_date).to eql(other_vacation.start_date)
-    end
-
     it "won't update not your vacation" do
       vacation = FactoryGirl.create(:vacation, user_id: user.id)
       other_vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
-      expect {
-        patch :update, params: { id: other_vacation.id, vacation: vacation.attributes }
-        }.to raise_error(ActiveRecord::RecordNotFound)      
+      expect{
+            patch :update, params: { id: other_vacation.id, vacation: vacation.attributes }
+            }.to raise_error(ActiveRecord::RecordNotFound)      
     end
   end
 
