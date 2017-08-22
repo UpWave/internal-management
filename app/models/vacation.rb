@@ -6,11 +6,11 @@ class Vacation < ApplicationRecord
 
   private
 
-    def self.get_approved_status
+    def self.approved_status
       Vacation.statuses.key(1)
     end
 
-    def self.get_rejected_status
+    def self.rejected_status
       Vacation.statuses.key(2)
     end
 
