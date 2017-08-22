@@ -34,9 +34,8 @@ RSpec.describe Admin::VacationsController, type: :controller do
 
   describe "PATCH #update" do
     it "updates any vacation" do
-      FactoryGirl.create(:vacation, user_id: other_user.id)
-      other_vacation = Vacation.first
-      patch :update, params: { id: other_vacation.id, status: 'approved' }
+      other_vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
+      patch :update, params: { id: other_vacation.id, vacation: { status: 'approved' } }
       other_vacation.reload
       expect(other_vacation.status).to eql('approved')
     end

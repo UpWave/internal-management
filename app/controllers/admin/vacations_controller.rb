@@ -9,7 +9,6 @@ module Admin
     end
 
     def update
-      byebug
       if @vacation.update(vacation_params)
         flash[:success] = "Vacation updated"
         redirect_to admin_vacations_path
@@ -32,7 +31,7 @@ module Admin
 
     private
       def vacation_params
-        params.permit(:id, :status)
+        params.require(:vacation).permit(:status)
       end
 
       def load_vacation

@@ -5,6 +5,11 @@ class Vacation < ApplicationRecord
   validate :date_is_valid?
 
   private
+
+    def self.get_status(input)
+      Vacation.statuses.key(input)
+    end
+
     def date_is_valid?
       if start_date > end_date
         errors.add(:end_date, 'End date must be bigger than start date')
