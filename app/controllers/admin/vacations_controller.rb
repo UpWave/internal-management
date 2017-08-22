@@ -9,6 +9,7 @@ module Admin
     end
 
     def update
+      byebug
       if @vacation.update(vacation_params)
         flash[:success] = "Vacation updated"
         redirect_to admin_vacations_path
