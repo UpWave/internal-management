@@ -3,8 +3,10 @@ Rails.application.routes.draw do
   resources :users
   resource :user, only: [] do
     resources :timelogs 
+    resources :vacations
   end
   namespace :admin do
+    resources :vacations
     resources :users, only: [] do
       resources :timelogs
     end

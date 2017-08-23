@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_many :timelogs, dependent: :destroy
   has_many :identities, dependent: :destroy
+  has_many :vacations, dependent: :destroy
 
   def has_trello?
     identities.pluck("provider").include?("trello")
