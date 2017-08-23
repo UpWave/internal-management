@@ -2,17 +2,17 @@ class ProfilesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_user
 
-  def index
+  def show
     @user
   end
 
   def update
-    if @user.update(profile_params)
+    if @user.update_attributes(profile_params)
       flash[:success] = "Avatar updated"
-      redirect_to user_profiles_path
+      redirect_to user_profile_path
     else  
       flash[:alert] = "Something went wrong"
-      redirect_to user_profiles_path
+      redirect_to user_profile_path
     end    
   end
 
@@ -23,6 +23,6 @@ class ProfilesController < ApplicationController
     end
 
     def load_user
-      @user = current_user 
+      @user = current_user
     end
 end

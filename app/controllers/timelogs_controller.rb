@@ -29,7 +29,7 @@ class TimelogsController < ApplicationController
   end
 
   def update
-    if @timelog.update(timelogs_params)
+    if @timelog.update_attributes(timelogs_params)
       flash[:success] = "Timelog updated"
       redirect_to user_timelogs_path
     else

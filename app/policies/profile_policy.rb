@@ -6,7 +6,7 @@ class ProfilePolicy
     @user = model
   end
 
-  def index?
+  def show?
     @current_user
   end
 

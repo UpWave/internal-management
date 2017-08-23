@@ -23,9 +23,12 @@ class User < ApplicationRecord
   end
 
   def photo
-    if (avatar.url == "original/default.png") && has_google? 
+    if avatar.exists?
+      avatar.url
+    elsif has_google?
       identities.where(provider: 'google_oauth2').first.image_url
     else
+      #default avatar
       avatar.url
     end
   end

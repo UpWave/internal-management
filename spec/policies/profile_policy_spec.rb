@@ -5,7 +5,7 @@ describe ProfilePolicy do
 
   let (:current_user) { FactoryGirl.build_stubbed :user }
 
-  permissions :index? do    
+  permissions :show? do    
     it 'allows user to see profile' do
       expect(subject).to permit(current_user)    
     end
