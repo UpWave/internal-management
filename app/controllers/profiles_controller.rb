@@ -8,16 +8,13 @@ class ProfilesController < ApplicationController
 
   def update
     if @user.update(profile_params)
-      flash[:success] = "Profile updated"
+      flash[:success] = "Avatar updated"
       redirect_to user_profiles_path
     else  
       flash[:alert] = "Something went wrong"
       redirect_to user_profiles_path
     end    
   end
-
-
-
 
   private
 
