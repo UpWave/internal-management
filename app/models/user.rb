@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
          :validatable, :omniauthable
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ":style/default.png"
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
   has_many :timelogs, dependent: :destroy
   has_many :identities, dependent: :destroy
@@ -19,6 +21,17 @@ class User < ApplicationRecord
 
   def has_all?
     identities.pluck("provider").count == 2
+  end
+
+  def photo
+    if avatar.exists?
+      avatar.url
+    elsif has_google?
+      identities.where(provider: 'google_oauth2').first.image_url
+    else
+      #default avatar
+      avatar.url
+    end
   end
 
   def active_for_authentication?

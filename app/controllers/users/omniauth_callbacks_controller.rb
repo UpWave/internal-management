@@ -3,7 +3,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     auth = request.env["omniauth.auth"]
     if current_user
       unless current_user.has_google?
-        Identity.create(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+        Identity.create(uid: auth.uid, provider: auth.provider, user_id: current_user.id, image_url: auth.info.image)
         redirect_to root_path, notice: "Successfully linked Google account!"
       else
         redirect_to root_path, notice: "Google account already linked!"
@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'
         sign_in_and_redirect @user, event: :authentication
         unless current_user.has_google?
-          Identity.create(:uid => auth.uid, :provider => auth.provider, :user_id => current_user.id)
+          Identity.create(uid: auth.uid, provider: auth.provider, user_id: current_user.id, image_url: auth.info.image)
         end
       else
         session['devise.google_data'] = auth.except(:extra) 

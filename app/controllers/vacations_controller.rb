@@ -24,7 +24,7 @@ class VacationsController < ApplicationController
   end
 
   def update
-    if @vacation.update(vacation_params)
+    if @vacation.update_attributes(vacation_params)
       flash[:success] = "Vacation updated"
       redirect_to user_vacations_path
     else
