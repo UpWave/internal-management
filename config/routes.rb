@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resource :user, only: [] do
     resources :timelogs 
     resources :vacations
+    resource :profile
   end
   namespace :admin do
     resources :vacations
