@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   enum role: { admin: 0, member: 1 }
+  enum status: { inactive: 0, active: 1 }
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
          :validatable, :omniauthable
@@ -31,6 +32,18 @@ class User < ApplicationRecord
       #default avatar
       avatar.url
     end
+  end
+
+  def active_for_authentication?
+    super && active?
+  end
+
+  def inactive_message
+    "Sorry, this account has been deactivated."
+  end
+
+  def active?
+    status == 'active'
   end
 
   def self.from_omniauth(auth)
