@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UsersController, :type => :controller do
+RSpec.describe Admin::UsersController, :type => :controller do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)

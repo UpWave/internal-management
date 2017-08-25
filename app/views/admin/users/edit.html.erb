@@ -1,7 +1,12 @@
-<%= form_for(@user) do |f| %>
+<%= form_for([:admin, @user]) do |f| %>
   <div class="form-inputs">
     <p><%= f.text_field :email %></p>
     <p><%= f.select(:role, User.roles.keys.map { |role| [role.titleize,role] })%></p>
+    <% if @user.admin? %>
+      <% f.hidden_field :status, value: 'active' %>
+    <% else %>
+      <p><%= f.select(:status, User.statuses.keys.map { |status| [status.titleize,status] })%></p>
+    <% end %>
   </div>
   <div class="form-actions">
     <%= f.button "Save", type: 'submit', :class => 'btn btn-primary'%>
