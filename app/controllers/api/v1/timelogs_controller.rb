@@ -1,6 +1,7 @@
 require 'trello'
 require 'will_paginate/array' 
 class Api::V1::TimelogsController < Api::V1::BaseController
+  skip_before_action :verify_authenticity_token
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
   before_action :load_trello_service
@@ -14,19 +15,18 @@ class Api::V1::TimelogsController < Api::V1::BaseController
 
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
+    respond_with :api, :v1, @timelog 
     authorize @timelog
     if @timelog.save
       flash[:success] = "Timelog created"
       redirect_to user_timelogs_path
-    else
-      render :new
     end
   end
 
   def update
     if @timelog.update_attributes(timelogs_params)
       flash[:success] = "Timelog updated"
-      redirect_to user_timelogs_path
+      respond_with @timelog, json: @timelog
     else
       flash[:error] = "Something went wrong"
       redirect_to user_timelogs_path
@@ -39,6 +39,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   end
 
   def destroy
+    respond_with @timelog.destroy
     if @timelog.destroy
       flash[:success] = "Timelog deleted"
       redirect_to user_timelogs_path

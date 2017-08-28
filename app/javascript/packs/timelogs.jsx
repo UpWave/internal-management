@@ -17,15 +17,16 @@ export class Timelogs extends React.Component {
     var timelogs = this.state.timelogs.map((timelog) => {
     return (
       <div key={timelog.id}>
-        <h3>{timelog.start_time}</h3>
-        <h3>{timelog.duration}</h3>
-        <h3>{timelog.trello_card}</h3>
-        <h3>{timelog.end_time}</h3>
+        <h4>Start time: {timelog.start_time}</h4>
+        <h4>Duration: {timelog.duration} min</h4>
+        <h4>Trello card: {timelog.trello_card}</h4>
+        <h4>End time: {timelog.end_time}</h4>
+        <br />
       </div>
     )
     })
     return(
-      <div>
+      <div id="timelogs">
         {timelogs}
       </div>
     )
