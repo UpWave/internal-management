@@ -1,7 +1,8 @@
-<div class="well">
+<div class="well", id="example">
   <% if current_user.has_trello? %>
     <% if current_user.timelogs.empty? %>
       <h4>You have no timelogs yet</h4>
+      <%= javascript_pack_tag 'button_react' %>
       <%= link_to 'Create timelog', new_user_timelog_path, class: 'btn btn-default' %><br>
     <% else %>
       <h3>Timelogs</h3>
