@@ -2,11 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-class Timelogs extends React.Component {
+export class Timelogs extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = { timelogs: [] };
   }
 
   componentDidMount() {
@@ -19,10 +19,16 @@ class Timelogs extends React.Component {
       <div key={timelog.id}>
         <h3>{timelog.start_time}</h3>
         <h3>{timelog.duration}</h3>
+        <h3>{timelog.trello_card}</h3>
         <h3>{timelog.end_time}</h3>
       </div>
     )
     })
+    return(
+      <div>
+        {timelogs}
+      </div>
+    )
   }
 }
 
