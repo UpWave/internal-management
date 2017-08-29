@@ -17,7 +17,7 @@ class Timelogs extends React.Component {
     var timelogs = this.props.timelogs.map((timelog) => {
       return (
         <div key={timelog.id}>
-          <Timelog timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this, timelog)} />
+          <Timelog timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this)} />
         </div>
       )
     })

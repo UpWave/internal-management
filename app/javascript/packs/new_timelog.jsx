@@ -21,7 +21,7 @@ class NewTimelog extends React.Component {
   render() {
     return (
       <div>
-        <input type="date" ref='start_time' /><br />
+        <input type="datetime-local" ref='start_time' /><br />
         <input type="number" ref='duration' placeholder='Enter the duration in minutes' /><br />
         <input type="text" ref='trello_card' /><br />
         <button onClick={this.handleClick.bind(this)}>Submit</button><br />
