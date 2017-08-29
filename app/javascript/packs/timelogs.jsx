@@ -1,32 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import Timelog from './timelog.jsx'
 
 class Timelogs extends React.Component {
 
+  handleDelete(id) {
+    this.props.handleDelete(id);
+  }
+
+  onUpdate(timelog) {
+    this.props.onUpdate(timelog);
+  }
+
   render() {
     var timelogs = this.props.timelogs.map((timelog) => {
-    return (
-      <div key={timelog.id}>
-        <h4>Start time: {timelog.start_time}</h4>
-        <h4>Duration: {timelog.duration} min</h4>
-        <h4>Trello card: {timelog.trello_card}</h4>
-        <h4>End time: {timelog.end_time}</h4>
-        <br />
-      </div>
-    )
+      return (
+        <div key={timelog.id}>
+          <Timelog timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this, timelog)} />
+        </div>
+      )
     })
     return(
-      <div id="timelogs">
+      <div>
         {timelogs}
       </div>
     )
   }
 }
-
-ReactDOM.render(
-  <Timelogs />,
-  document.body.appendChild(document.createElement('div'))
-);
 
 export default Timelogs;

@@ -2,12 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-export class NewTimelog extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = { timelogs: [] };
-  }
+class NewTimelog extends React.Component {
 
   handleClick() {
     var start_time  = this.refs.start_time.value;
@@ -23,21 +18,15 @@ export class NewTimelog extends React.Component {
             }
         });
     }
-    render() {
-      return (
-        <div>
-          <input type="date" ref='start_time' /><br />
-          <input type="number" ref='duration' placeholder='Enter the duration in minutes' /><br />
-          <input type="text" ref='trello_card' /><br />
-          <button onClick={this.handleClick.bind(this)}>Submit</button><br />
-        </div>
-      )
-    }
+  render() {
+    return (
+      <div>
+        <input type="date" ref='start_time' /><br />
+        <input type="number" ref='duration' placeholder='Enter the duration in minutes' /><br />
+        <input type="text" ref='trello_card' /><br />
+        <button onClick={this.handleClick.bind(this)}>Submit</button><br />
+      </div>
+    )
+  }
 }
-  
-
-
-ReactDOM.render(
-  <NewTimelog />,
-  document.body.appendChild(document.createElement('div'))
-);
+export default NewTimelog;

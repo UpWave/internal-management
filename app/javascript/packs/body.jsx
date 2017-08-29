@@ -2,12 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import Timelogs from './timelogs.jsx'
+import NewTimelog from './new_timelog.jsx'
 
 class Body extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { timelogs: [] };
+    this.handleSubmit = this.handleSubmit.bind(this, this.state);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.removeTimelog = this.removeTimelog.bind(this, this.state);
+    this.updateTimelogs = this.updateTimelogs.bind(this, this.state);
   }
 
   componentDidMount() {
@@ -21,8 +27,9 @@ class Body extends React.Component {
 
   handleDelete(id) {
     $.ajax({
-      url: '/api/v1/timelogs/${id}',
+      url: `/api/v1/timelogs/${id}`,
       type: 'DELETE',
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       success:() => {
         this.removeTimelog(id);
       }
@@ -38,8 +45,9 @@ class Body extends React.Component {
 
   handleUpdate(timelog) {
     $.ajax({
-      url: '/api/v1/timelogs/${timelog.id}',
-      type: 'PUT',
+      url: `/api/v1/timelogs/${timelog.id}`,
+      type: 'PATCH',
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       data: { timelog: timelog },
       success: () => {
         this.updateTimelogs(timelog);
@@ -55,14 +63,15 @@ class Body extends React.Component {
 
   render() {
     return (
-      <div>
-        <Timelogs timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
+      <div key='body'>
+        <Timelogs key={this.state.timelogs.length} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
+        <NewTimelog handleSubmit={this.handleSubmit} />
       </div>
     )
   }
 }
 
 ReactDOM.render(
-  <Body />,
-  document.body.appendChild(document.createElement('div'))
+  <Body key='main'/>,
+  document.getElementById('root')
 );
