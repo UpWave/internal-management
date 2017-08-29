@@ -4,6 +4,12 @@ import PropTypes from 'prop-types'
 import Timelogs from './timelogs.jsx'
 import NewTimelog from './new_timelog.jsx'
 
+//TODO:
+//Each child in an array or iterator should have a unique "key" prop.
+//Rerender after Deleting
+//Datetime default value
+//Dropdown select for trello cards
+
 class Body extends React.Component {
 
   constructor(props) {
