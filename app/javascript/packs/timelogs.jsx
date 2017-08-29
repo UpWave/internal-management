@@ -2,19 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-export class Timelogs extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { timelogs: [] };
-  }
-
-  componentDidMount() {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
-  }
+class Timelogs extends React.Component {
 
   render() {
-    var timelogs = this.state.timelogs.map((timelog) => {
+    var timelogs = this.props.timelogs.map((timelog) => {
     return (
       <div key={timelog.id}>
         <h4>Start time: {timelog.start_time}</h4>
@@ -37,3 +28,5 @@ ReactDOM.render(
   <Timelogs />,
   document.body.appendChild(document.createElement('div'))
 );
+
+export default Timelogs;

@@ -1,7 +1,6 @@
 require 'trello'
 require 'will_paginate/array' 
 class Api::V1::TimelogsController < Api::V1::BaseController
-  skip_before_action :verify_authenticity_token
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
   before_action :load_trello_service

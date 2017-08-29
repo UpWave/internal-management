@@ -12,10 +12,11 @@ export class NewTimelog extends React.Component {
   handleClick() {
     var start_time  = this.refs.start_time.value;
     var duration = this.refs.duration.value;
-    var trello_card = this.refs.duration.value;
+    var trello_card = this.refs.trello_card.value;
       $.ajax({
         url: '/api/v1/timelogs',
         type: 'POST',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
         data: { timelog: { start_time: start_time, duration: duration, trello_card: trello_card } },
         success: (timelog) => {
             this.props.handleSubmit(timelog);
@@ -38,5 +39,5 @@ export class NewTimelog extends React.Component {
 
 ReactDOM.render(
   <NewTimelog />,
-  document.body.appendChild(document.getElementById('timelogs'))
+  document.body.appendChild(document.createElement('div'))
 );
