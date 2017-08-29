@@ -1,5 +1,4 @@
 require 'trello'
-require 'will_paginate/array' 
 class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
@@ -10,6 +9,10 @@ class Api::V1::TimelogsController < Api::V1::BaseController
     @timelogs = current_user.timelogs
     respond_with @timelogs  
     authorize @timelogs
+  end
+
+  def trello_cards
+    respond_with @trello_service.cards
   end
 
   def create

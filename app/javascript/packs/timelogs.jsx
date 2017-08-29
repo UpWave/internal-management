@@ -22,7 +22,7 @@ class Timelogs extends React.Component {
       )
     })
     return(
-      <div>
+      <div key={timelogs.length}>
         {timelogs}
       </div>
     )

@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
-      resources :timelogs
+      resources :timelogs do
+        collection do
+          get :trello_cards
+        end
+      end
     end
   end
   get 'pages/index'

@@ -18,6 +18,7 @@ class Body extends React.Component {
 
   componentDidMount() {
     $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trello_cards: response }) });
   }
 
   handleSubmit(timelog) {
@@ -64,8 +65,8 @@ class Body extends React.Component {
   render() {
     return (
       <div key='body'>
-        <Timelogs key={this.state.timelogs.length} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
-        <NewTimelog handleSubmit={this.handleSubmit} />
+        <Timelogs key={this.state.timelogs.length} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
+        <NewTimelog trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
       </div>
     )
   }
