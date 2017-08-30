@@ -32,7 +32,7 @@ class Timelog extends React.Component {
       </Select>
       : 
       <p>Trello card: {this.props.timelog.trello_card}</p>;
-    var end_time = this.state.editable ? null : <p>End time: {this.props.timelog.end_time}</p>;
+    var end_time = this.state.editable ? null : <p>End time: {this.props.timelog.end_time.substring(0, this.props.timelog.start_time.length-5)}</p>;
     return (
       <div key={this.props.timelog.id}>
         {start_time}

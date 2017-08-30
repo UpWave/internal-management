@@ -14,15 +14,23 @@ class Body extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.removeTimelog = this.removeTimelog.bind(this, this.state);
     this.updateTimelogs = this.updateTimelogs.bind(this, this.state);
+    this.loadTimelogs = this.loadTimelogs.bind(this);
+    this.filterByDuration = this.filterByDuration.bind(this, this.state);
+    this.filterByStartTime = this.filterByStartTime.bind(this, this.state);
+    this.filterByEndTime = this.filterByEndTime.bind(this, this.state);
+  }
+
+  loadTimelogs() {
+    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
   }
 
   componentDidMount() {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    this.loadTimelogs();
     $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trello_cards: response }) });
   }
 
   handleSubmit(timelog) {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    this.loadTimelogs();
   }
 
   handleDelete(id) {
@@ -36,8 +44,23 @@ class Body extends React.Component {
     });
   }
 
+  filterByDuration(){
+    var timelogs = this.state.timelogs.sort(function(a,b) { return a.duration > b.duration; });
+    this.setState({timelogs: timelogs })
+  }
+
+  filterByStartTime(){
+    var timelogs = this.state.timelogs.sort(function(a,b) { return a.start_time > b.start_time; });
+    this.setState({timelogs: timelogs })
+  }
+
+  filterByEndTime(){
+    var timelogs = this.state.timelogs.sort(function(a,b) { return a.end_time > b.end_time; });
+    this.setState({timelogs: timelogs })
+  }
+
   removeTimelog(timelog_id) {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    this.loadTimelogs();
     //var newTimelogs = this.state.timelogs.filter(function(timelog) {
     //  return timelog.id != timelog_id;
     //});
@@ -57,7 +80,7 @@ class Body extends React.Component {
   }
 
   updateTimelogs(timelog) {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    this.loadTimelogs();
     //var timelogs = this.state.timelogs.filter((i) => { return i.id != timelog.id });
     //timelogs.push(timelog);
     //this.setState({timelogs: timelogs })
@@ -66,6 +89,10 @@ class Body extends React.Component {
   render() {
     return (
       <div>
+        Filter by:
+        <button onClick={this.filterByDuration}>Duration</button>
+        <button onClick={this.filterByStartTime}>Start time</button>
+        <button onClick={this.filterByEndTime}>End time</button>
         <Timelogs key={this.state.timelogs.length.toString()} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
         <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
       </div>

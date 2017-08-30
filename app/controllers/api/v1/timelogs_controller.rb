@@ -4,7 +4,6 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :load_timelog, only: [:update, :destroy]
   before_action :load_trello_service
 
-
   def index
     @timelogs = current_user.timelogs
     respond_with @timelogs  
@@ -39,7 +38,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card)
+      params.require(:timelog).permit(:start_time, :duration, :trello_card)
     end
 
     def load_trello_service
