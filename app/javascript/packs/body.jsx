@@ -4,17 +4,11 @@ import PropTypes from 'prop-types'
 import Timelogs from './timelogs.jsx'
 import NewTimelog from './new_timelog.jsx'
 
-//TODO:
-//Each child in an array or iterator should have a unique "key" prop.
-//Rerender after Deleting
-//Datetime default value
-//Dropdown select for trello cards
-
 class Body extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { timelogs: [] };
+    this.state = { timelogs: [], trello_cards: [] };
     this.handleSubmit = this.handleSubmit.bind(this, this.state);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -28,8 +22,7 @@ class Body extends React.Component {
   }
 
   handleSubmit(timelog) {
-    var newState = this.state.timelogs.concat(timelog);
-    this.setState({ timelogs: newState })
+    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
   }
 
   handleDelete(id) {
@@ -43,11 +36,12 @@ class Body extends React.Component {
     });
   }
 
-  removeTimelog(id) {
-    var newTimelogs = this.state.timelogs.filter((timelog) => {
-      return timelog.id != id;
-    });
-    this.setState({ timelogs: newTimelogs });
+  removeTimelog(timelog_id) {
+    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    //var newTimelogs = this.state.timelogs.filter(function(timelog) {
+    //  return timelog.id != timelog_id;
+    //});
+    //this.setState({ timelogs: newTimelogs });
   }
 
   handleUpdate(timelog) {
@@ -63,22 +57,23 @@ class Body extends React.Component {
   }
 
   updateTimelogs(timelog) {
-    var timelogs = this.state.timelogs.filter((i) => { return i.id != timelog.id });
-    timelogs.push(timelog);
-    this.setState({timelogs: timelogs })
+    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ timelogs: response }) });
+    //var timelogs = this.state.timelogs.filter((i) => { return i.id != timelog.id });
+    //timelogs.push(timelog);
+    //this.setState({timelogs: timelogs })
   }
 
   render() {
     return (
-      <div key='body'>
-        <Timelogs key={this.state.timelogs.length} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
-        <NewTimelog trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
+      <div>
+        <Timelogs key={this.state.timelogs.length.toString()} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
+        <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
       </div>
     )
   }
 }
 
 ReactDOM.render(
-  <Body key='main'/>,
+  <Body />,
   document.getElementById('root')
 );

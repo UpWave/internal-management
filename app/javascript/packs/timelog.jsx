@@ -1,12 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import Select from 'react-normalized-select'
 
 class Timelog extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { editable: false };
+    this.state = { editable: false, card: this.props.timelog.trello_card };
     this.handleEdit = this.handleEdit.bind(this, this.state);
   }
 
@@ -15,7 +16,7 @@ class Timelog extends React.Component {
       var id = this.props.timelog.id;
       var start_time = this.refs.start_time.value;
       var duration = this.refs.duration.value;
-      var trello_card = this.refs.trello_card.value;
+      var trello_card = this.state.card;
       var timelog = {id: id , start_time: start_time , duration: duration, trello_card: trello_card};
       this.props.handleUpdate(timelog);
     }
@@ -23,12 +24,17 @@ class Timelog extends React.Component {
   }
 
   render() {
-    var start_time = this.state.editable ? <input type='datetime-local' ref='start_time' defaultValue={this.props.timelog.start_time}/>: <p>Start time: {this.props.timelog.start_time}</p>;
+    var start_time = this.state.editable ? <input type='datetime-local' ref='start_time' defaultValue={this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length-5)}/>: <p>Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length-5)}</p>;
     var duration = this.state.editable ? <input type='number' ref='duration' defaultValue={this.props.timelog.duration}/>: <p>Duration: {this.props.timelog.duration}</p>;
-    var trello_card = this.state.editable ? <input type='text' ref='trello_card' defaultValue={this.props.timelog.trello_card}/>: <p>Trello card: {this.props.timelog.trello_card}</p>;
+    var trello_card = this.state.editable ? 
+      <Select className="mySelect" onChange={e => this.setState({card: e.target.value})}>
+        {this.props.trello_cards.map(option => <option key={option} value={option}>{option}</option>)}
+      </Select>
+      : 
+      <p>Trello card: {this.props.timelog.trello_card}</p>;
     var end_time = this.state.editable ? null : <p>End time: {this.props.timelog.end_time}</p>;
     return (
-      <div>
+      <div key={this.props.timelog.id}>
         {start_time}
         {duration}
         {trello_card}
