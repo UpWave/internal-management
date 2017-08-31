@@ -2,12 +2,25 @@ require 'trello'
 class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_trello_service
+  before_action :load_trello_service, only: [:trello_cards]
 
   def index
-    @timelogs = current_user.timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit]) 
+    if ((params[:start_time] != "0") && (params[:end_time] != "0"))
+      if params[:limit] == "0"
+        @timelogs = current_user.timelogs.date_range(params[:start_time], params[:end_time]).count
+      else 
+        @timelogs = current_user.timelogs.date_range(params[:start_time], params[:end_time]).paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
+        authorize @timelogs
+      end    
+    else
+      if params[:limit] == "0"
+        @timelogs = current_user.timelogs.count
+      else 
+        @timelogs = current_user.timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
+        authorize @timelogs
+      end
+    end
     respond_with @timelogs  
-    authorize @timelogs
   end
 
   def trello_cards

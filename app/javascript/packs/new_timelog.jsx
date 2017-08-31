@@ -34,7 +34,8 @@ class NewTimelog extends React.Component {
           {this.props.trello_cards.map(option => <option key={option} value={option}>{option}</option>)}
           }
         </Select>
-        <button onClick={this.handleClick.bind(this)}>Submit</button><br />
+        <br />
+        <button onClick={this.handleClick.bind(this)}>Create</button><br />
       </div>
     )
   }

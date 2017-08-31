@@ -9,7 +9,7 @@ class Body extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { timelogs: [], trello_cards: [], page: 0, pageCount: 1, perPage: 3 };
+    this.state = { timelogs: [], trello_cards: [], page: 0, pageCount: 1, perPage: 3, start_time: 0, end_time: 0 };
     this.handleSubmit = this.handleSubmit.bind(this, this.state);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -19,14 +19,27 @@ class Body extends React.Component {
     this.filterByDuration = this.filterByDuration.bind(this, this.state);
     this.filterByStartTime = this.filterByStartTime.bind(this, this.state);
     this.filterByEndTime = this.filterByEndTime.bind(this, this.state);
+    this.filterByTimeRange = this.filterByTimeRange.bind(this, this.state);
+    this.discardFilter = this.discardFilter.bind(this);
   }
 
   loadTimelogs() {
-    $.getJSON('/api/v1/timelogs.json', (response) => { this.setState({ pageCount: Math.ceil(response.length / this.state.perPage)}) });
-     $.ajax({
+    //Get all timelogs for pageCount
+    $.ajax({
       url      : '/api/v1/timelogs',
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      data     : {limit: this.state.perPage, page: this.state.page},
+      data     : {limit: 0, page: 0, start_time: this.state.start_time, end_time: this.state.end_time},
+      dataType : 'json',
+      type     : 'GET',
+      success: data => {
+        this.setState({pageCount: Math.ceil(data / this.state.perPage)});
+      }
+    });
+    //Get only few timelogs for current page
+    $.ajax({
+      url      : '/api/v1/timelogs',
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      data     : {limit: this.state.perPage, page: this.state.page, start_time: this.state.start_time, end_time: this.state.end_time},
       dataType : 'json',
       type     : 'GET',
 
@@ -71,6 +84,10 @@ class Body extends React.Component {
     this.setState({timelogs: timelogs })
   }
 
+  filterByTimeRange(){
+    this.loadTimelogs()
+  }
+
   removeTimelog(timelog_id) {
     if (this.state.timelogs.length === 1) {
       this.setState({page: this.state.page - 1})
@@ -107,10 +124,17 @@ class Body extends React.Component {
     });
   }
 
+  discardFilter() {
+    this.setState({start_time: 0, end_time: 0}, () => {
+      this.loadTimelogs();
+    });
+  }
+
   render() {
     if (this.state.timelogs.length === 0) {
       return (
         <div>
+          <h3>There are no timelogs</h3>
           <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
         </div>
         )
@@ -120,7 +144,12 @@ class Body extends React.Component {
           Filter by:
           <button onClick={this.filterByDuration}>Duration</button>
           <button onClick={this.filterByStartTime}>Start time</button>
-          <button onClick={this.filterByEndTime}>End time</button>
+          <button onClick={this.filterByEndTime}>End time</button><br /><br />
+          Select time range:
+          <input type="datetime-local" ref='start_time' onChange={e => this.setState({start_time: e.target.value})}/>
+          <input type="datetime-local" ref='end_time' onChange={e => this.setState({end_time: e.target.value})}/>
+          <button onClick={this.discardFilter}>X</button>
+          <button onClick={this.filterByTimeRange}>Submit</button><br /><br />
           <Timelogs key={this.state.timelogs.length.toString()} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
           <ReactPaginate previousLabel={"previous"}
                          nextLabel={"next"}
