@@ -50,8 +50,8 @@ class Body extends React.Component {
   }
 
   componentDidMount() {
-    this.loadTimelogs();
     $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trello_cards: response }) });
+    this.loadTimelogs();
   }
 
   handleSubmit(timelog) {
@@ -90,7 +90,9 @@ class Body extends React.Component {
 
   removeTimelog(timelog_id) {
     if (this.state.timelogs.length === 1) {
-      this.setState({page: this.state.page - 1})
+      if (this.state.page != 0) {
+        this.setState({page: this.state.page - 1})
+      }
     }
     this.loadTimelogs();
     //var newTimelogs = this.state.timelogs.filter(function(timelog) {
@@ -131,41 +133,47 @@ class Body extends React.Component {
   }
 
   render() {
-    if (this.state.timelogs.length === 0) {
+    if (this.state.trello_cards.length === 0) {
+      return (
+        <div>
+          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first</h3>
+        </div>
+      )
+    } else if (this.state.timelogs.length === 0) {
       return (
         <div>
           <h3>There are no timelogs</h3>
           <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
         </div>
-        )
-    } else {
-      return (
-        <div>
-          Filter by:
-          <button onClick={this.filterByDuration}>Duration</button>
-          <button onClick={this.filterByStartTime}>Start time</button>
-          <button onClick={this.filterByEndTime}>End time</button><br /><br />
-          Select time range:
-          <input type="datetime-local" ref='start_time' onChange={e => this.setState({start_time: e.target.value})}/>
-          <input type="datetime-local" ref='end_time' onChange={e => this.setState({end_time: e.target.value})}/>
-          <button onClick={this.discardFilter}>X</button>
-          <button onClick={this.filterByTimeRange}>Submit</button><br /><br />
-          <Timelogs key={this.state.timelogs.length.toString()} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
-          <ReactPaginate previousLabel={"previous"}
-                         nextLabel={"next"}
-                         breakLabel={<a href="">...</a>}
-                         breakClassName={"break-me"}
-                         pageCount={this.state.pageCount}
-                         marginPagesDisplayed={2}
-                         pageRangeDisplayed={5}
-                         onPageChange={this.handlePageClick}
-                         containerClassName={"pagination"}
-                         subContainerClassName={"pages pagination"}
-                         activeClassName={"active"} />
-          <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
-        </div>
       )
-    }
+      } else {
+        return (
+          <div>
+            Filter by:
+            <button onClick={this.filterByDuration}>Duration</button>
+            <button onClick={this.filterByStartTime}>Start time</button>
+            <button onClick={this.filterByEndTime}>End time</button><br /><br />
+            Select time range:
+            <input type="datetime-local" ref='start_time' onChange={e => this.setState({start_time: e.target.value})}/>
+            <input type="datetime-local" ref='end_time' onChange={e => this.setState({end_time: e.target.value})}/>
+            <button onClick={this.discardFilter}>X</button>
+            <button onClick={this.filterByTimeRange}>Submit</button><br /><br />
+            <Timelogs key={this.state.timelogs.length.toString()} trello_cards={this.state.trello_cards} timelogs={this.state.timelogs}  handleDelete={this.handleDelete} onUpdate={this.handleUpdate}/>
+            <ReactPaginate previousLabel={"previous"}
+                           nextLabel={"next"}
+                           breakLabel={<a href="">...</a>}
+                           breakClassName={"break-me"}
+                           pageCount={this.state.pageCount}
+                           marginPagesDisplayed={2}
+                           pageRangeDisplayed={5}
+                           onPageChange={this.handlePageClick}
+                           containerClassName={"pagination"}
+                           subContainerClassName={"pages pagination"}
+                           activeClassName={"active"} />
+            <NewTimelog key='new_timelog' trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
+          </div>
+        )
+      }
   }
 }
 
