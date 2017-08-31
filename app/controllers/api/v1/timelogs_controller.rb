@@ -5,7 +5,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :load_trello_service
 
   def index
-    @timelogs = current_user.timelogs
+    @timelogs = current_user.timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit]) 
     respond_with @timelogs  
     authorize @timelogs
   end
