@@ -5,6 +5,9 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 /public/system
+myapp.sublime-project
+myapp.sublime-workspace
+package-lock.json
 
 # Ignore bundler config.
 /.bundle

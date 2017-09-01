@@ -1,9 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
-import Timelogs from './timelogs.jsx'
-import NewTimelog from './new_timelog.jsx'
+import Timelogs from './timelogs.jsx';
+import NewTimelog from './new_timelog.jsx';
 
 class Body extends React.Component {
 
@@ -27,7 +27,7 @@ class Body extends React.Component {
     //Get all timelogs for pageCount
     $.ajax({
       url      : '/api/v1/timelogs',
-      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));},
       data     : {limit: 0, page: 0, start_time: this.state.start_time, end_time: this.state.end_time},
       dataType : 'json',
       type     : 'GET',
@@ -38,7 +38,7 @@ class Body extends React.Component {
     //Get only few timelogs for current page
     $.ajax({
       url      : '/api/v1/timelogs',
-      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));},
       data     : {limit: this.state.perPage, page: this.state.page, start_time: this.state.start_time, end_time: this.state.end_time},
       dataType : 'json',
       type     : 'GET',
@@ -50,7 +50,7 @@ class Body extends React.Component {
   }
 
   componentDidMount() {
-    $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trello_cards: response }) });
+    $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trello_cards: response }); });
     this.loadTimelogs();
   }
 
@@ -62,7 +62,7 @@ class Body extends React.Component {
     $.ajax({
       url: `/api/v1/timelogs/${id}`,
       type: 'DELETE',
-      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));},
       success:() => {
         this.removeTimelog(id);
       }
@@ -71,34 +71,30 @@ class Body extends React.Component {
 
   filterByDuration(){
     var timelogs = this.state.timelogs.sort(function(a,b) { return a.duration > b.duration; });
-    this.setState({timelogs: timelogs })
+    this.setState({timelogs: timelogs });
   }
 
   filterByStartTime(){
     var timelogs = this.state.timelogs.sort(function(a,b) { return a.start_time > b.start_time; });
-    this.setState({timelogs: timelogs })
+    this.setState({timelogs: timelogs });
   }
 
   filterByEndTime(){
     var timelogs = this.state.timelogs.sort(function(a,b) { return a.end_time > b.end_time; });
-    this.setState({timelogs: timelogs })
+    this.setState({timelogs: timelogs });
   }
 
   filterByTimeRange(){
-    this.loadTimelogs()
+    this.loadTimelogs();
   }
 
   removeTimelog(timelog_id) {
     if (this.state.timelogs.length === 1) {
       if (this.state.page != 0) {
-        this.setState({page: this.state.page - 1})
+        this.setState({page: this.state.page - 1});
       }
     }
     this.loadTimelogs();
-    //var newTimelogs = this.state.timelogs.filter(function(timelog) {
-    //  return timelog.id != timelog_id;
-    //});
-    //this.setState({ timelogs: newTimelogs });
   }
 
   handleUpdate(timelog) {
@@ -115,9 +111,6 @@ class Body extends React.Component {
 
   updateTimelogs(timelog) {
     this.loadTimelogs();
-    //var timelogs = this.state.timelogs.filter((i) => { return i.id != timelog.id });
-    //timelogs.push(timelog);
-    //this.setState({timelogs: timelogs })
   }
 
   handlePageClick = (data) => {
