@@ -10,6 +10,11 @@ class Timelog extends React.Component {
       card: this.props.timelog.trelloCard,
     };
     this.handleEdit = this.handleEdit.bind(this, this.state);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete() {
+    this.props.handleDelete(this.props.timelog.id);
   }
 
   handleEdit() {
@@ -50,7 +55,7 @@ class Timelog extends React.Component {
         {duration}
         {trelloCard}
         {endTime}
-        <button onClick={this.props.handleDelete}> Delete</button>
+        <button onClick={this.handleDelete}> Delete</button>
         <button onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
       </div>
     );
@@ -58,9 +63,10 @@ class Timelog extends React.Component {
 }
 
 Timelog.propTypes = {
-  timelog: PropTypes.arrayOf.isRequired,
+  timelog: PropTypes.shape.isRequired,
   trelloCards: PropTypes.arrayOf.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
+
 export default Timelog;

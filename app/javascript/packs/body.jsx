@@ -165,7 +165,11 @@ class Body extends React.Component {
       return (
         <div>
           <h3>There are no timelogs</h3>
-          <NewTimelog key="new_timelog" trello_cards={this.state.trello_cards} handleSubmit={this.handleSubmit} />
+          <NewTimelog
+            key="new_timelog"
+            trello_cards={this.state.trello_cards}
+            handleSubmit={this.handleSubmit}
+          />
         </div>
       );
     }
@@ -180,7 +184,13 @@ class Body extends React.Component {
         <input type="datetime-local" id="endDate" onChange={this.handleEndDateChange} />
         <button onClick={this.discardFilter}>X</button>
         <button onClick={this.filterByTimeRange}>Submit</button><br /><br />
-        <Timelogs key={this.state.timelogs.length.toString()} trelloCards={this.state.trelloCards} timelogs={this.state.timelogs} handleDelete={this.handleDelete} onUpdate={this.handleUpdate} />
+        <Timelogs
+          key={this.state.timelogs.length.toString()}
+          trelloCards={this.state.trelloCards}
+          timelogs={this.state.timelogs}
+          handleDelete={this.handleDelete}
+          onUpdate={this.handleUpdate}
+        />
         <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
@@ -194,7 +204,11 @@ class Body extends React.Component {
           subContainerClassName={'pages pagination'}
           activeClassName={'active'}
         />
-        <NewTimelog key="new_timelog" trelloCards={this.state.trelloCards} handleSubmit={this.handleSubmit} />
+        <NewTimelog
+          key="new_timelog"
+          trelloCards={this.state.trelloCards}
+          handleSubmit={this.handleSubmit}
+        />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 
 class NewTimelog extends React.Component {
@@ -19,7 +20,7 @@ class NewTimelog extends React.Component {
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: { timelog: { start_time: startTime, duration, trello_card: trelloCard } },
-      success: (timelog) => {
+      success: () => {
         this.props.handleSubmit();
       },
     });
@@ -30,10 +31,20 @@ class NewTimelog extends React.Component {
         <h3>Create a new timelog!</h3>
         <input type="datetime-local" ref="start_time" /><br />
         <input type="number" ref="duration" placeholder="Enter the duration in minutes" /><br />
+        <Select className="mySelect" onChange={e => this.setState({ card: e.target.value })}>
+          {this.props.trelloCards.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
         <br />
         <button onClick={this.handleClick}>Create</button><br />
       </div>
     );
   }
 }
+
+NewTimelog.propTypes = {
+  trelloCards: PropTypes.arrayOf.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
+
 export default NewTimelog;
