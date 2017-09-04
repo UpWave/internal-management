@@ -1,7 +1,13 @@
 import React from 'react';
-import Timelog from './timelog.jsx';
+import PropTypes from 'prop-types';
+import Timelog from './timelog';
 
 class Timelogs extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
+  }
   onUpdate(timelog) {
     this.props.onUpdate(timelog);
   }
@@ -12,7 +18,7 @@ class Timelogs extends React.Component {
 
   render() {
     const timelogs = this.props.timelogs.map(timelog => (
-      <Timelog id={timelog.id} key={timelog.id.toString()} trello_cards={this.props.trello_cards} timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this)} />
+      <Timelog id={timelog.id} key={timelog.id.toString()} trelloCards={this.props.trelloCards} timelog={timelog} handleDelete={this.handleDelete} handleUpdate={this.onUpdate} />
     ));
     return (
       <div>
@@ -21,5 +27,12 @@ class Timelogs extends React.Component {
     );
   }
 }
+
+Timelogs.propTypes = {
+  timelogs: PropTypes.arrayOf.isRequired,
+  trelloCards: PropTypes.arrayOf.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+};
 
 export default Timelogs;

@@ -1,10 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 
 class Timelog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editable: false, card: this.props.timelog.trello_card };
+    this.state = {
+      editable: false,
+      card: this.props.timelog.trelloCard,
+    };
     this.handleEdit = this.handleEdit.bind(this, this.state);
   }
 
@@ -21,15 +25,25 @@ class Timelog extends React.Component {
   }
 
   render() {
-    const startTime = this.state.editable ? <input type="datetime-local" ref="start_time" defaultValue={this.props.timelog.startTime.substring(0, this.props.timelog.startTime.length - 5)} /> : <p>Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
-    const duration = this.state.editable ? <input type="number" ref="duration" defaultValue={this.props.timelog.duration} /> : <p>Duration: {this.props.timelog.duration}</p>;
+    const startTime = this.state.editable ?
+      <input type="datetime-local" ref="startTime" defaultValue={this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)} />
+      :
+      <p>Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+    const duration = this.state.editable ?
+      <input type="number" ref="duration" defaultValue={this.props.timelog.duration} />
+      :
+      <p>Duration: {this.props.timelog.duration}</p>;
     const trelloCard = this.state.editable ?
       (<Select className="mySelect" onChange={e => this.setState({ card: e.target.value })}>
-        {this.props.trello_cards.map(option => <option key={option} value={option}>{option}</option>)}
+        {this.props.trelloCards.map(option => <option key={option} value={option}>{option}</option>)}
       </Select>)
       :
-      <p>Trello card: {this.props.timelog.trelloCard}</p>;
-    const endTime = this.state.editable ? null : <p>End time: {this.props.timelog.endTime.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+      <p>Trello card: {this.props.timelog.trello_card}</p>;
+    const endTime = this.state.editable ?
+      null
+      :
+      <p>End time: {this.props.timelog.end_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+
     return (
       <div key={this.props.timelog.id}>
         {startTime}
@@ -43,4 +57,10 @@ class Timelog extends React.Component {
   }
 }
 
+Timelog.propTypes = {
+  timelog: PropTypes.arrayOf.isRequired,
+  trelloCards: PropTypes.arrayOf.isRequired,
+  handleUpdate: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+};
 export default Timelog;

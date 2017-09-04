@@ -4,13 +4,16 @@ import Select from 'react-normalized-select';
 class NewTimelog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { card: false };
+    this.state = {
+      card: false,
+    };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
     const startTime = this.refs.start_time.value;
     const duration = this.refs.duration.value;
-    const trelloCard = this.state.card || this.props.trello_cards[0];
+    const trelloCard = this.state.card || this.props.trelloCards[0];
     $.ajax({
       url: '/api/v1/timelogs',
       type: 'POST',
@@ -27,12 +30,8 @@ class NewTimelog extends React.Component {
         <h3>Create a new timelog!</h3>
         <input type="datetime-local" ref="start_time" /><br />
         <input type="number" ref="duration" placeholder="Enter the duration in minutes" /><br />
-        <Select className="mySelect" onChange={e => this.setState({ card: e.target.value })}>
-          {this.props.trello_cards.map(option => <option key={option} value={option}>{option}</option>)}
-          }
-        </Select>
         <br />
-        <button onClick={this.handleClick.bind(this)}>Create</button><br />
+        <button onClick={this.handleClick}>Create</button><br />
       </div>
     );
   }
