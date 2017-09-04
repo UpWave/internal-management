@@ -31,6 +31,7 @@ class Body extends React.Component {
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.checkDateSubmitVisibility = this.checkDateSubmitVisibility.bind(this);
   }
 
   componentDidMount() {
@@ -146,21 +147,34 @@ class Body extends React.Component {
   }
 
   handleStartDateChange(event) {
-    this.setState({ startTime: event.target.value });
+    this.setState({ startTime: event.target.value }, () => {
+      this.checkDateSubmitVisibility();
+    });
   }
 
   handleEndDateChange(event) {
-    this.setState({ endTime: event.target.value });
+    this.setState({ endTime: event.target.value }, () => {
+      this.checkDateSubmitVisibility();
+    });
+  }
+
+  checkDateSubmitVisibility() {
+    if (this.state.endTime > this.state.startTime) {
+      document.getElementById('dateSubmit').style = { display: 'block' };
+    } else {
+      document.getElementById('dateSubmit').style = { display: 'none' };
+    }
   }
 
   discardFilter() {
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
     this.setState({
-      start_time: 0,
-      end_time: 0,
+      startTime: 0,
+      endTime: 0,
     }, () => {
-      document.getElementById('startDate').value = '';
-      document.getElementById('endDate').value = '';
       this.loadTimelogs();
+      this.checkDateSubmitVisibility();
     });
   }
 
@@ -193,8 +207,8 @@ class Body extends React.Component {
             Select time range:
         <input type="datetime-local" id="startDate" onChange={this.handleStartDateChange} />
         <input type="datetime-local" id="endDate" onChange={this.handleEndDateChange} />
-        <button onClick={this.discardFilter}>X</button>
-        <button onClick={this.filterByTimeRange}>Submit</button><br /><br />
+        <button id="dateDiscard" onClick={this.discardFilter}>X</button>
+        <button id="dateSubmit" style={{ display: 'none' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
         <Timelogs
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}
