@@ -5,8 +5,8 @@ import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 
 class Body extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       timelogs: [],
       trelloCards: [],
@@ -16,16 +16,16 @@ class Body extends React.Component {
       startTime: 0,
       endTime: 0,
     };
-    this.handleSubmit = this.handleSubmit.bind(this, this.state);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.removeTimelog = this.removeTimelog.bind(this, this.state);
-    this.updateTimelogs = this.updateTimelogs.bind(this, this.state);
-    this.loadTimelogs = this.loadTimelogs.bind(this, this.state);
-    this.filterByDuration = this.filterByDuration.bind(this, this.state);
-    this.filterByStartTime = this.filterByStartTime.bind(this, this.state);
-    this.filterByEndTime = this.filterByEndTime.bind(this, this.state);
-    this.filterByTimeRange = this.filterByTimeRange.bind(this, this.state);
+    this.removeTimelog = this.removeTimelog.bind(this);
+    this.updateTimelogs = this.updateTimelogs.bind(this);
+    this.loadTimelogs = this.loadTimelogs.bind(this);
+    this.filterByDuration = this.filterByDuration.bind(this);
+    this.filterByStartTime = this.filterByStartTime.bind(this);
+    this.filterByEndTime = this.filterByEndTime.bind(this);
+    this.filterByTimeRange = this.filterByTimeRange.bind(this);
     this.discardFilter = this.discardFilter.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -122,7 +122,7 @@ class Body extends React.Component {
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: { timelog },
       success: () => {
-        this.updateTimelogs(timelog);
+        this.updateTimelogs();
       },
     });
   }

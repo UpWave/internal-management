@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Timelog from './timelog';
 
 class Timelogs extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.handleDelete = this.handleDelete.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
   }
