@@ -2,7 +2,6 @@ import React from 'react';
 import Timelog from './timelog.jsx';
 
 class Timelogs extends React.Component {
-
   onUpdate(timelog) {
     this.props.onUpdate(timelog);
   }
@@ -12,11 +11,9 @@ class Timelogs extends React.Component {
   }
 
   render() {
-    const timelogs = this.props.timelogs.map((timelog) => {
-      return (
-        <Timelog id={timelog.id} key={timelog.id.toString()} trello_cards={this.props.trello_cards} timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this)} />
-      );
-    });
+    const timelogs = this.props.timelogs.map(timelog => (
+      <Timelog id={timelog.id} key={timelog.id.toString()} trello_cards={this.props.trello_cards} timelog={timelog} handleDelete={this.handleDelete.bind(this, timelog.id)} handleUpdate={this.onUpdate.bind(this)} />
+    ));
     return (
       <div>
         {timelogs}

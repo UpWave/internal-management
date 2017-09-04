@@ -30,13 +30,15 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   def create
     @timelog = current_user.timelogs.build(timelogs_params)
     authorize @timelog
-    respond_with :api, :v1, @timelog 
-    @timelog.save
+    if @timelog.save
+      respond_with :api, :v1, @timelog
+    end 
   end
 
   def update
-    @timelog.update_attributes(timelogs_params)
-    respond_with @timelog, json: @timelog
+    if @timelog.update_attributes(timelogs_params)
+      respond_with @timelog, json: @timelog
+    end
   end
 
   def new
