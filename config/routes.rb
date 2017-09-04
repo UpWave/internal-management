@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   resource :user, only: [] do
-    resources :timelogs 
+    resources :timelogs
     resources :vacations
     resource :profile
   end
@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :timelogs do
         collection do
           get :trello_cards
+          get :count_timelogs
         end
       end
     end

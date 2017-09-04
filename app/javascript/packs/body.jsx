@@ -12,9 +12,10 @@ class Body extends React.Component {
       trelloCards: [],
       page: 0,
       pageCount: 1,
-      perPage: 3,
+      perPage: 5,
       startTime: 0,
       endTime: 0,
+      filter: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -40,13 +41,14 @@ class Body extends React.Component {
   loadTimelogs() {
     // Get all timelogs for pageCount
     $.ajax({
-      url: '/api/v1/timelogs',
+      url: '/api/v1/timelogs/count_timelogs',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: {
         limit: 0,
         page: 0,
         start_time: this.state.startTime,
         end_time: this.state.endTime,
+        filter: this.state.filter,
       },
       dataType: 'json',
       type: 'GET',
@@ -63,6 +65,7 @@ class Body extends React.Component {
         page: this.state.page,
         start_time: this.state.startTime,
         end_time: this.state.endTime,
+        filter: this.state.filter,
       },
       dataType: 'json',
       type: 'GET',
@@ -88,22 +91,27 @@ class Body extends React.Component {
   }
 
   filterByDuration() {
-    const timelogs = this.state.timelogs.sort((a, b) => a.duration > b.duration);
-    this.setState({ timelogs });
+    this.setState({ filter: 'duration' }, () => {
+      this.loadTimelogs();
+    });
   }
 
   filterByStartTime() {
-    const timelogs = this.state.timelogs.sort((a, b) => a.start_time > b.start_time);
-    this.setState({ timelogs });
+    this.setState({ filter: 'start_time' }, () => {
+      this.loadTimelogs();
+    });
   }
 
   filterByEndTime() {
-    const timelogs = this.state.timelogs.sort((a, b) => a.end_time > b.end_time);
-    this.setState({ timelogs });
+    this.setState({ filter: 'end_time' }, () => {
+      this.loadTimelogs();
+    });
   }
 
   filterByTimeRange() {
-    this.loadTimelogs();
+    this.setState({ filter: '' }, () => {
+      this.loadTimelogs();
+    });
   }
 
   removeTimelog() {
@@ -150,6 +158,8 @@ class Body extends React.Component {
       start_time: 0,
       end_time: 0,
     }, () => {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
       this.loadTimelogs();
     });
   }
@@ -158,7 +168,8 @@ class Body extends React.Component {
     if (this.state.trelloCards.length === 0) {
       return (
         <div>
-          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first</h3>
+          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
+          and add cards to your boards</h3>
         </div>
       );
     } else if (this.state.timelogs.length === 0) {
@@ -167,7 +178,7 @@ class Body extends React.Component {
           <h3>There are no timelogs</h3>
           <NewTimelog
             key="new_timelog"
-            trello_cards={this.state.trello_cards}
+            trelloCards={this.state.trelloCards}
             handleSubmit={this.handleSubmit}
           />
         </div>

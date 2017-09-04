@@ -5,22 +5,13 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :load_trello_service, only: [:trello_cards]
 
   def index
-    if ((params[:start_time] != "0") && (params[:end_time] != "0"))
-      if params[:limit] == "0"
-        @timelogs = current_user.timelogs.date_range(params[:start_time], params[:end_time]).count
-      else 
-        @timelogs = current_user.timelogs.date_range(params[:start_time], params[:end_time]).paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
-        authorize @timelogs
-      end    
-    else
-      if params[:limit] == "0"
-        @timelogs = current_user.timelogs.count
-      else 
-        @timelogs = current_user.timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
-        authorize @timelogs
-      end
-    end
-    respond_with @timelogs  
+    @timelogs = filtered_timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
+    authorize @timelogs
+    respond_with @timelogs
+  end
+
+  def count_timelogs
+    respond_with filtered_timelogs.count
   end
 
   def trello_cards
@@ -32,7 +23,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
     authorize @timelog
     if @timelog.save
       respond_with :api, :v1, @timelog
-    end 
+    end
   end
 
   def update
@@ -60,9 +51,19 @@ class Api::V1::TimelogsController < Api::V1::BaseController
       @trello_service = TrelloService.new(current_user)
     end
 
+    def filtered_timelogs
+      if params[:filter] != ""
+        current_user.timelogs.send params[:filter]
+      elsif ((params[:start_time] != "0") && (params[:end_time] !="0"))
+        current_user.timelogs.date_range(params[:start_time], params[:end_time])
+      else
+        current_user.timelogs
+      end
+    end
+
     def load_timelog
       @timelog = current_user.timelogs.find(params[:id])
       authorize @timelog
     end
-    
+
 end
