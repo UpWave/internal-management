@@ -40,7 +40,7 @@ class NewTimelog extends React.Component {
 
   render() {
     return (
-      <div id="newtimelog">
+      <div id="new_timelog">
         <h3>Create a new timelog!</h3>
         <input type="datetime-local" onChange={this.handleStartDateChange} /><br />
         <input type="number" onChange={this.handleDurationChange} placeholder="Enter duration in minutes" /><br />

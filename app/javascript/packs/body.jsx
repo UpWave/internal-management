@@ -160,15 +160,15 @@ class Body extends React.Component {
 
   checkDateSubmitVisibility() {
     if (this.state.endTime > this.state.startTime) {
-      document.getElementById('dateSubmit').style = { display: 'block' };
+      $('#date_submit').css('visibility', 'visible');
     } else {
-      document.getElementById('dateSubmit').style = { display: 'none' };
+      $('#date_submit').css('visibility', 'hidden');
     }
   }
 
   discardFilter() {
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
+    document.getElementById('start_date').value = '';
+    document.getElementById('end_date').value = '';
     this.setState({
       startTime: 0,
       endTime: 0,
@@ -205,10 +205,10 @@ class Body extends React.Component {
         <button onClick={this.filterByStartTime}>Start time</button>
         <button onClick={this.filterByEndTime}>End time</button><br /><br />
             Select time range:
-        <input type="datetime-local" id="startDate" onChange={this.handleStartDateChange} />
-        <input type="datetime-local" id="endDate" onChange={this.handleEndDateChange} />
-        <button id="dateDiscard" onClick={this.discardFilter}>X</button>
-        <button id="dateSubmit" style={{ display: 'none' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
+        <input type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
+        <input type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
+        <button id="date_discard" onClick={this.discardFilter}>X</button>
+        <button id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
         <Timelogs
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}
