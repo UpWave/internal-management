@@ -5,6 +5,8 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 /public/system
+package-lock.json
+yarn.lock
 
 # Ignore bundler config.
 /.bundle
@@ -29,3 +31,5 @@
 
 # Ignore application configuration
 /config/application.yml
+/public/packs
+/node_modules
