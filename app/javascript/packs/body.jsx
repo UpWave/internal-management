@@ -40,7 +40,7 @@ class Body extends React.Component {
   }
 
   loadTimelogs() {
-    // Get all timelogs for pageCount
+    // Get number of timelogs for pageCount
     $.ajax({
       url: '/api/v1/timelogs/count_timelogs',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
