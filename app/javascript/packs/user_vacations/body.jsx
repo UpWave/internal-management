@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactPaginate from 'react-paginate';
 import Vacations from './vacations';
 import NewVacation from './new_vacation';
 
@@ -11,7 +10,6 @@ class Body extends React.Component {
       vacations: [],
       startDate: 0,
       endDate: 0,
-      status: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
