@@ -14,11 +14,13 @@ class Vacation extends React.Component {
   render() {
     const startDate = <p>Start time: {this.props.vacation.start_date}</p>;
     const endDate = <p>End time: {this.props.vacation.end_date}</p>;
+    const vacationType = <p>Type of vacation: {this.props.vacation.reason}</p>;
     const status = <p>Status: {this.props.vacation.status}</p>;
     return (
       <div key={this.props.vacation.id}>
         {startDate}
         {endDate}
+        {vacationType}
         {status}
         <button onClick={this.handleDelete}> Delete</button>
       </div>
