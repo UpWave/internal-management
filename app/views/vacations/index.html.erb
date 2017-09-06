@@ -1,9 +1,3 @@
-<div class="well">
-  <% if @vacations.empty? %>
-    <h3>Request a vacation!<h3>
-  <% else %> 
-    <h3>Vacations</h3>
-    <%= render @vacations %>
-  <% end %>
-  <%= link_to 'Request a vacation', new_user_vacation_path, class: 'btn btn-default' %>
+<div class="well", id="root">
+<%= javascript_pack_tag 'user_vacations/body' %>
 </div>
