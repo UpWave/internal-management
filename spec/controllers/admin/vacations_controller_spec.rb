@@ -8,8 +8,8 @@ RSpec.describe Admin::VacationsController, type: :controller do
 
   let(:user) { FactoryGirl.create(:user, role: 'admin') }
   let(:other_user) { FactoryGirl.create(:user) }
-  
-  describe "GET #index" do    
+
+  describe "GET #index" do
     it "renders the index template" do
       get :index
       expect(response).to render_template("index")
@@ -29,7 +29,7 @@ RSpec.describe Admin::VacationsController, type: :controller do
       expect{
             get :destroy, params: { id: vacation.id }
             }.to change(Vacation, :count).by(-1)
-    end  
+    end
   end
 
   describe "PATCH #update" do
