@@ -22,6 +22,18 @@ Rails.application.routes.draw do
       end
     end
   end
+  namespace :api do
+    namespace :v1 do
+      namespace :admin do
+        resources :timelogs do
+          collection do
+            get :trello_cards
+            get :count_timelogs
+          end
+        end
+      end
+    end
+  end
   get 'pages/index'
   root to: "pages#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
