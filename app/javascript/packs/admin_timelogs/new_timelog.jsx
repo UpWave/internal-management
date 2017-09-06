@@ -5,16 +5,10 @@ import Select from 'react-normalized-select';
 class NewTimelog extends React.Component {
   constructor(props, context) {
     super(props, context);
-    // Here is the same process as in the body.jsx
-    // i have to do this, cause i can't pass props to
-    // this component from Body if user has no timelogs yet.
-    // (i know it's weird)
-    const numberPattern = /users\/\d+/g;
     this.state = {
       card: false,
       duration: 0,
       startTime: 0,
-      userId: window.location.href.match(numberPattern)[0].replace('users/', ''),
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleDurationChange = this.handleDurationChange.bind(this);
@@ -29,7 +23,7 @@ class NewTimelog extends React.Component {
       url: '/api/v1/admin/timelogs',
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_id: this.state.userId, timelog: { start_time: startTime, duration, trello_card: trelloCard } },
+      data: { user_id: this.props.userId, timelog: { start_time: startTime, duration, trello_card: trelloCard } },
       success: () => {
         this.props.handleSubmit();
       },
@@ -62,6 +56,7 @@ class NewTimelog extends React.Component {
 }
 
 NewTimelog.propTypes = {
+  userId: PropTypes.string.isRequired,
   trelloCards: PropTypes.arrayOf.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };

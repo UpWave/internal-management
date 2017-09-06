@@ -8,7 +8,7 @@ class Body extends React.Component {
   constructor(props, context) {
     super(props, context);
     // regex for parsing user_id from URL
-    const numberPattern = /users\/\d+/g;
+    const userIdPattern = /users\/\d+/g;
     this.state = {
       timelogs: [],
       trelloCards: [],
@@ -19,7 +19,7 @@ class Body extends React.Component {
       endTime: 0,
       filter: '',
       // parsing user_id from current URL
-      userId: window.location.href.match(numberPattern)[0].replace('users/', ''),
+      userId: window.location.href.match(userIdPattern)[0].replace('users/', ''),
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -210,6 +210,7 @@ class Body extends React.Component {
           <h3>There are no timelogs</h3>
           <NewTimelog
             key="new_timelog"
+            userId={this.state.userId}
             trelloCards={this.state.trelloCards}
             handleSubmit={this.handleSubmit}
           />
