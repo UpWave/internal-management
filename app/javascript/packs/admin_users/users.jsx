@@ -7,9 +7,14 @@ class Users extends React.Component {
     super(props, context);
     this.handleDelete = this.handleDelete.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.setNewSalary = this.setNewSalary.bind(this);
   }
   onUpdate(user) {
     this.props.onUpdate(user);
+  }
+
+  setNewSalary(salary, user) {
+    this.props.setNewSalary(salary, user);
   }
 
   handleDelete(id) {
@@ -25,6 +30,7 @@ class Users extends React.Component {
         statuses={this.props.statuses}
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
+        setNewSalary={this.setNewSalary}
       />
     ));
     return (
@@ -41,6 +47,7 @@ Users.propTypes = {
   statuses: PropTypes.arrayOf.isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  setNewSalary: PropTypes.func.isRequired,
 };
 
 export default Users;

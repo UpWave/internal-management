@@ -31,6 +31,7 @@ Rails.application.routes.draw do
             get :roles
             get :statuses
             get :salary
+            patch :set_salary
           end
         end
         resources :timelogs do

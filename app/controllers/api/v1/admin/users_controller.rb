@@ -1,11 +1,11 @@
 class Api::V1::Admin::UsersController < Api::V1::BaseController
   before_action :authenticate_user!
-  before_action :load_user, except: [:index, :roles, :statuses, :salary]
-  after_action :verify_authorized, except: [:roles, :statuses, :salary]
+  before_action :authorize_user
+  before_action :load_user, except: [:index, :roles, :statuses]
+  after_action :verify_authorized
 
   def index
     @users = User.all
-    authorize User
     respond_with @users
   end
 
@@ -18,15 +18,21 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
   end
 
   def salary
-    respond_with User.find(params[:id]).salary.amount.to_s
+    respond_with @user.salaries.last.amount
   end
 
   def destroy
     respond_with @user.destroy
   end
 
+  def set_salary
+    if ((@user.salaries.last.update_attributes(archived_at: params[:archived_at])) && (@user.salaries.create(amount: params[:amount])))
+      respond_with @user, json: @user
+    end
+  end
+
   def update
-    if ((@user.update_attributes(user_params)) && (@user.salary.update_attributes(salary_params)))
+    if ((@user.update_attributes(user_params)) && (@user.salaries.last.update_attributes(salary_params)))
       respond_with @user, json: @user
     end
   end
@@ -38,6 +44,10 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
 
     def salary_params
       params.require(:user).permit(:amount)
+    end
+
+    def authorize_user
+      authorize User
     end
 
     def load_user

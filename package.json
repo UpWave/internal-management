@@ -23,6 +23,8 @@
     "prop-types": "^15.5.10",
     "rails-erb-loader": "^5.2.1",
     "react": "^15.6.1",
+    "react-alert": "^2.3.0",
+    "react-collapsible": "^2.0.0",
     "react-datepicker": "^0.54.0",
     "react-dom": "^15.6.1",
     "react-input-calendar": "^0.4.1",

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import AlertContainer from 'react-alert';
 import Users from './users';
 
 class Body extends React.Component {
@@ -13,6 +14,7 @@ class Body extends React.Component {
     this.loadUsers = this.loadUsers.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.setNewSalary = this.setNewSalary.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +37,20 @@ class Body extends React.Component {
       },
     });
     this.loadUsers();
+  }
+
+  setNewSalary(salary, user) {
+    const date = new Date();
+    $.ajax({
+      url: '/api/v1/admin/users/set_salary/',
+      type: 'PATCH',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { id: user.id, amount: salary, archived_at: date.toISOString().slice(0, 10) },
+      success: () => {
+        this.msg.success('Successfully setted new salary');
+        this.loadUsers();
+      },
+    });
   }
 
   loadUsers() {
@@ -75,6 +91,7 @@ class Body extends React.Component {
   render() {
     return (
       <div>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />,
         <Users
           key={this.state.users.length.toString()}
           users={this.state.users}
@@ -82,6 +99,7 @@ class Body extends React.Component {
           statuses={this.state.statuses}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
+          setNewSalary={this.setNewSalary}
         />
       </div>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
+import Collapsible from 'react-collapsible';
 
 class User extends React.Component {
   constructor(props, context) {
@@ -10,10 +11,12 @@ class User extends React.Component {
       editable: false,
       role: this.props.user.role,
       status: this.props.user.status,
+      newSalary: false,
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSalaryChange = this.handleSalaryChange.bind(this);
+    this.setNewSalary = this.setNewSalary.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +34,10 @@ class User extends React.Component {
     });
   }
 
+  setNewSalary() {
+    this.props.setNewSalary(this.state.salary, this.props.user);
+  }
+
   handleDelete() {
     this.props.handleDelete(this.props.user.id);
   }
@@ -46,6 +53,7 @@ class User extends React.Component {
       };
       this.props.handleUpdate(user);
     }
+    this.setState({ newSalary: !this.state.newSalary });
     this.setState({ editable: !this.state.editable });
   }
 
@@ -56,7 +64,11 @@ class User extends React.Component {
   render() {
     const email = <p>Email: {this.props.user.email}</p>;
     const role = this.state.editable ?
-      (<Select className="mySelect" value={this.state.value} onChange={e => this.setState({ role: e.target.value })}>
+      (<Select
+        className="mySelect"
+        value={this.state.value}
+        onChange={e => this.setState({ role: e.target.value })}
+      >
         <option value="0" disabled hidden>Select role</option>
         {this.props.roles.map(option =>
           <option key={option} value={option}>{option}</option>)}
@@ -64,7 +76,11 @@ class User extends React.Component {
       :
       <p>Role: {this.props.user.role}</p>;
     const status = this.state.editable ?
-      (<Select className="mySelect" value={this.state.value} onChange={e => this.setState({ status: e.target.value })}>
+      (<Select
+        className="mySelect"
+        value={this.state.value}
+        onChange={e => this.setState({ status: e.target.value })}
+      >
         <option value="0" disabled hidden>Select status</option>
         {this.props.statuses.map(option =>
           <option key={option} value={option}>{option}</option>)}
@@ -75,18 +91,30 @@ class User extends React.Component {
       <input type="number" onChange={this.handleSalaryChange} defaultValue={this.state.salary} />
       :
       <p>Salary: {this.state.salary} $</p>;
+    const newSalary = this.state.editable ?
+      null
+      :
+      (<Collapsible
+        id="collapse"
+        trigger="Set new salary"
+        triggerClassName="btn btn-default"
+      >
+        <input type="number" onChange={this.handleSalaryChange} defaultValue={this.state.salary} />
+        <button className="btn btn-default" onClick={this.setNewSalary}>Submit</button>
+      </Collapsible>);
     return (
       <div key={this.props.user.id}>
         {email}
         {role}
         {status}
         {salary}
-        <button onClick={this.handleDelete}>Delete</button>
-        <button onClick={this.handleEdit}>{this.state.editable ? 'Submit' : 'Edit'}</button>
+        {newSalary}<br />
+        <button className="btn btn-default" onClick={this.handleDelete}>Delete</button>
+        <button className="btn btn-default" onClick={this.handleEdit}>{this.state.editable ? 'Submit' : 'Edit'}</button>
         <a
-          className="btn"
+          className="btn btn-default"
           href={'/admin/users/'.concat(this.props.user.id).concat('/timelogs')}
-        ><button>Timelogs</button></a>
+        >Timelogs</a>
       </div>
     );
   }
@@ -97,6 +125,7 @@ User.propTypes = {
   roles: PropTypes.arrayOf.isRequired,
   statuses: PropTypes.arrayOf.isRequired,
   handleUpdate: PropTypes.func.isRequired,
+  setNewSalary: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
 
