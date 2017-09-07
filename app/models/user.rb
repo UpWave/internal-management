@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :timelogs, dependent: :destroy
   has_many :identities, dependent: :destroy
   has_many :vacations, dependent: :destroy
+  has_one :salary, dependent: :destroy
 
   def has_trello?
     identities.pluck("provider").include?("trello")
@@ -47,7 +48,7 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    where(email: auth.info.email).first_or_create do |user|  
+    where(email: auth.info.email).first_or_create do |user|
       user.password = Devise.friendly_token[0,20]
     end
   end
