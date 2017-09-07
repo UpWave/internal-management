@@ -24,7 +24,7 @@ class NewVacation extends React.Component {
       url: '/api/v1/vacations',
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { start_date: startDate, end_date: endDate, reason: vacationType } },
+      data: { vacation: { start_date: startDate, end_date: endDate, type: vacationType } },
       success: () => {
         this.props.handleSubmit();
       },

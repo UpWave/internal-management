@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :vacations do
         collection do
-          get :vacation_reasons
+          get :vacation_types
         end
       end
       resources :timelogs do

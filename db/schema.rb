@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20170906211554) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "reason", default: 0, null: false
+    t.integer "type", default: 0, null: false
     t.index ["user_id"], name: "index_vacations_on_user_id"
   end
 

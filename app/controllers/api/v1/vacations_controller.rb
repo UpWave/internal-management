@@ -7,8 +7,8 @@ class Api::V1::VacationsController < Api::V1::BaseController
     respond_with @vacations
   end
 
-  def vacation_reasons
-    respond_with Vacation.reasons.keys
+  def vacation_types
+    respond_with Vacation.types.keys
   end
 
   def create
@@ -37,7 +37,7 @@ class Api::V1::VacationsController < Api::V1::BaseController
 
   private
     def vacation_params
-      params.require(:vacation).permit(:start_date, :end_date, :reason)
+      params.require(:vacation).permit(:start_date, :end_date, :type)
     end
 
     def load_vacation
