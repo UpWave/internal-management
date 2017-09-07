@@ -8,7 +8,7 @@ class NewVacation extends React.Component {
     this.state = {
       startDate: 0,
       endDate: 0,
-      vacationType: '',
+      type: '',
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -19,12 +19,12 @@ class NewVacation extends React.Component {
   handleClick() {
     const startDate = this.state.startDate;
     const endDate = this.state.endDate;
-    const vacationType = this.state.vacationType;
+    const type = this.state.type;
     $.ajax({
       url: '/api/v1/vacations',
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { start_date: startDate, end_date: endDate, type: vacationType } },
+      data: { vacation: { start_date: startDate, end_date: endDate, type: type } },
       success: () => {
         this.props.handleSubmit();
       },
@@ -56,8 +56,8 @@ class NewVacation extends React.Component {
       <div id="new_vacation">
         <h3>Request a new vacation!</h3>
         Select type of vacation:
-        <Select className="mySelect" onChange={e => this.setState({ vacationType: e.target.value })}>
-          {this.props.vacationTypes.map(option =>
+        <Select className="mySelect" onChange={e => this.setState({ type: e.target.value })}>
+          {this.props.types.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select><br />
         Start Date:
@@ -73,7 +73,7 @@ class NewVacation extends React.Component {
 
 NewVacation.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  vacationTypes: PropTypes.arrayOf.isRequired,
+  types: PropTypes.arrayOf.isRequired,
 };
 
 export default NewVacation;

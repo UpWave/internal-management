@@ -8,7 +8,7 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       vacations: [],
-      vacationTypes: [],
+      types: [],
       startDate: 0,
       endDate: 0,
     };
@@ -25,7 +25,7 @@ class Body extends React.Component {
       dataType: 'json',
       type: 'GET',
       success: (data) => {
-        this.setState({ vacationTypes: data });
+        this.setState({ types: data });
       },
     });
     this.loadVacations();
@@ -70,7 +70,7 @@ class Body extends React.Component {
           <NewVacation
             key="new_vacation"
             handleSubmit={this.handleSubmit}
-            vacationTypes={this.state.vacationTypes}
+            types={this.state.types}
           />
         </div>
       );
@@ -85,7 +85,7 @@ class Body extends React.Component {
         <NewVacation
           key="new_vacation"
           handleSubmit={this.handleSubmit}
-          vacationTypes={this.state.vacationTypes}
+          types={this.state.types}
         />
       </div>
     );

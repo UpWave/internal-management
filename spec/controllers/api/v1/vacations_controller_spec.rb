@@ -24,7 +24,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
     end
   end
 
-  describe "GET #vacation_types" do
+  describe "GET #types" do
     it "returns successfull response" do
       get :types, format: :json
       expect(response).to be_success
