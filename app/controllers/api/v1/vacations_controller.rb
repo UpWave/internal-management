@@ -7,7 +7,7 @@ class Api::V1::VacationsController < Api::V1::BaseController
     respond_with @vacations
   end
 
-  def vacation_types
+  def types
     respond_with Vacation.types.keys
   end
 

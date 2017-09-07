@@ -26,12 +26,12 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
 
   describe "GET #vacation_types" do
     it "returns successfull response" do
-      get :vacation_types, format: :json
+      get :types, format: :json
       expect(response).to be_success
     end
 
     it "returns response as array" do
-      get :vacation_types, format: :json
+      get :types, format: :json
       expect(JSON.parse(response.body)).to be_an_instance_of(Array)
     end
   end
