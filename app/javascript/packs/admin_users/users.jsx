@@ -19,7 +19,6 @@ class Users extends React.Component {
   render() {
     const users = this.props.users.map(user => (
       <User
-        id={user.id}
         key={user.id.toString()}
         user={user}
         roles={this.props.roles}

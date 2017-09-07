@@ -13,6 +13,22 @@ class User extends React.Component {
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleSalaryChange = this.handleSalaryChange.bind(this);
+  }
+
+  componentDidMount() {
+    $.ajax({
+      url: '/api/v1/admin/users/salary',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: {
+        id: this.props.user.id,
+      },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ salary: data });
+      },
+    });
   }
 
   handleDelete() {
@@ -21,14 +37,20 @@ class User extends React.Component {
 
   handleEdit() {
     if (this.state.editable) {
-      const id = this.props.user.id;
-      const email = this.props.user.email;
-      const role = this.state.role;
-      const status = this.state.status;
-      const user = { id, email: email, role: role, status: status };
+      const user = {
+        id: this.props.user.id,
+        email: this.props.user.email,
+        role: this.state.role,
+        status: this.state.status,
+        amount: this.state.salary,
+      };
       this.props.handleUpdate(user);
     }
     this.setState({ editable: !this.state.editable });
+  }
+
+  handleSalaryChange(event) {
+    this.setState({ salary: event.target.value });
   }
 
   render() {
@@ -49,11 +71,16 @@ class User extends React.Component {
       </Select>)
       :
       <p>Status: {this.props.user.status}</p>;
+    const salary = this.state.editable ?
+      <input type="number" onChange={this.handleSalaryChange} defaultValue={this.state.salary} />
+      :
+      <p>Salary: {this.state.salary} $</p>;
     return (
       <div key={this.props.user.id}>
         {email}
         {role}
         {status}
+        {salary}
         <button onClick={this.handleDelete}>Delete</button>
         <button onClick={this.handleEdit}>{this.state.editable ? 'Submit' : 'Edit'}</button>
         <a

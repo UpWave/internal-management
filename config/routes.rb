@@ -30,6 +30,7 @@ Rails.application.routes.draw do
           collection do
             get :roles
             get :statuses
+            get :salary
           end
         end
         resources :timelogs do
