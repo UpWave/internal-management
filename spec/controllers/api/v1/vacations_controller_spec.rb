@@ -24,18 +24,6 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
     end
   end
 
-  describe "GET #types" do
-    it "returns successfull response" do
-      get :types, format: :json
-      expect(response).to be_success
-    end
-
-    it "returns response as array" do
-      get :types, format: :json
-      expect(JSON.parse(response.body)).to be_an_instance_of(Array)
-    end
-  end
-
   describe "GET #create" do
     it "creates your vacation" do
       vacation = FactoryGirl.build(:vacation, user_id: user.id)

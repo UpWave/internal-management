@@ -14,10 +14,9 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
-      resources :vacations do
-        collection do
-          get :types
-        end
+      resources :vacations
+      namespace :vacations do
+        resources :types
       end
       resources :timelogs do
         collection do
