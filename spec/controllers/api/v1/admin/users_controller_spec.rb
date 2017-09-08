@@ -24,46 +24,6 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
-  describe "GET #roles" do
-    it "allows authenticated access" do
-      get :roles, format: :json
-      expect(response).to be_success
-    end
-
-    it "returns array with correct roles" do
-      roles = ["admin", "member"]
-      get :roles, format: :json
-      expect(JSON.parse(response.body)).to eq(roles)
-    end
-  end
-
-  describe "GET #statuses" do
-    it "allows authenticated access" do
-      get :statuses, format: :json
-      expect(response).to be_success
-    end
-
-    it "returns array with correct statuses" do
-      statuses = ["inactive", "active"]
-      get :statuses, format: :json
-      expect(JSON.parse(response.body)).to eq(statuses)
-    end
-  end
-
-  describe "GET #salary" do
-    it "allows authenticated access" do
-      FactoryGirl.create(:salary, user_id: other_user.id)
-      get :salary, format: :json, params: { id: other_user.id }
-      expect(response).to be_success
-    end
-
-    it "returns correct salary" do
-      FactoryGirl.create(:salary, user_id: other_user.id)
-      get :salary, format: :json, params: { id: other_user.id }
-      expect(JSON.parse(response.body)).to eq(Salary.last.amount.to_s)
-    end
-  end
-
   describe "DELETE #destroy" do
     it "deletes the user" do
       get :destroy, format: :json, params: { id: other_user.id }
@@ -72,19 +32,9 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
-  describe "PATCH #set_salary" do
-    it "sets new salary for a user and archives the previous" do
-      FactoryGirl.create(:salary, user_id: other_user.id)
-      patch :set_salary, format: :json, params: { id: other_user.id, archived_at: "2017-12-12", amount: 500 }
-      expect(Salary.first.archived_at.to_s).to eql("2017-12-12")
-      expect(Salary.last.amount.to_s).to eql("500.0")
-    end
-  end
-
   describe "PATCH #update" do
     it "updates an user" do
-      FactoryGirl.create(:salary, user_id: user.id)
-      patch :update, format: :json, params: { id: user.id, user: FactoryGirl.attributes_for(:user, email: "email@email.com", amount: 500) }
+      patch :update, format: :json, params: { id: user.id, user: FactoryGirl.attributes_for(:user, email: "email@email.com") }
       user.reload
       expect(user.email).to eql("email@email.com")
     end

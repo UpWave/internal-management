@@ -35,6 +35,10 @@ class User < ApplicationRecord
     end
   end
 
+  def salary
+    salaries.last.amount.to_s
+  end
+
   def active_for_authentication?
     super && active?
   end

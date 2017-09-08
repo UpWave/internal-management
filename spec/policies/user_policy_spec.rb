@@ -17,46 +17,6 @@ describe UserPolicy do
     end
   end
 
-  permissions :roles? do
-    it 'prevents other users from accessing roles' do
-      expect(subject).not_to permit(current_user)
-    end
-
-    it 'allows an admin to access roles' do
-      expect(subject).to permit(admin)
-    end
-  end
-
-  permissions :statuses? do
-    it 'prevents other users from accessing statuses' do
-      expect(subject).not_to permit(current_user)
-    end
-
-    it 'allows an admin to access statuses' do
-      expect(subject).to permit(admin)
-    end
-  end
-
-  permissions :salary? do
-    it 'prevents other users from requesting salary' do
-      expect(subject).not_to permit(current_user)
-    end
-
-    it 'allows an admin to request salary' do
-      expect(subject).to permit(admin)
-    end
-  end
-
-  permissions :set_salary? do
-    it 'prevents other users from setting salaries' do
-      expect(subject).not_to permit(current_user)
-    end
-
-    it 'allows an admin to set salary' do
-      expect(subject).to permit(admin)
-    end
-  end
-
   permissions :show? do
     it 'prevents other users from seeing the profile' do
       expect(subject).not_to permit(current_user, other_user)

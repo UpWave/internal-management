@@ -14,12 +14,13 @@ class Body extends React.Component {
     this.loadUsers = this.loadUsers.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleUpdateSalary = this.handleUpdateSalary.bind(this);
     this.setNewSalary = this.setNewSalary.bind(this);
   }
 
   componentDidMount() {
     $.ajax({
-      url: '/api/v1/admin/users/roles',
+      url: '/api/v1/admin/roles',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       dataType: 'json',
       type: 'GET',
@@ -28,7 +29,7 @@ class Body extends React.Component {
       },
     });
     $.ajax({
-      url: '/api/v1/admin/users/statuses',
+      url: '/api/v1/admin/statuses',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       dataType: 'json',
       type: 'GET',
@@ -39,13 +40,12 @@ class Body extends React.Component {
     this.loadUsers();
   }
 
-  setNewSalary(salary, user) {
-    const date = new Date();
+  setNewSalary(salary, id) {
     $.ajax({
-      url: '/api/v1/admin/users/set_salary/',
-      type: 'PATCH',
+      url: '/api/v1/admin/salaries',
+      type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { id: user.id, amount: salary, archived_at: date.toISOString().slice(0, 10) },
+      data: { salary: salary, id: id },
       success: () => {
         this.msg.success('Successfully setted new salary');
         this.loadUsers();
@@ -71,11 +71,23 @@ class Body extends React.Component {
       type: 'DELETE',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       success: () => {
+        this.msg.success('User deleted');
         this.loadUsers();
       },
     });
   }
 
+  handleUpdateSalary(salary, id) {
+    $.ajax({
+      url: `/api/v1/admin/salaries/${id}`,
+      type: 'PATCH',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { salary: salary, id: id },
+      success: () => {
+        this.msg.success('Salary updated');
+      },
+    });
+  }
   handleUpdate(user) {
     $.ajax({
       url: `/api/v1/admin/users/${user.id}`,
@@ -83,6 +95,7 @@ class Body extends React.Component {
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: { user: user },
       success: () => {
+        this.msg.success('User updated');
         this.loadUsers();
       },
     });
@@ -91,7 +104,7 @@ class Body extends React.Component {
   render() {
     return (
       <div>
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />,
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <Users
           key={this.state.users.length.toString()}
           users={this.state.users}
@@ -99,6 +112,7 @@ class Body extends React.Component {
           statuses={this.state.statuses}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
+          handleUpdateSalary={this.handleUpdateSalary}
           setNewSalary={this.setNewSalary}
         />
       </div>
