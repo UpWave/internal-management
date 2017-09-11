@@ -41,13 +41,24 @@ RSpec.describe Api::V1::Admin::SalariesController, type: :controller do
           }.to change(Salary, :count).by(1)
     end
 
-    it "archives a previous salary when creating a new one" do
+    it "archives a first salary when creating a second" do
       salary_params = FactoryGirl.attributes_for(:salary)
       FactoryGirl.create(:salary, user_id: other_user.id)
       post :create, format: :json, params: { id: other_user.id, salary: salary_params }
       expect(other_user.salaries.first.archived_at).to eql(Date.current)
       expect(other_user.salary).to eql(salary_params[:amount])
       expect(other_user.salaries.length).to eql(2)
+    end
+
+    it "archives a previous salary when creating a new one" do
+      4.times do
+        SalaryCreator.new(other_user.salaries, FactoryGirl.attributes_for(:salary))
+      end
+      new_salary_params = FactoryGirl.attributes_for(:salary)
+      SalaryCreator.new(other_user.salaries, new_salary_params)
+      expect(other_user.salaries.length).to eql(5)
+      other_user.salaries.first(4).each { |record| expect(record.archived_at).to eql(Date.current) }
+      expect(other_user.salary).to eql(new_salary_params[:amount])
     end
   end
 end

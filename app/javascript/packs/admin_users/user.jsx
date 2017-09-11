@@ -143,7 +143,7 @@ class User extends React.Component {
         <img
           onMouseOver={() => this.mouseOverRed()}
           onMouseLeave={() => this.mouseLeave()}
-          src="https://cdn2.iconfinder.com/data/icons/freecns-cumulus/32/519791-101_Warning-128.png"
+          src="images/red-warn-icon.png"
           alt="red-warn-icon"
         />
         <br />
@@ -153,7 +153,7 @@ class User extends React.Component {
         <img
           onMouseOver={() => this.mouseOverGrey()}
           onMouseLeave={() => this.mouseLeave()}
-          src="https://cdn1.iconfinder.com/data/icons/hawcons/32/700303-icon-61-warning-128.png"
+          src="images/grey-warn-icon.png"
           alt="grey-warn-icon"
         />
         <br />
