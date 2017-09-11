@@ -26,4 +26,12 @@ class UserPolicy
     @current_user.admin?
   end
 
+  def roles
+    @current_user.admin?
+  end
+
+  def statuses
+    @current_user.admin?
+  end
+
 end

@@ -55,4 +55,25 @@ describe UserPolicy do
     end
   end
 
+  permissions :roles do
+    it 'prevents other users from accessing roles' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access roles' do
+      expect(subject).to permit(admin)
+    end
+  end
+
+  permissions :statuses do
+    it 'prevents other users from accessing statuses' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access statuses' do
+      expect(subject).to permit(admin)
+    end
+  end
+
+
 end
