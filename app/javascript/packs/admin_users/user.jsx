@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import Collapsible from 'react-collapsible';
+import AlertContainer from 'react-alert';
 
 class User extends React.Component {
   constructor(props, context) {
@@ -24,6 +25,10 @@ class User extends React.Component {
     this.checkValues = this.checkValues.bind(this);
     this.handleReviewDateChange = this.handleReviewDateChange.bind(this);
     this.checkSetSalaryButton = this.checkSetSalaryButton.bind(this);
+    this.warningIcon = this.warningIcon.bind(this);
+    this.mouseOverRed = this.mouseOverRed.bind(this);
+    this.mouseOverGrey = this.mouseOverGrey.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
   }
 
   componentDidMount() {
@@ -125,6 +130,43 @@ class User extends React.Component {
     }
   }
 
+  mouseOverRed() {
+    this.msg.error('You have missed review date!');
+  }
+
+  mouseOverGrey() {
+    this.msg.info('Review salary in few days!');
+  }
+
+  mouseLeave() {
+    this.msg.removeAll();
+  }
+
+  warningIcon() {
+    if ((new Date(this.state.reviewDate) - new Date()) < 0) {
+      return (<div>
+        <img
+          onMouseOver={() => this.mouseOverRed()}
+          onMouseLeave={() => this.mouseLeave()}
+          src="https://cdn2.iconfinder.com/data/icons/freecns-cumulus/32/519791-101_Warning-128.png"
+          alt="red-warn-icon"
+        />
+        <br />
+      </div>);
+    } else if ((new Date(this.state.reviewDate) - new Date()) < 1.21e+9) {
+      return (<div>
+        <img
+          onMouseOver={() => this.mouseOverGrey()}
+          onMouseLeave={() => this.mouseLeave()}
+          src="https://cdn1.iconfinder.com/data/icons/hawcons/32/700303-icon-61-warning-128.png"
+          alt="grey-warn-icon"
+        />
+        <br />
+      </div>);
+    }
+    return null;
+  }
+
   render() {
     const email = <b>Email: {this.props.user.email}</b>;
     const role = this.state.editable ?
@@ -155,6 +197,7 @@ class User extends React.Component {
       <input type="number" min="0" onChange={this.handleSalaryChange} defaultValue={this.state.amount} />
       :
       <text>{this.state.amount} $</text>;
+    const warningImg = this.warningIcon();
     const reviewDate = this.state.editableSalary ?
       <input type="date" onChange={this.handleReviewDateChange} />
       :
@@ -181,6 +224,7 @@ class User extends React.Component {
       </Collapsible>);
     return (
       <div className="well" key={this.props.user.id}>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         {email}<br />
         Role:{role}<br />
         Status:{status}<br />
@@ -192,6 +236,7 @@ class User extends React.Component {
         >Timelogs
         </a><br />
         Salary:{salary}<br />
+        {warningImg}
         Review date:{reviewDate}<br />
         {editSubmitButton}
         {newSalary}<br />
