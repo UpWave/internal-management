@@ -20,7 +20,7 @@ RSpec.describe Api::V1::Admin::SalariesController, type: :controller do
     it "returns correct salary" do
       FactoryGirl.create(:salary, user_id: other_user.id)
       get :index, format: :json, params: { id: other_user.id }
-      expect(JSON.parse(response.body)["amount"]).to eq(Salary.last.amount.to_s)
+      expect(JSON.parse(response.body)["amount"]).to eq(Salary.last.amount)
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::Admin::SalariesController, type: :controller do
       salary_params = FactoryGirl.attributes_for(:salary)
       FactoryGirl.create(:salary, user_id: other_user.id)
       patch :update, format: :json, params: { id: other_user.id, salary: salary_params }
-      expect(Salary.last.amount.to_i).to eql(salary_params[:amount])
+      expect(Salary.last.amount).to eql(salary_params[:amount])
     end
   end
 
@@ -45,8 +45,8 @@ RSpec.describe Api::V1::Admin::SalariesController, type: :controller do
       salary_params = FactoryGirl.attributes_for(:salary)
       FactoryGirl.create(:salary, user_id: other_user.id)
       post :create, format: :json, params: { id: other_user.id, salary: salary_params }
-      expect(other_user.salaries.first.archived_at).not_to eql(nil)
-      expect(other_user.salaries.last.archived_at).to eql(nil)
+      expect(other_user.salaries.first.archived_at).to eql(Date.current)
+      expect(other_user.salary).to eql(salary_params[:amount])
       expect(other_user.salaries.length).to eql(2)
     end
   end

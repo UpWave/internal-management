@@ -47,7 +47,6 @@ class User extends React.Component {
           this.setState({
             amount: data.amount,
             reviewDate: data.review_date,
-            archivedAt: data.archived_at,
           });
           this.checkValues();
         } else {
@@ -61,12 +60,9 @@ class User extends React.Component {
   }
 
   setNewSalary() {
-    const today = new Date();
-    const archivedAt = today.toISOString().substring(0, 10);
     const salary = {
       amount: this.state.amount,
       review_date: this.state.reviewDate,
-      archived_at: archivedAt,
     };
     this.props.setNewSalary(salary, this.props.user.id);
   }
@@ -90,7 +86,6 @@ class User extends React.Component {
       const salary = {
         amount: this.state.amount,
         review_date: this.state.reviewDate,
-        archived_at: this.state.archivedAt,
       };
       this.props.handleUpdateSalary(salary, this.props.user.id);
     }

@@ -27,9 +27,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :admin do
         resources :salaries
-        resources :users
-        resources :roles
-        resources :statuses
+        resources :users do
+          collection do
+            get :count_users
+          end
+        end
+        resources :roles, only: [:index]
+        resources :statuses, only: [:index]
         resources :timelogs do
           collection do
             get :trello_cards

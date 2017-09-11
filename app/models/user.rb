@@ -36,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def salary
-    salaries.last.amount.to_s
+    salaries.last.amount
   end
 
   def active_for_authentication?

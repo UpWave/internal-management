@@ -10,7 +10,7 @@
 </h3>
 <h3>
   <strong>Salary:</strong>
-  <%= @user.salaries.last.amount.to_s %>
+  <%= @user.salary %>
 </h3>
 
 <%= form_for @user, url: user_profile_path(@user), html: { multipart: true } do |form| %>

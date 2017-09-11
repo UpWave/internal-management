@@ -34,4 +34,8 @@ class UserPolicy
     @current_user.admin?
   end
 
+  def count_users
+    @current_user.admin?
+  end
+
 end

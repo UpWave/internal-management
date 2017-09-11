@@ -1,12 +1,17 @@
 class Api::V1::Admin::UsersController < Api::V1::BaseController
   before_action :authenticate_user!
-  before_action :authorize_user
-  before_action :load_user, except: [:index, :roles, :statuses]
+  before_action :load_user, except: [:index, :count_users]
   after_action :verify_authorized
 
   def index
-    @users = User.all
+    @users = User.all.paginate(page: (params[:page].to_i+1).to_s, per_page: params[:per_page])
+    authorize @users
     respond_with @users
+  end
+
+  def count_users
+    authorize current_user, :count_users
+    respond_with User.all.count
   end
 
   def destroy
@@ -16,16 +21,14 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
   def update
     if @user.update_attributes(user_params)
       respond_with @user, json: @user
+    else
+      render json: { errors: @user.errors.full_messages }, status: 422
     end
   end
 
   private
     def user_params
       params.require(:user).permit(:email, :role, :status)
-    end
-
-    def authorize_user
-      authorize User
     end
 
     def load_user
