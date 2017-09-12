@@ -4,11 +4,15 @@
   <strong>Email:</strong>
   <%= @user.email %>
 </h3>
-
 <h3>
   <strong>Role:</strong>
   <%= @user.role %>
 </h3>
+<h3>
+  <strong>Salary:</strong>
+  <%= @user.salary %>
+</h3>
+
 <%= form_for @user, url: user_profile_path(@user), html: { multipart: true } do |form| %>
   <%= form.label 'Set avatar' %>
   <%= form.file_field :avatar %>

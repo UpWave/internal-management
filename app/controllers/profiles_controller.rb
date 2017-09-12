@@ -10,10 +10,10 @@ class ProfilesController < ApplicationController
     if @user.update_attributes(profile_params)
       flash[:success] = "Avatar updated"
       redirect_to user_profile_path
-    else  
+    else
       flash[:alert] = "Something went wrong"
       redirect_to user_profile_path
-    end    
+    end
   end
 
   private

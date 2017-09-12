@@ -7,6 +7,7 @@ class Timelog extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
+      value: '0',
       card: this.props.timelog.trelloCard,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
@@ -51,7 +52,8 @@ class Timelog extends React.Component {
       :
       <p>Duration: {this.props.timelog.duration}</p>;
     const trelloCard = this.state.editable ?
-      (<Select className="mySelect" onChange={e => this.setState({ card: e.target.value })}>
+      (<Select className="mySelect" value={this.state.value} onChange={e => this.setState({ card: e.target.value })}>
+        <option value="0" disabled hidden>Select trello card</option>
         {this.props.trelloCards.map(option =>
           <option key={option} value={option}>{option}</option>)}
       </Select>)

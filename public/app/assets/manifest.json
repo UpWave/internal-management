@@ -1,0 +1,18 @@
+{
+  "admin_timelogs/body.js": "http://127.0.0.1:8080/app/assets/admin_timelogs/body.js",
+  "admin_timelogs/new_timelog.js": "http://127.0.0.1:8080/app/assets/admin_timelogs/new_timelog.js",
+  "admin_timelogs/timelog.js": "http://127.0.0.1:8080/app/assets/admin_timelogs/timelog.js",
+  "admin_timelogs/timelogs.js": "http://127.0.0.1:8080/app/assets/admin_timelogs/timelogs.js",
+  "admin_users/body.js": "http://127.0.0.1:8080/app/assets/admin_users/body.js",
+  "admin_users/user.js": "http://127.0.0.1:8080/app/assets/admin_users/user.js",
+  "admin_users/users.js": "http://127.0.0.1:8080/app/assets/admin_users/users.js",
+  "application.js": "http://127.0.0.1:8080/app/assets/application.js",
+  "user_timelogs/body.js": "http://127.0.0.1:8080/app/assets/user_timelogs/body.js",
+  "user_timelogs/new_timelog.js": "http://127.0.0.1:8080/app/assets/user_timelogs/new_timelog.js",
+  "user_timelogs/timelog.js": "http://127.0.0.1:8080/app/assets/user_timelogs/timelog.js",
+  "user_timelogs/timelogs.js": "http://127.0.0.1:8080/app/assets/user_timelogs/timelogs.js",
+  "user_vacations/body.js": "http://127.0.0.1:8080/app/assets/user_vacations/body.js",
+  "user_vacations/new_vacation.js": "http://127.0.0.1:8080/app/assets/user_vacations/new_vacation.js",
+  "user_vacations/vacation.js": "http://127.0.0.1:8080/app/assets/user_vacations/vacation.js",
+  "user_vacations/vacations.js": "http://127.0.0.1:8080/app/assets/user_vacations/vacations.js"
+}

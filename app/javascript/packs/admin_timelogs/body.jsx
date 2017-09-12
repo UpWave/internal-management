@@ -237,7 +237,7 @@ class Body extends React.Component {
             .concat(this.state.startTime)
             .concat('&end_time=')
             .concat(this.state.endTime))}
-        >Download PDF</a>
+        ><button>Download PDF</button></a>
         <a
           className="btn"
           href={'/api/v1/admin/timelogs.csv'.concat('?user_id='.concat(this.state.userId)
@@ -247,7 +247,7 @@ class Body extends React.Component {
             .concat(this.state.startTime)
             .concat('&end_time=')
             .concat(this.state.endTime))}
-        >Download CSV</a>
+        ><button>Download CSV</button></a>
         <Timelogs
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}

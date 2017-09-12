@@ -9,13 +9,13 @@ class UserPolicy
   def index?
     @current_user.admin?
   end
-  
+
   def show?
-    @current_user.admin? 
+    @current_user.admin?
   end
 
   def edit?
-    @current_user.admin? 
+    @current_user.admin?
   end
 
   def update?
@@ -23,6 +23,18 @@ class UserPolicy
   end
 
   def destroy?
+    @current_user.admin?
+  end
+
+  def roles
+    @current_user.admin?
+  end
+
+  def statuses
+    @current_user.admin?
+  end
+
+  def count_users
     @current_user.admin?
   end
 

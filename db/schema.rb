@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906211554) do
+ActiveRecord::Schema.define(version: 20170907145915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(version: 20170906211554) do
     t.datetime "updated_at", null: false
     t.string "image_url"
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "salaries", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "amount", default: 0
+    t.date "review_date"
+    t.date "archived_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_salaries_on_user_id"
   end
 
   create_table "timelogs", force: :cascade do |t|
@@ -74,6 +84,7 @@ ActiveRecord::Schema.define(version: 20170906211554) do
   end
 
   add_foreign_key "identities", "users"
+  add_foreign_key "salaries", "users"
   add_foreign_key "timelogs", "users"
   add_foreign_key "vacations", "users"
 end
