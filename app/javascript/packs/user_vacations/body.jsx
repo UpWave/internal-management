@@ -8,6 +8,7 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       vacations: [],
+      types: [],
       startDate: 0,
       endDate: 0,
     };
@@ -18,6 +19,15 @@ class Body extends React.Component {
   }
 
   componentDidMount() {
+    $.ajax({
+      url: '/api/v1/vacations/types',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ types: data });
+      },
+    });
     this.loadVacations();
   }
 
@@ -60,6 +70,7 @@ class Body extends React.Component {
           <NewVacation
             key="new_vacation"
             handleSubmit={this.handleSubmit}
+            types={this.state.types}
           />
         </div>
       );
@@ -74,6 +85,7 @@ class Body extends React.Component {
         <NewVacation
           key="new_vacation"
           handleSubmit={this.handleSubmit}
+          types={this.state.types}
         />
       </div>
     );

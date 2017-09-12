@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Select from 'react-normalized-select';
 
 class NewVacation extends React.Component {
   constructor(props, context) {
@@ -7,6 +8,7 @@ class NewVacation extends React.Component {
     this.state = {
       startDate: 0,
       endDate: 0,
+      type: '',
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -17,11 +19,12 @@ class NewVacation extends React.Component {
   handleClick() {
     const startDate = this.state.startDate;
     const endDate = this.state.endDate;
+    const type = this.state.type;
     $.ajax({
       url: '/api/v1/vacations',
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { start_date: startDate, end_date: endDate } },
+      data: { vacation: { start_date: startDate, end_date: endDate, type: type } },
       success: () => {
         this.props.handleSubmit();
       },
@@ -52,6 +55,11 @@ class NewVacation extends React.Component {
     return (
       <div id="new_vacation">
         <h3>Request a new vacation!</h3>
+        Select type of vacation:
+        <Select className="mySelect" onChange={e => this.setState({ type: e.target.value })}>
+          {this.props.types.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select><br />
         Start Date:
         <input type="date" onChange={this.handleStartDateChange} /><br />
         End Date:
@@ -65,6 +73,7 @@ class NewVacation extends React.Component {
 
 NewVacation.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  types: PropTypes.arrayOf.isRequired,
 };
 
 export default NewVacation;

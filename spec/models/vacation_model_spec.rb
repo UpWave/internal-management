@@ -10,5 +10,13 @@ RSpec.describe Vacation, type: :model do
     it "assigns rejected status" do
       expect(Vacation.rejected_status).to eql('rejected')
     end
-  end 
+  end
+
+  describe "correct types" do
+    it "assigns right types" do
+      expect(Vacation.types["planned vacation"]).to eql(0)
+      expect(Vacation.types["sick leave"]).to eql(1)
+      expect(Vacation.types["unpaid day offs"]).to eql(2)
+    end
+  end
 end

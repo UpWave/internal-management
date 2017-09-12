@@ -33,7 +33,7 @@ class Api::V1::VacationsController < Api::V1::BaseController
 
   private
     def vacation_params
-      params.require(:vacation).permit(:start_date, :end_date)
+      params.require(:vacation).permit(:start_date, :end_date, :type)
     end
 
     def load_vacation

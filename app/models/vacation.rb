@@ -1,5 +1,8 @@
 class Vacation < ApplicationRecord
+  self.inheritance_column = :_type_disabled
+
   enum status: { pending: 0, approved: 1, rejected: 2 }
+  enum type: { 'planned vacation': 0, 'sick leave': 1, 'unpaid day offs': 2 }
   belongs_to :user
   validates_presence_of :start_date, :end_date
   validate :date_is_valid?

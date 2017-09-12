@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :vacations
+      namespace :vacations do
+        resources :types
+      end
       resources :timelogs do
         collection do
           get :trello_cards
