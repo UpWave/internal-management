@@ -3,11 +3,10 @@ class SalaryCreator
   def initialize(salaries, params)
     @salaries = salaries
     @params = params
-    new_salary
   end
 
-  def success?
-    ((@salaries.last(2).last.amount == @params["amount"].to_i) && (@salaries.last(2).first.archived_at == Date.current))
+  def create
+    new_salary
   end
 
   private
@@ -17,7 +16,7 @@ class SalaryCreator
           @salaries.last.update_attributes(archived_at: Date.current)
         end
         salary = @salaries.build(@params)
-        salary.save!
+        salary.save
       end
     end
 

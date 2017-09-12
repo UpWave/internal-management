@@ -52,10 +52,10 @@ RSpec.describe Api::V1::Admin::SalariesController, type: :controller do
 
     it "archives a previous salary when creating a new one" do
       4.times do
-        SalaryCreator.new(other_user.salaries, FactoryGirl.attributes_for(:salary))
+        SalaryCreator.new(other_user.salaries, FactoryGirl.attributes_for(:salary)).create
       end
       new_salary_params = FactoryGirl.attributes_for(:salary)
-      SalaryCreator.new(other_user.salaries, new_salary_params)
+      SalaryCreator.new(other_user.salaries, new_salary_params).create
       expect(other_user.salaries.length).to eql(5)
       other_user.salaries.first(4).each { |record| expect(record.archived_at).to eql(Date.current) }
       expect(other_user.salary).to eql(new_salary_params[:amount])

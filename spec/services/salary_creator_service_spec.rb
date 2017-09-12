@@ -9,7 +9,7 @@ RSpec.describe SalaryCreator do
     it "creates a first" do
     salary_params = FactoryGirl.attributes_for(:salary)
     expect{
-          SalaryCreator.new(admin.salaries, salary_params)
+          SalaryCreator.new(admin.salaries, salary_params).create
         }.to change(Salary, :count).by(1)
     end
 
@@ -17,6 +17,7 @@ RSpec.describe SalaryCreator do
       salary_params = FactoryGirl.attributes_for(:salary)
       FactoryGirl.create(:salary, user_id: admin.id)
       salary_creator = SalaryCreator.new(admin.salaries, salary_params)
+      salary_creator.create
       expect(admin.salaries.length).to eql(2)
       expect(admin.salaries.first.archived_at).to eql(Date.current)
       expect(admin.salary).to eql(salary_params[:amount])
@@ -24,10 +25,11 @@ RSpec.describe SalaryCreator do
 
     it "archives a previous salary when creating a new one" do
       4.times do
-        SalaryCreator.new(admin.salaries, FactoryGirl.attributes_for(:salary))
+        SalaryCreator.new(admin.salaries, FactoryGirl.attributes_for(:salary)).create
       end
       new_salary_params = FactoryGirl.attributes_for(:salary)
-      SalaryCreator.new(admin.salaries, new_salary_params)
+      salary_creator = SalaryCreator.new(admin.salaries, new_salary_params)
+      salary_creator.create
       expect(admin.salaries.length).to eql(5)
       admin.salaries.first(4).each { |record| expect(record.archived_at).to eql(Date.current) }
       expect(admin.salary).to eql(new_salary_params[:amount])

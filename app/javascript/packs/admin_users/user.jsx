@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import Collapsible from 'react-collapsible';
 import AlertContainer from 'react-alert';
-import GreyImg from '../images/grey-warn-icon.png';
-import RedImg from '../images/red-warn-icon.png';
+import GreyWarnIcon from '../images/grey-warn-icon.png';
+import RedWarnIcon from '../images/red-warn-icon.png';
 
 class User extends React.Component {
   constructor(props, context) {
@@ -145,7 +145,7 @@ class User extends React.Component {
         <img
           onMouseOver={() => this.mouseOverRed()}
           onMouseLeave={() => this.mouseLeave()}
-          src={RedImg}
+          src={RedWarnIcon}
           alt="red-warn-icon"
         />
         <br />
@@ -155,7 +155,7 @@ class User extends React.Component {
         <img
           onMouseOver={() => this.mouseOverGrey()}
           onMouseLeave={() => this.mouseLeave()}
-          src={GreyImg}
+          src={GreyWarnIcon}
           alt="grey-warn-icon"
         />
         <br />

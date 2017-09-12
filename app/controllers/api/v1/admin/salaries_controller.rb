@@ -8,7 +8,7 @@ class Api::V1::Admin::SalariesController < Api::V1::BaseController
 
   def create
     new_salary = SalaryCreator.new(@salaries, salary_params)
-    if new_salary.success?
+    if new_salary.create
       respond_with :api, :v1, :admin, @salaries.last
     else
       render json: { errors: "Something went wrong" }, status: 422
