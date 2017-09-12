@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::Vacations::TypesController, type: :controller do
+RSpec.describe Api::V1::VacationTypes::TypesController, type: :controller do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
   end

@@ -15,8 +15,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :vacations
-      namespace :vacations do
-        resources :types
+      namespace :vacation_types do
+        resources :types, only: [:index]
       end
       resources :timelogs do
         collection do

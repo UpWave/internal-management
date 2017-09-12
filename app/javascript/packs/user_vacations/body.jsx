@@ -20,7 +20,7 @@ class Body extends React.Component {
 
   componentDidMount() {
     $.ajax({
-      url: '/api/v1/vacations/types',
+      url: '/api/v1/vacation_types/types',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       dataType: 'json',
       type: 'GET',
