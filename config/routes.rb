@@ -30,9 +30,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :admin do
         resources :salaries
+        resources :skills
+        resources :user_skills
         resources :users do
           collection do
             get :count_users
+            get :skills
+            get :missing_skills
           end
         end
         resources :roles, only: [:index]

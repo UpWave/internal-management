@@ -14,6 +14,16 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
     respond_with User.all.count
   end
 
+  def skills
+    authorize current_user, :skills?
+    respond_with @user.skills_rate
+  end
+
+  def missing_skills
+    authorize current_user, :missing_skills?
+    respond_with @user.missing_skills
+  end
+
   def destroy
     respond_with @user.destroy
   end

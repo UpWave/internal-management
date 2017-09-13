@@ -41,6 +41,26 @@ class User < ApplicationRecord
     salaries.last.amount
   end
 
+  def skills_rate
+    hash = Hash.new
+    skills.each do |s|
+      hash[s.name] = user_skills.find_by(skill_id: s.id).rate
+    end
+    hash
+  end
+
+  def missing_skills
+    user_skills = []
+    all_skills = []
+    Skill.all.each do |skill|
+      all_skills.push(skill.name)
+    end
+    skills.each do |s|
+      user_skills.push(s.name)
+    end
+    all_skills - user_skills
+  end
+
   def active_for_authentication?
     super && active?
   end

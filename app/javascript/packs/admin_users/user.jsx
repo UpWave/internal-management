@@ -13,11 +13,15 @@ class User extends React.Component {
       value: '0',
       editable: false,
       editableSalary: false,
+      editableSkills: false,
       role: this.props.user.role,
       status: this.props.user.status,
       newSalary: false,
       amount: 0,
       reviewDate: '',
+      skills: {},
+      rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      missingSkills: [],
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -31,6 +35,12 @@ class User extends React.Component {
     this.mouseOverRed = this.mouseOverRed.bind(this);
     this.mouseOverGrey = this.mouseOverGrey.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
+    this.loadSkills = this.loadSkills.bind(this);
+    this.loadMissingSkills = this.loadMissingSkills.bind(this);
+    this.handleRateChange = this.handleRateChange.bind(this);
+    this.handleSkillChange = this.handleSkillChange.bind(this);
+    this.checkAddNewSkillButton = this.checkAddNewSkillButton.bind(this);
+    this.addNewSkill = this.addNewSkill.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +69,8 @@ class User extends React.Component {
         }
       },
     });
+    this.loadSkills();
+    this.loadMissingSkills();
   }
 
   setNewSalary() {
@@ -69,6 +81,37 @@ class User extends React.Component {
     this.props.setNewSalary(salary, this.props.user.id);
   }
 
+  loadSkills() {
+    $.ajax({
+      url: '/api/v1/admin/users/skills',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: {
+        id: this.props.user.id,
+      },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ skills: data });
+      },
+    });
+  }
+
+  loadMissingSkills() {
+    $.ajax({
+      url: '/api/v1/admin/users/missing_skills',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: {
+        id: this.props.user.id,
+      },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ missingSkills: data });
+        this.setState({ selectedSkill: data[0] });
+      },
+    });
+  }
+
   checkValues() {
     if (this.state.reviewDate === null) {
       this.setState({ reviewDate: 'Not set yet' });
@@ -77,7 +120,6 @@ class User extends React.Component {
       this.setState({ amount: 0 });
     }
   }
-
 
   handleDelete() {
     this.props.handleDelete(this.props.user.id);
@@ -116,6 +158,50 @@ class User extends React.Component {
   handleReviewDateChange(event) {
     this.setState({ reviewDate: event.target.value }, () => {
       this.checkSetSalaryButton();
+    });
+  }
+
+  handleSkillChange(event) {
+    this.setState({ selectedSkill: event.target.value }, () => {
+      this.checkAddNewSkillButton();
+    });
+  }
+
+  handleRateChange(event) {
+    this.setState({ selectedRate: event.target.value }, () => {
+      this.checkAddNewSkillButton();
+    });
+  }
+
+  checkAddNewSkillButton() {
+    if ((this.state.selectedRate >= 0) && (this.state.selectedSkill !== '')) {
+      $('#submit-skill').css('visibility', 'visible');
+    } else {
+      $('#submit-skill').css('visibility', 'hidden');
+    }
+  }
+
+  addNewSkill() {
+    const userSkill = {
+      name: this.state.selectedSkill,
+      rate: this.state.selectedRate,
+      user_id: this.props.user.id,
+    };
+    $.ajax({
+      url: '/api/v1/admin/user_skills',
+      type: 'POST',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { user_skill: userSkill },
+      success: () => {
+        this.msg.success('Successfully setted new skill');
+        this.loadSkills();
+        this.loadMissingSkills();
+        this.setState({ selectedRate: -1 });
+        this.checkAddNewSkillButton();
+      },
+      error: (xhr) => {
+        this.msg.error($.parseJSON(xhr.responseText).errors);
+      },
     });
   }
 
@@ -196,7 +282,7 @@ class User extends React.Component {
       <text>{this.state.amount} $</text>;
     const warningImg = this.warningIcon();
     const reviewDate = this.state.editableSalary ?
-      <input type="date" onChange={this.handleReviewDateChange} />
+      <input type="date" defaultValue={this.state.reviewDate} onChange={this.handleReviewDateChange} />
       :
       <text>{this.state.reviewDate}</text>;
     const editSubmitButton = this.state.amount === 0 ?
@@ -212,12 +298,49 @@ class User extends React.Component {
         triggerClassName="btn btn-default"
       >
         <text>Salary:</text>
-        <input type="number" min="0" onChange={this.handleSalaryChange} defaultValue={this.state.amount} />
+        <input
+          type="number"
+          min="0"
+          onChange={this.handleSalaryChange}
+          defaultValue={this.state.amount}
+        />
         <br />
         <text>Review date:</text>
         <input type="date" onChange={this.handleReviewDateChange} />
         <br />
         <button id="edit_submit" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.setNewSalary}>Submit</button>
+      </Collapsible>);
+    const skills =
+      (<text>{Object.keys(this.state.skills).map(item =>
+        <p key={item}>{item}: {this.state.skills[item]}</p>,
+      )}</text>);
+    const addSkillsCollapse = this.state.missingSkills.length === 0 ?
+      null
+      :
+      (<Collapsible
+        id="collapse"
+        trigger="Add new skill"
+        triggerClassName="btn btn-default"
+      >
+        <Select
+          className="mySelect"
+          defaultValue={this.state.value}
+          onChange={this.handleSkillChange}
+        >
+          <option value="0" disabled hidden>Skill</option>
+          {this.state.missingSkills.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+        <Select
+          className="mySelect"
+          defaultValue={this.state.value}
+          onChange={this.handleRateChange}
+        >
+          <option value="0" disabled hidden>Rate</option>
+          {this.state.rates.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+        <button id="submit-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addNewSkill}>Submit</button>
       </Collapsible>);
     return (
       <div className="well" key={this.props.user.id}>
@@ -237,6 +360,8 @@ class User extends React.Component {
         Review date:{reviewDate}<br />
         {editSubmitButton}
         {newSalary}<br />
+        <b>Skills</b>{skills}
+        {addSkillsCollapse}
       </div>
     );
   }

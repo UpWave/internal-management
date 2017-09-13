@@ -38,4 +38,12 @@ class UserPolicy
     @current_user.admin?
   end
 
+  def skills?
+    @current_user.admin?
+  end
+
+  def missing_skills?
+    @current_user.admin?
+  end
+
 end

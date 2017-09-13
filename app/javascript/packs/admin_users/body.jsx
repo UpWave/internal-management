@@ -12,7 +12,7 @@ class Body extends React.Component {
       roles: [],
       statuses: [],
       currentPage: 0,
-      perPage: 5,
+      perPage: 1,
       pageCount: 1,
     };
     this.loadUsers = this.loadUsers.bind(this);
