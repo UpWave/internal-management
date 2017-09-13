@@ -6,6 +6,7 @@ class NewVacation extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      value: '0',
       startDate: 0,
       endDate: 0,
       type: '',
@@ -14,6 +15,7 @@ class NewVacation extends React.Component {
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.checkSubmitVisibility = this.checkSubmitVisibility.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   handleClick() {
@@ -43,9 +45,19 @@ class NewVacation extends React.Component {
     });
   }
 
+  handleTypeChange(event) {
+    this.setState({ type: event.target.value }, () => {
+      this.checkSubmitVisibility();
+    });
+  }
+
   checkSubmitVisibility() {
-    if (this.state.endDate > this.state.startDate) {
-      $('#submit').css('visibility', 'visible');
+    if ((this.state.type !== '') && (this.state.startDate.length !== 0)) {
+      if (this.state.endDate > this.state.startDate) {
+        $('#submit').css('visibility', 'visible');
+      } else {
+        $('#submit').css('visibility', 'hidden');
+      }
     } else {
       $('#submit').css('visibility', 'hidden');
     }
@@ -56,7 +68,12 @@ class NewVacation extends React.Component {
       <div id="new_vacation">
         <h3>Request a new vacation!</h3>
         Select type of vacation:
-        <Select className="mySelect" onChange={e => this.setState({ type: e.target.value })}>
+        <Select
+          defaultValue={this.state.value}
+          className="mySelect"
+          onChange={this.handleTypeChange}
+        >
+          <option value="0" disabled hidden>Type</option>
           {this.props.types.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select><br />
