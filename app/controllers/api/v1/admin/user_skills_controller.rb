@@ -19,6 +19,13 @@ class Api::V1::Admin::UserSkillsController < Api::V1::BaseController
   end
 
   def destroy
+    params[:user_skill][:skill_id] = Skill.find_by(name: params[:user_skill][:name]).id
+    user_skill = UserSkill.find_by(skill_id: params[:user_skill][:skill_id], user_id: params[:user_skill][:user_id])
+    if user_skill
+      respond_with user_skill.destroy
+    else
+      render json: { errors: "Something went wrong" }, status: 422
+    end
   end
 
   private
