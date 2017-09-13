@@ -52,15 +52,14 @@ class NewVacation extends React.Component {
   }
 
   checkSubmitVisibility() {
-    // think about a way to handle checking startDate
-    // ATM when users sets good values and then reset startDate,
-    // submit button still will be visible
-    if ((this.state.type !== '') && (this.state.startDate.length > 8)) {
+    if ((this.state.type !== '') && (this.state.startDate.length !== 0)) {
       if (this.state.endDate > this.state.startDate) {
         $('#submit').css('visibility', 'visible');
       } else {
         $('#submit').css('visibility', 'hidden');
       }
+    } else {
+      $('#submit').css('visibility', 'hidden');
     }
   }
 
