@@ -75,5 +75,34 @@ describe UserPolicy do
     end
   end
 
+  permissions :count_users do
+    it 'prevents other users from accessing count_users action' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access count_users action' do
+      expect(subject).to permit(admin)
+    end
+  end
+
+  permissions :skills? do
+    it 'prevents other users from accessing skills' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access skills' do
+      expect(subject).to permit(admin)
+    end
+  end
+
+  permissions :missing_skills? do
+    it 'prevents other users from accessing missing_skills' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access missing_skills' do
+      expect(subject).to permit(admin)
+    end
+  end
 
 end
