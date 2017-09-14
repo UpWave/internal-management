@@ -24,6 +24,14 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
+  describe "GET #create" do
+    it "creates a user" do
+      expect{
+            post :create, format: :json, params: { user: { email: 'basicmail@gmail.com', role: 'member', status: 'active', password: "qwerty12" } }
+          }.to change(User, :count).by(1)
+    end
+  end
+
   describe "DELETE #destroy" do
     it "deletes the user" do
       get :destroy, format: :json, params: { id: other_user.id }

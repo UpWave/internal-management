@@ -3,6 +3,7 @@ import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
 import Fetch from '../Fetch';
 import Users from './users';
+import NewUser from './new_user';
 
 class AdminUsers extends React.Component {
   constructor(props, context) {
@@ -21,6 +22,7 @@ class AdminUsers extends React.Component {
     this.handleUpdateSalary = this.handleUpdateSalary.bind(this);
     this.setNewSalary = this.setNewSalary.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
+    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +48,22 @@ class AdminUsers extends React.Component {
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);
       });
+  }
+
+  handleCreateNewUser(newUser) {
+    $.ajax({
+      url: '/api/v1/admin/users',
+      type: 'POST',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { user: newUser },
+      success: () => {
+        this.msg.success('Successfully created new user');
+        this.loadUsers();
+      },
+      error: (xhr) => {
+        this.msg.error($.parseJSON(xhr.responseText).errors);
+      },
+    });
   }
 
   loadUsers() {
@@ -129,6 +147,12 @@ class AdminUsers extends React.Component {
           containerClassName={'pagination'}
           subContainerClassName={'pages pagination'}
           activeClassName={'active'}
+        />
+        <NewUser
+          key="new_user"
+          roles={this.state.roles}
+          statuses={this.state.statuses}
+          handleCreateNewUser={this.handleCreateNewUser}
         />
       </div>
     );

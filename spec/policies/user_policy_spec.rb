@@ -45,6 +45,16 @@ describe UserPolicy do
     end
   end
 
+  permissions :create? do
+    it 'prevents other users from creating users' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to create users' do
+      expect(subject).to permit(admin)
+    end
+  end
+
   permissions :destroy? do
     it 'prevents other users to delete' do
       expect(subject).not_to permit(current_user, other_user)
