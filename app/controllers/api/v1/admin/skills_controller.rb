@@ -4,25 +4,17 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   def index
     @skills = Skill.all
     authorize @skills
-    skills = []
-    @skills.each { |skill| skills.push(skill.name) }
-    respond_with skills
+    respond_with @skills.map(&:name)
   end
 
   def create
     @skill = Skill.new(skill_params)
     authorize @skill
     if @skill.save
-      respond_with :api, :v1, :admin, Skill.last
+      respond_with :api, :v1, :admin, @skill
     else
       render json: { errors: "Error! Probably current skill already exists" }, status: 422
     end
-  end
-
-  def new
-  end
-
-  def update
   end
 
   def destroy

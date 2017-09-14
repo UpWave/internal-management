@@ -1,23 +1,14 @@
 class Api::V1::Admin::UserSkillsController < Api::V1::BaseController
   before_action :authenticate_user!
 
-  def index
-  end
-
   def create
     @user_skill = UserSkill.new(user_skill_params)
     authorize @user_skill
     if @user_skill.save
-      respond_with :api, :v1, :admin, UserSkill.last
+      respond_with :api, :v1, :admin, @user_skill
     else
       render json: { errors: "Something went wrong" }, status: 422
     end
-  end
-
-  def new
-  end
-
-  def update
   end
 
   def destroy
