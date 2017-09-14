@@ -10,6 +10,13 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   end
 
   def create
+    @skill = Skill.new(skill_params)
+    authorize @skill
+    if @skill.save
+      respond_with :api, :v1, :admin, Skill.last
+    else
+      render json: { errors: "Error! Probably current skill already exists" }, status: 422
+    end
   end
 
   def new
@@ -19,6 +26,8 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   end
 
   def destroy
+    authorize Skill
+    respond_with :api, :v1, :admin, Skill.find_by(name: params[:skill][:name]).destroy
   end
 
 

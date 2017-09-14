@@ -23,6 +23,7 @@ class User extends React.Component {
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       selectedRate: 0,
       missingSkills: [],
+      allSkills: [],
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -37,12 +38,16 @@ class User extends React.Component {
     this.mouseOverGrey = this.mouseOverGrey.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
     this.loadSkills = this.loadSkills.bind(this);
+    this.loadUserSkills = this.loadUserSkills.bind(this);
     this.loadMissingSkills = this.loadMissingSkills.bind(this);
     this.handleRateChange = this.handleRateChange.bind(this);
     this.handleSkillChange = this.handleSkillChange.bind(this);
-    this.checkAddNewSkillButton = this.checkAddNewSkillButton.bind(this);
-    this.addNewSkill = this.addNewSkill.bind(this);
-    this.destroySkill = this.destroySkill.bind(this);
+    this.addNewSkillRate = this.addNewSkillRate.bind(this);
+    this.destroySkillRate = this.destroySkillRate.bind(this);
+    this.customSkillChange = this.customSkillChange.bind(this);
+    this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
+    this.addCustomSkill = this.addCustomSkill.bind(this);
+    this.deleteSkill = this.deleteSkill.bind(this);
   }
 
   componentDidMount() {
@@ -71,8 +76,9 @@ class User extends React.Component {
         }
       },
     });
-    this.loadSkills();
+    this.loadUserSkills();
     this.loadMissingSkills();
+    this.loadSkills();
   }
 
   setNewSalary() {
@@ -85,6 +91,18 @@ class User extends React.Component {
 
   loadSkills() {
     $.ajax({
+      url: '/api/v1/admin/skills',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ allSkills: data });
+        this.setState({ selectedDeleteSkill: data[0] });
+      },
+    });
+  }
+  loadUserSkills() {
+    $.ajax({
       url: '/api/v1/admin/users/skills',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: {
@@ -94,7 +112,7 @@ class User extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({ skills: data });
-        this.setState({ selectedDestroySkill: Object.keys(data)[0] });
+        this.setState({ selectedDestroySkillRate: Object.keys(data)[0] });
       },
     });
   }
@@ -166,25 +184,15 @@ class User extends React.Component {
 
   handleSkillChange(event) {
     this.setState({ selectedSkill: event.target.value }, () => {
-      this.checkAddNewSkillButton();
     });
   }
 
   handleRateChange(event) {
     this.setState({ selectedRate: event.target.value }, () => {
-      this.checkAddNewSkillButton();
     });
   }
 
-  checkAddNewSkillButton() {
-    if ((this.state.selectedRate >= 0) && (this.state.selectedSkill !== '')) {
-      $('#submit-skill').css('visibility', 'visible');
-    } else {
-      $('#submit-skill').css('visibility', 'hidden');
-    }
-  }
-
-  addNewSkill() {
+  addNewSkillRate() {
     const userSkill = {
       name: this.state.selectedSkill,
       rate: this.state.selectedRate,
@@ -197,9 +205,8 @@ class User extends React.Component {
       data: { user_skill: userSkill },
       success: () => {
         this.msg.success('Successfully setted new skill');
-        this.loadSkills();
+        this.loadUserSkills();
         this.loadMissingSkills();
-        this.checkAddNewSkillButton();
       },
       error: (xhr) => {
         this.msg.error($.parseJSON(xhr.responseText).errors);
@@ -207,9 +214,9 @@ class User extends React.Component {
     });
   }
 
-  destroySkill() {
+  destroySkillRate() {
     const userSkill = {
-      name: this.state.selectedDestroySkill,
+      name: this.state.selectedDestroySkillRate,
       user_id: this.props.user.id,
     };
     $.ajax({
@@ -220,12 +227,63 @@ class User extends React.Component {
       success: () => {
         this.msg.success('Successfully deleted');
         this.loadSkills();
+        this.loadUserSkills();
         this.loadMissingSkills();
       },
       error: (xhr) => {
         this.msg.error($.parseJSON(xhr.responseText).errors);
       },
     });
+  }
+
+  customSkillChange(event) {
+    this.setState({ customSkill: event.target.value }, () => {
+      this.checkCustomSkillButton();
+    });
+  }
+
+  addCustomSkill() {
+    $.ajax({
+      url: '/api/v1/admin/skills',
+      type: 'POST',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { skill: { name: this.state.customSkill } },
+      success: () => {
+        this.msg.success(`Successfully added ${this.state.customSkill} to a list`);
+        this.loadSkills();
+        this.loadUserSkills();
+        this.loadMissingSkills();
+      },
+      error: (xhr) => {
+        this.msg.error($.parseJSON(xhr.responseText).errors);
+      },
+    });
+  }
+
+  deleteSkill() {
+    $.ajax({
+      url: `/api/v1/admin/skills/${this.props.user.id}`,
+      type: 'DELETE',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      data: { skill: { name: this.state.selectedDeleteSkill } },
+      success: () => {
+        this.msg.success(`Successfully deleted ${this.state.selectedDeleteSkill}`);
+        this.loadSkills();
+        this.loadUserSkills();
+        this.loadMissingSkills();
+      },
+      error: (xhr) => {
+        this.msg.error($.parseJSON(xhr.responseText).errors);
+      },
+    });
+  }
+
+  checkCustomSkillButton() {
+    if (this.state.customSkill.length > 0) {
+      $('#submit-custom-skill').css('visibility', 'visible');
+    } else {
+      $('#submit-custom-skill').css('visibility', 'hidden');
+    }
   }
 
   checkSetSalaryButton() {
@@ -272,6 +330,7 @@ class User extends React.Component {
     }
     return null;
   }
+
 
   render() {
     const email = <b>Email: {this.props.user.email}</b>;
@@ -337,12 +396,12 @@ class User extends React.Component {
       (<text>{Object.keys(this.state.skills).map(item =>
         <p key={item}>{item}: {this.state.skills[item]}</p>,
       )}</text>);
-    const addSkillsCollapse = this.state.missingSkills.length === 0 ?
+    const addSkillRateCollapse = this.state.missingSkills.length === 0 ?
       null
       :
       (<Collapsible
         id="collapse"
-        trigger="Add new skill"
+        trigger="Add skill rate"
         triggerClassName="btn btn-default"
       >
         <Select
@@ -359,24 +418,46 @@ class User extends React.Component {
           {this.state.rates.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select>
-        <button id="submit-skill" className="btn btn-default" onClick={this.addNewSkill}>Submit</button>
+        <button id="submit-skill-rate" className="btn btn-default" onClick={this.addNewSkillRate}>Submit</button>
       </Collapsible>);
-    const destroySkillsCollapse = Object.keys(this.state.skills).length === 0 ?
+    const addCustomSkill =
+    (<div><p>Add custom skill to list</p>
+      <input type="text" placeholder="Skill name" onChange={this.customSkillChange} />
+      <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
+    </div>);
+    const destroySkillRatesCollapse = Object.keys(this.state.skills).length === 0 ?
       null
       :
       (<Collapsible
         id="delete-collapse"
+        trigger="Delete skill rate"
+        triggerClassName="btn btn-default"
+      >
+        <Select
+          className="mySelect"
+          onChange={e => this.setState({ selectedDestroySkillRate: e.target.value })}
+        >
+          {Object.keys(this.state.skills).map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+        <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
+      </Collapsible>);
+    const deleteSkills = this.state.allSkills.length === 0 ?
+      null
+      :
+      (<Collapsible
+        id="delete-skill-collapse"
         trigger="Delete skill"
         triggerClassName="btn btn-default"
       >
         <Select
           className="mySelect"
-          onChange={e => this.setState({ selectedDestroySkill: e.target.value })}
+          onChange={e => this.setState({ selectedDeleteSkill: e.target.value })}
         >
-          {Object.keys(this.state.skills).map(option =>
+          {this.state.allSkills.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select>
-        <button id="destroy-skill" className="btn btn-default" onClick={this.destroySkill}>Delete</button>
+        <button id="delete-skill" className="btn btn-default" onClick={this.deleteSkill}>Delete</button>
       </Collapsible>);
     return (
       <div className="well" key={this.props.user.id}>
@@ -396,9 +477,11 @@ class User extends React.Component {
         Review date:{reviewDate}<br />
         {editSubmitButton}
         {newSalary}<br />
-        <b>Skills</b>{skills}
-        {addSkillsCollapse}
-        {destroySkillsCollapse}
+        <b>Skill rates</b>{skills}
+        {addSkillRateCollapse}
+        {destroySkillRatesCollapse}<br />
+        {addCustomSkill}<br />
+        {deleteSkills}
       </div>
     );
   }
