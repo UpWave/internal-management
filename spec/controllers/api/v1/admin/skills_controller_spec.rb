@@ -22,4 +22,29 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
       expect(JSON.parse(response.body)).to eq(skills)
     end
   end
+
+  describe "GET #create" do
+    it "creates a new skill" do
+      skill = FactoryGirl.build(:skill)
+      expect{
+            post :create, format: :json, params: { skill: skill.attributes }
+          }.to change(Skill, :count).by(1)
+    end
+
+    it "won't create a duplicate skill" do
+      skill = FactoryGirl.create(:skill)
+      expect{
+            post :create, format: :json, params: { skill: skill.attributes }
+          }.to_not change(Skill, :count)
+    end
+  end
+
+  describe "DELETE #destroy" do
+    it "destroys skill" do
+      skill = FactoryGirl.create(:skill)
+      expect{
+            get :destroy, format: :json, params: { id: user.id, skill: skill.attributes }
+          }.to change(Skill, :count).by(-1)
+    end
+  end
 end

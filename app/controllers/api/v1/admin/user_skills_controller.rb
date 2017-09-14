@@ -5,8 +5,9 @@ class Api::V1::Admin::UserSkillsController < Api::V1::BaseController
   end
 
   def create
-    authorize UserSkill
-    if UserSkill.create(user_skill_params)
+    @user_skill = UserSkill.new(user_skill_params)
+    authorize @user_skill
+    if @user_skill.save
       respond_with :api, :v1, :admin, UserSkill.last
     else
       render json: { errors: "Something went wrong" }, status: 422
