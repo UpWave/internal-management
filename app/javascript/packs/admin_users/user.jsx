@@ -47,7 +47,6 @@ class User extends React.Component {
     this.customSkillChange = this.customSkillChange.bind(this);
     this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
     this.addCustomSkill = this.addCustomSkill.bind(this);
-    this.deleteSkill = this.deleteSkill.bind(this);
   }
 
   componentDidMount() {
@@ -97,7 +96,6 @@ class User extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({ allSkills: data });
-        this.setState({ selectedDeleteSkill: data[Object.keys(data)[0]] });
       },
     });
   }
@@ -250,24 +248,6 @@ class User extends React.Component {
       data: { skill: { name: this.state.customSkill } },
       success: () => {
         this.msg.success(`Successfully added ${this.state.customSkill} to a list`);
-        this.loadSkills();
-        this.loadUserSkills();
-        this.loadMissingSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
-  }
-
-  deleteSkill() {
-    $.ajax({
-      url: `/api/v1/admin/skills/${this.props.user.id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { skill: { skill_id: this.state.selectedDeleteSkill } },
-      success: () => {
-        this.msg.success(`Successfully deleted ${this.state.selectedDeleteSkill}`);
         this.loadSkills();
         this.loadUserSkills();
         this.loadMissingSkills();
@@ -447,23 +427,6 @@ class User extends React.Component {
         </Select>
         <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
       </Collapsible>);
-    const deleteSkills = Object.keys(this.state.allSkills).length === 0 ?
-      null
-      :
-      (<Collapsible
-        id="delete-skill-collapse"
-        trigger="Delete skill"
-        triggerClassName="btn btn-default"
-      >
-        <Select
-          className="mySelect"
-          onChange={e => this.setState({ selectedDeleteSkill: e.target.value })}
-        >
-          {Object.keys(this.state.allSkills).map(option =>
-            <option key={option} value={this.state.allSkills[option]}>{option}</option>)}
-        </Select>
-        <button id="delete-skill" className="btn btn-default" onClick={this.deleteSkill}>Delete</button>
-      </Collapsible>);
     return (
       <div className="well" key={this.props.user.id}>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
@@ -486,7 +449,6 @@ class User extends React.Component {
         {addSkillRateCollapse}
         {destroySkillRatesCollapse}<br />
         {addCustomSkill}<br />
-        {deleteSkills}
       </div>
     );
   }

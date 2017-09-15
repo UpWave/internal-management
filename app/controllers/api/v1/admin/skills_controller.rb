@@ -11,6 +11,17 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
     respond_with hash
   end
 
+  def update
+    @skill = Skill.find(params[:id])
+    authorize @skill
+    if @skill.update_attributes(skill_params)
+      respond_with @skill, json: @skill
+    else
+      render json: { errors: @skill.errors.full_messages }, status: 422
+    end
+
+  end
+
   def create
     @skill = Skill.new(skill_params)
     authorize @skill
@@ -23,12 +34,12 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
 
   def destroy
     authorize Skill
-    respond_with :api, :v1, :admin, Skill.find_by(id: params[:skill][:skill_id]).destroy
+    respond_with :api, :v1, :admin, Skill.find(params[:id]).destroy
   end
 
 
   private
     def skill_params
-      params.require(:skill).permit(:name)
+      params.require(:skill).permit(:id, :name)
     end
 end

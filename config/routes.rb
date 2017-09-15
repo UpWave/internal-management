@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users
     resources :vacations
+    resources :skills
     resources :users, only: [] do
       resources :timelogs
     end
