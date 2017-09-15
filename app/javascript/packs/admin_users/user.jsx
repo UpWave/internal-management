@@ -392,11 +392,16 @@ class User extends React.Component {
         <br />
         <button id="edit_submit" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.setNewSalary}>Submit</button>
       </Collapsible>);
-    const skills =
-      (<text>{Object.keys(this.state.skills).map(item =>
-        <p key={item}>{item}: {this.state.skills[item]}</p>,
-      )}</text>);
-      const addSkillRateCollapse = Object.keys(this.state.missingSkills).length === 0 ?
+    const skills = Object.keys(this.state.allSkills).length === 0 ?
+      <div><b>There no skills yet. Please add few below</b></div>
+      :
+      (<div>
+        <b>Skill rates:</b>
+        <text>{Object.keys(this.state.skills).map(item =>
+          <p key={item}>{item}: {this.state.skills[item]}</p>,
+        )}</text>
+      </div>);
+    const addSkillRateCollapse = Object.keys(this.state.missingSkills).length === 0 ?
       null
       :
       (<Collapsible
@@ -442,7 +447,7 @@ class User extends React.Component {
         </Select>
         <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
       </Collapsible>);
-    const deleteSkills = this.state.allSkills.length === 0 ?
+    const deleteSkills = Object.keys(this.state.allSkills).length === 0 ?
       null
       :
       (<Collapsible
@@ -477,7 +482,7 @@ class User extends React.Component {
         Review date:{reviewDate}<br />
         {editSubmitButton}
         {newSalary}<br />
-        <b>Skill rates</b>{skills}
+        {skills}
         {addSkillRateCollapse}
         {destroySkillRatesCollapse}<br />
         {addCustomSkill}<br />

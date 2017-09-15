@@ -12,7 +12,7 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
   end
 
   def destroy
-    @user_skill = UserSkill.find_by(skill_id: params[:user_skill][:skill_id], user_id: params[:user_skill][:user_id])
+    @user_skill = UserSkill.find_by(user_skill_params)
     authorize @user_skill
     if @user_skill
       respond_with @user_skill.destroy
