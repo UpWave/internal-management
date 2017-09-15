@@ -48,7 +48,9 @@ Rails.application.routes.draw do
           end
         end
         namespace :user do
-          resources :skills
+          resources :users, only: [] do
+            resources :skills
+          end
         end
       end
     end

@@ -197,7 +197,7 @@ class User extends React.Component {
       user_id: this.props.user.id,
     };
     $.ajax({
-      url: '/api/v1/admin/user/skills',
+      url: `/api/v1/admin/user/users/${this.props.user.id}/skills`,
       type: 'POST',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       data: { user_skill: userSkill },
@@ -213,15 +213,10 @@ class User extends React.Component {
   }
 
   destroySkillRate() {
-    const userSkill = {
-      skill_id: this.state.selectedDestroySkillRate,
-      user_id: this.props.user.id,
-    };
     $.ajax({
-      url: `/api/v1/admin/user/skills/${this.props.user.id}`,
+      url: `/api/v1/admin/user/users/${this.props.user.id}/skills/${this.state.selectedDestroySkillRate}`,
       type: 'DELETE',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_skill: userSkill },
       success: () => {
         this.msg.success('Successfully deleted');
         this.loadSkills();

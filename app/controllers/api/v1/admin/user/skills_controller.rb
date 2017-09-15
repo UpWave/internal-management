@@ -5,14 +5,21 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
     @user_skill = UserSkill.new(user_skill_params)
     authorize @user_skill
     if @user_skill.save
-      respond_with :api, :v1, :admin, @user_skill
+      # Dunno what to do here
+      #
+      # It creates new record but then responds with
+      # ActionController::UrlGenerationError
+      # (No route matches {:action=>"show", :controller=>"api/v1/admin/user/skills",
+      # :user_id=>#<UserSkill id: 149, user_id: 36, skill_id: 52, rate: 6...
+      # missing required keys: [:id])
+      # respond_with :api, :v1, :admin, :user, @user_skill
     else
-      render json: { errors: "Something went wrong" }, status: 422
+      render json: { errors: @user_skill.errors.full_messages }, status: 422
     end
   end
 
   def destroy
-    @user_skill = UserSkill.find_by(user_skill_params)
+    @user_skill = UserSkill.find_by(user_id: params[:user_id], skill_id: params[:id])
     authorize @user_skill
     if @user_skill
       respond_with @user_skill.destroy
