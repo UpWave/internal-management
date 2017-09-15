@@ -67,9 +67,11 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
       skill = FactoryGirl.create(:skill)
       another_skill = FactoryGirl.create(:skill)
       user_skill = UserSkill.create(user_id: user.id, skill_id: skill.id, rate: 10)
+      hash = Hash.new
+      hash[another_skill.name] = another_skill.id
       get :missing_skills, format: :json, params: { id: user.id }
       parsed_response = JSON.parse(response.body)
-      expect(parsed_response).to eq([another_skill.name])
+      expect(parsed_response).to eq(hash)
     end
   end
 

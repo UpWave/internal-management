@@ -50,15 +50,14 @@ class User < ApplicationRecord
   end
 
   def missing_skills
-    user_skills = []
-    all_skills = []
+    all_skills = Hash.new
     Skill.all.each do |skill|
-      all_skills.push(skill.name)
+      all_skills[skill.name] = skill.id
     end
     skills.each do |s|
-      user_skills.push(s.name)
+      all_skills.except!(s.name)
     end
-    all_skills - user_skills
+    all_skills
   end
 
   def active_for_authentication?

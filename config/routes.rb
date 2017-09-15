@@ -31,7 +31,6 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :salaries
         resources :skills
-        resources :user_skills
         resources :users do
           collection do
             get :count_users
@@ -46,6 +45,9 @@ Rails.application.routes.draw do
             get :trello_cards
             get :count_timelogs
           end
+        end
+        namespace :user do
+          resources :skills
         end
       end
     end

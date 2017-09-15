@@ -4,7 +4,11 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   def index
     @skills = Skill.all
     authorize @skills
-    respond_with @skills.map(&:name)
+    hash = Hash.new
+    @skills.each do |s|
+      hash[s.name] = s.id
+    end
+    respond_with hash
   end
 
   def create
@@ -19,7 +23,7 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
 
   def destroy
     authorize Skill
-    respond_with :api, :v1, :admin, Skill.find_by(name: params[:skill][:name]).destroy
+    respond_with :api, :v1, :admin, Skill.find_by(id: params[:skill][:skill_id]).destroy
   end
 
 

@@ -16,8 +16,8 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
 
     it "returns array with correct skills" do
       skill = FactoryGirl.create(:skill)
-      skills = []
-      skills.push(skill.name)
+      skills = Hash.new
+      skills[skill.name] = skill.id
       get :index, format: :json
       expect(JSON.parse(response.body)).to eq(skills)
     end
@@ -43,7 +43,7 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
     it "destroys skill" do
       skill = FactoryGirl.create(:skill)
       expect{
-            get :destroy, format: :json, params: { id: user.id, skill: skill.attributes }
+            get :destroy, format: :json, params: { id: user.id, skill: { skill_id: skill.id } }
           }.to change(Skill, :count).by(-1)
     end
   end
