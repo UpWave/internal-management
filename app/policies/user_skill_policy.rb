@@ -26,4 +26,8 @@ class UserSkillPolicy
    @current_user.admin?
  end
 
+ def missing?
+   @current_user.admin?
+ end
+
 end

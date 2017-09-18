@@ -4,11 +4,7 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   def index
     @skills = Skill.all
     authorize @skills
-    hash = Hash.new
-    @skills.each do |s|
-      hash[s.name] = s.id
-    end
-    respond_with hash
+    respond_with @skills
   end
 
   def update
@@ -19,7 +15,6 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
     else
       render json: { errors: @skill.errors.full_messages }, status: 422
     end
-
   end
 
   def create

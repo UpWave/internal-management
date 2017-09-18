@@ -35,8 +35,6 @@ Rails.application.routes.draw do
         resources :users do
           collection do
             get :count_users
-            get :skills
-            get :missing_skills
           end
         end
         resources :roles, only: [:index]
@@ -49,7 +47,11 @@ Rails.application.routes.draw do
         end
         namespace :user do
           resources :users, only: [] do
-            resources :skills
+            resources :skills do
+              collection do
+                get :missing
+              end
+            end
           end
         end
       end

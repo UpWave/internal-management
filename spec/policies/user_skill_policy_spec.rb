@@ -16,6 +16,16 @@ describe UserSkillPolicy do
     end
   end
 
+  permissions :missing? do
+    it 'prevents other users from accessing missing' do
+      expect(subject).not_to permit(other_user)
+    end
+
+    it 'allows an admin to access missing' do
+      expect(subject).to permit(admin)
+    end
+  end
+
   permissions :create? do
     it 'prevents other users from accessing create' do
       expect(subject).not_to permit(other_user)

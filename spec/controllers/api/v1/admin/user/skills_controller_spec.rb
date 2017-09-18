@@ -8,6 +8,27 @@ RSpec.describe Api::V1::Admin::User::SkillsController, type: :controller do
 
   let(:user) { FactoryGirl.create(:user, role: 'admin') }
 
+  describe "GET #index" do
+    it "returns correct data" do
+      skill = FactoryGirl.create(:skill)
+      user_skill = UserSkill.create(user_id: user.id, skill_id: skill.id, rate: 10)
+      get :index, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response[0]['skill_id']).to eq(user.user_skills[0].skill_id)
+    end
+  end
+
+  describe "GET #missing" do
+    it "returns correct data" do
+      skill = FactoryGirl.create(:skill)
+      another_skill = FactoryGirl.create(:skill)
+      user_skill = UserSkill.create(user_id: user.id, skill_id: skill.id, rate: 10)
+      get :missing, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response[0]['id']).to eq(another_skill.id)
+    end
+  end
+
   describe "GET #create" do
     it "creates skill rate for a user" do
       skill = FactoryGirl.create(:skill)

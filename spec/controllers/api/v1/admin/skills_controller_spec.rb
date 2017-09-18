@@ -16,10 +16,8 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
 
     it "returns array with correct skills" do
       skill = FactoryGirl.create(:skill)
-      skills = Hash.new
-      skills[skill.name] = skill.id
       get :index, format: :json
-      expect(JSON.parse(response.body)).to eq(skills)
+      expect(JSON.parse(response.body)[0]['name']).to eq(skill.name)
     end
   end
 

@@ -19,7 +19,7 @@ class User extends React.Component {
       newSalary: false,
       amount: 0,
       reviewDate: '',
-      skills: {},
+      skills: [],
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       selectedRate: 0,
       missingSkills: [],
@@ -47,6 +47,7 @@ class User extends React.Component {
     this.customSkillChange = this.customSkillChange.bind(this);
     this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
     this.addCustomSkill = this.addCustomSkill.bind(this);
+    this.findSkillTitleById = this.findSkillTitleById.bind(this);
   }
 
   componentDidMount() {
@@ -75,9 +76,9 @@ class User extends React.Component {
         }
       },
     });
+    this.loadSkills();
     this.loadUserSkills();
     this.loadMissingSkills();
-    this.loadSkills();
   }
 
   setNewSalary() {
@@ -101,32 +102,26 @@ class User extends React.Component {
   }
   loadUserSkills() {
     $.ajax({
-      url: '/api/v1/admin/users/skills',
+      url: `/api/v1/admin/user/users/${this.props.user.id}/skills`,
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        id: this.props.user.id,
-      },
       dataType: 'json',
       type: 'GET',
       success: (data) => {
         this.setState({ skills: data });
-        this.setState({ selectedDestroySkillRate: this.state.allSkills[Object.keys(data)[0]] });
+        this.setState({ selectedDestroySkillRate: data[0].skill_id });
       },
     });
   }
 
   loadMissingSkills() {
     $.ajax({
-      url: '/api/v1/admin/users/missing_skills',
+      url: `/api/v1/admin/user/users/${this.props.user.id}/skills/missing`,
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        id: this.props.user.id,
-      },
       dataType: 'json',
       type: 'GET',
       success: (data) => {
         this.setState({ missingSkills: data });
-        this.setState({ selectedSkill: data[Object.keys(data)[0]] });
+        this.setState({ selectedSkill: data[0].id });
       },
     });
   }
@@ -181,13 +176,11 @@ class User extends React.Component {
   }
 
   handleSkillChange(event) {
-    this.setState({ selectedSkill: event.target.value }, () => {
-    });
+    this.setState({ selectedSkill: event.target.value });
   }
 
   handleRateChange(event) {
-    this.setState({ selectedRate: event.target.value }, () => {
-    });
+    this.setState({ selectedRate: event.target.value });
   }
 
   addNewSkillRate() {
@@ -279,6 +272,14 @@ class User extends React.Component {
 
   mouseLeave() {
     this.msg.removeAll();
+    console.log(this.findElementById(50));
+  }
+
+  findSkillTitleById(id) {
+    const skill = this.state.allSkills.find((element) => {
+      return element.id === id;
+    });
+    return skill.name;
   }
 
   warningIcon() {
@@ -367,16 +368,17 @@ class User extends React.Component {
         <br />
         <button id="edit_submit" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.setNewSalary}>Submit</button>
       </Collapsible>);
-    const skills = Object.keys(this.state.allSkills).length === 0 ?
+    const skills = this.state.allSkills.length === 0 ?
       <div><b>There no skills yet. Please add few below</b></div>
       :
       (<div>
         <b>Skill rates:</b>
-        <text>{Object.keys(this.state.skills).map(item =>
-          <p key={item}>{item}: {this.state.skills[item]}</p>,
+        <text>{this.state.skills.map(item =>
+          (<p key={item.skill_id}>
+            {this.findSkillTitleById(item.skill_id)}: {item.rate}</p>),
         )}</text>
       </div>);
-    const addSkillRateCollapse = Object.keys(this.state.missingSkills).length === 0 ?
+    const addSkillRateCollapse = this.state.missingSkills.length === 0 ?
       null
       :
       (<Collapsible
@@ -388,8 +390,13 @@ class User extends React.Component {
           className="mySelect"
           onChange={this.handleSkillChange}
         >
-          {Object.keys(this.state.missingSkills).map(option =>
-            <option key={option} value={this.state.missingSkills[option]}>{option}</option>)}
+          {this.state.missingSkills.map(option =>
+            (<option
+              key={option.id}
+              value={option.id}
+            >
+              {this.findSkillTitleById(option.id)}
+            </option>))}
         </Select>
         <Select
           className="mySelect"
@@ -405,7 +412,7 @@ class User extends React.Component {
       <input type="text" placeholder="Skill name" onChange={this.customSkillChange} />
       <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
     </div>);
-    const destroySkillRatesCollapse = Object.keys(this.state.skills).length === 0 ?
+    const destroySkillRatesCollapse = this.state.skills.length === 0 ?
       null
       :
       (<Collapsible
@@ -417,8 +424,11 @@ class User extends React.Component {
           className="mySelect"
           onChange={e => this.setState({ selectedDestroySkillRate: e.target.value })}
         >
-          {Object.keys(this.state.skills).map(option =>
-            <option key={option} value={this.state.allSkills[option]}>{option}</option>)}
+          {this.state.skills.map(option =>
+            (<option
+              key={option.id}
+              value={option.skill_id}
+            >{this.findSkillTitleById(option.skill_id)}</option>))}
         </Select>
         <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
       </Collapsible>);
