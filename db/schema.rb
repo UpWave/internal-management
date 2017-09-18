@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907145915) do
+ActiveRecord::Schema.define(version: 20170913190226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,12 @@ ActiveRecord::Schema.define(version: 20170907145915) do
     t.index ["user_id"], name: "index_salaries_on_user_id"
   end
 
+  create_table "skills", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "timelogs", force: :cascade do |t|
     t.datetime "start_time"
     t.integer "duration", null: false
@@ -47,6 +53,17 @@ ActiveRecord::Schema.define(version: 20170907145915) do
     t.string "trello_card", null: false
     t.datetime "end_time"
     t.index ["user_id"], name: "index_timelogs_on_user_id"
+  end
+
+  create_table "user_skills", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "skill_id"
+    t.integer "rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["skill_id"], name: "index_user_skills_on_skill_id"
+    t.index ["user_id", "skill_id"], name: "index_user_skills_on_user_id_and_skill_id", unique: true
+    t.index ["user_id"], name: "index_user_skills_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

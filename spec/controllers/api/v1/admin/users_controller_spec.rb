@@ -40,4 +40,14 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
+  describe "GET #count_users" do
+    it "returns correct number of users" do
+      5.times do FactoryGirl.create(:user)
+      end
+      get :count_users, format: :json
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response).to eq(6) # 5 users + admin
+    end
+  end
+
 end

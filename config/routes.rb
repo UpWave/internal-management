@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users
     resources :vacations
+    resources :skills
     resources :users, only: [] do
       resources :timelogs
     end
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :admin do
         resources :salaries
+        resources :skills
         resources :users do
           collection do
             get :count_users
@@ -41,6 +43,15 @@ Rails.application.routes.draw do
           collection do
             get :trello_cards
             get :count_timelogs
+          end
+        end
+        namespace :user do
+          resources :users, only: [] do
+            resources :skills do
+              collection do
+                get :missing
+              end
+            end
           end
         end
       end

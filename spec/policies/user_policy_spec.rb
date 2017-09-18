@@ -75,5 +75,14 @@ describe UserPolicy do
     end
   end
 
+  permissions :count_users do
+    it 'prevents other users from accessing count_users action' do
+      expect(subject).not_to permit(current_user)
+    end
+
+    it 'allows an admin to access count_users action' do
+      expect(subject).to permit(admin)
+    end
+  end
 
 end
