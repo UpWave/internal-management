@@ -108,7 +108,9 @@ class User extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({ skills: data });
-        this.setState({ selectedDestroySkillRate: data[0].skill_id });
+        if (data.length !== 0) {
+          this.setState({ selectedDestroySkillRate: data[0].skill_id });
+        }
       },
     });
   }
@@ -121,7 +123,9 @@ class User extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({ missingSkills: data });
-        this.setState({ selectedSkill: data[0].id });
+        if (data.length !== 0) {
+          this.setState({ selectedSkill: data[0].id });
+        }
       },
     });
   }
@@ -272,7 +276,6 @@ class User extends React.Component {
 
   mouseLeave() {
     this.msg.removeAll();
-    console.log(this.findElementById(50));
   }
 
   findSkillTitleById(id) {
