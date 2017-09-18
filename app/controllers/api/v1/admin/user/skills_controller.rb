@@ -9,6 +9,7 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
   end
 
   def missing
+    authorize :user_skill, :missing?
     @user = User.find(params[:user_id])
     @skills = @user.skills
     @missing = Skill.all - @skills
