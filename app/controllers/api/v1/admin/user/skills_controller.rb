@@ -4,9 +4,6 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
   def index
     @user = User.find(params[:user_id])
     @user_skills = @user.user_skills
-    # @user_skills returns a collection of
-    # records with Skill rates of user.
-    # Each record contains skill_id, user_id, rate
     authorize @user_skills
     respond_with @user_skills
   end
@@ -14,8 +11,6 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
   def missing
     @user = User.find(params[:user_id])
     @skills = @user.skills
-    # @skills retrun a Skill records, where user has rate.
-    # Each record contains id, name
     @missing = Skill.all - @skills
     respond_with @missing
   end
