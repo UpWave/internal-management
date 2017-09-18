@@ -33,7 +33,12 @@ class AdminUsers extends React.Component {
     Fetch.json('/api/v1/admin/statuses')
       .then((data) => {
         this.setState({ statuses: data });
+<<<<<<< HEAD
       });
+=======
+      },
+    });
+>>>>>>> modal for creating user
     this.loadUsers();
   }
 
@@ -67,6 +72,7 @@ class AdminUsers extends React.Component {
   }
 
   loadUsers() {
+<<<<<<< HEAD
     if (this.state.currentPage === this.state.pageCount - 1) {
       this.setState({ currentPage: this.state.currentPage - 1 });
     }
@@ -80,6 +86,25 @@ class AdminUsers extends React.Component {
       per_page: this.state.perPage,
     })
       .then((data) => {
+=======
+    // Get number of users for pageCount
+    $.ajax({
+      url: '/api/v1/admin/users/count_users',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
+      },
+    });
+    $.ajax({
+      url: '/api/v1/admin/users',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      data: { page: this.state.currentPage, per_page: this.state.perPage },
+      success: (data) => {
+>>>>>>> modal for creating user
         this.setState({ users: data });
       });
   }

@@ -39,10 +39,17 @@ class Skill extends React.Component {
   render() {
     const name = this.state.editable ?
       (<div>
+<<<<<<< HEAD
         <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
       </div>)
       :
       <h4>{this.props.skillName}</h4>;
+=======
+        <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skill.name} /><br />
+      </div>)
+      :
+      <h4>{this.props.skill.name}</h4>;
+>>>>>>> modal for creating user
     return (
       <div key={this.props.id}>
         {name}
