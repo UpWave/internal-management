@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
 import Users from './users';
 
-class Body extends React.Component {
+class AdminUsers extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -134,7 +133,7 @@ class Body extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="well">
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <Users
           key={this.state.users.length.toString()}
@@ -164,7 +163,5 @@ class Body extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Body />,
-  document.getElementById('root'),
-);
+
+export default AdminUsers;

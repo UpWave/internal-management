@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 
-class Body extends React.Component {
+class UserTimelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -239,7 +238,4 @@ class Body extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Body />,
-  document.getElementById('root'),
-);
+export default UserTimelogs;

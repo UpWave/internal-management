@@ -8,6 +8,10 @@
   </head>
 
   <body>
+    <div class="collapse navbar-collapse", id="root">
+      <%= javascript_pack_tag 'layout/App' %>
+    </div>
+  <% if false %>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <% flash.each do |key, value| %>
@@ -68,6 +72,7 @@
           <% end %>
       </ul>
     </div>
+  <% end %>
     <%= yield %>
   </body>
 </html>
