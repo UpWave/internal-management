@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  scope :auth do
+    get 'is_signed_in', to: 'auth#is_signed_in?'
+  end
   resource :user, only: [] do
     resources :timelogs
     resources :vacations
