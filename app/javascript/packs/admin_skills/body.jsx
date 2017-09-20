@@ -66,7 +66,7 @@ class AdminSkills extends React.Component {
       <div>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <Skills
-          key={Object.keys(this.state.skills).length.toString()}
+          key={this.state.skills.length.toString()}
           skills={this.state.skills}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}

@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 
-class Body extends React.Component {
+class AdminTimelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
     // regex for parsing user_id from URL
@@ -280,7 +279,4 @@ class Body extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Body />,
-  document.getElementById('root'),
-);
+export default AdminTimelogs;

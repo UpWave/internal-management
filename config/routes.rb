@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   scope :auth do
     get 'is_signed_in', to: 'auth#is_signed_in?'
+    get 'check_identities', to: 'auth#check_identities'
   end
   resource :user, only: [] do
     resources :timelogs
