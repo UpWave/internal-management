@@ -63,7 +63,7 @@ class AdminSkills extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="well">
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <Skills
           key={this.state.skills.length.toString()}

@@ -1,14 +1,10 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Route,
   Link,
 } from 'react-router-dom';
-import AdminUsers from '../admin_users/body';
-import AdminSkills from '../admin_skills/body';
-import AdminTimelogs from '../admin_timelogs/body';
-import UserVacations from '../user_vacations/body';
-import UserTimelogs from '../user_timelogs/body';
+import routes from './Routes';
+
 
 class Header extends React.Component {
   constructor(props, context) {
@@ -84,81 +80,72 @@ class Header extends React.Component {
       </li>);
 
     const AdminRoutes = () => (
-      <Router>
-        <div>
-          <div className="navbar">
-            <ul className="nav navbar-nav">
-              <li><Link to="/admin/users">Users</Link></li>
-              <li><Link to="/admin/skills">Skills</Link></li>
-              <li><a href="/admin/vacations">Users vacations </a></li>
-              <li><a href="/user/profile">Profile</a></li>
-              <li><Link to="/user/vacations">My Vacations</Link></li>
-              <li><Link to="/user/timelogs">Timelogs</Link></li>
-              {googleLink}
-              {trelloLink}
-              {signOutLink}
-            </ul>
-          </div>
-          <Route path="/admin/users/:user_id/timelogs" component={AdminTimelogs} />
-          <Route exact path="/admin/users" component={AdminUsers} />
-          <Route exact path="/admin/skills" component={AdminSkills} />
-          <Route exact path="/user/vacations" component={UserVacations} />
-          <Route exact path="/user/timelogs" component={UserTimelogs} />
-        </div>
-      </Router>
+      <ul className="nav navbar-nav">
+        <li><Link to="/admin/users">Users</Link></li>
+        <li><Link to="/admin/skills">Skills</Link></li>
+        <li><a href="/admin/vacations">Users vacations </a></li>
+      </ul>
     );
 
     const MemberRoutes = () => (
-      <Router>
-        <div>
-          <div className="navbar">
-            <ul className="nav navbar-nav">
-              <li><a href="/user/profile">Profile</a></li>
-              <li><Link to="/user/vacations">My Vacations</Link></li>
-              <li><Link to="/user/timelogs">Timelogs</Link></li>
-              {googleLink}
-              {trelloLink}
-              {signOutLink}
-            </ul>
-          </div>
-          <Route exact path="/user/vacations" component={UserVacations} />
-          <Route exact path="/user/timelogs" component={UserTimelogs} />
-        </div>
-      </Router>
+      <ul className="nav navbar-nav">
+        <li><a href="/user/profile">Profile</a></li>
+        <li><Link to="/user/vacations">My Vacations</Link></li>
+        <li><Link to="/user/timelogs">Timelogs</Link></li>
+        {googleLink}
+        {trelloLink}
+        {signOutLink}
+      </ul>
     );
 
     const GuestRoutes = () => (
-      <Router>
-        <div>
-          <div className="navbar">
-            <ul className="nav navbar-nav">
-              <li><a id="signin" href="/users/sign_in">Sign in</a></li>
-              {googleLink}
-              {trelloLink}
-            </ul>
-          </div>
-        </div>
-      </Router>
+      <ul className="nav navbar-nav">
+        <li><a id="signin" href="/users/sign_in">Sign in</a></li>
+        {googleLink}
+        {trelloLink}
+      </ul>
     );
 
     if (this.state.logged) {
       if (this.state.admin) {
         return (
-          <div>
-            <AdminRoutes />
-          </div>
+          <Router>
+            <div>
+              <div className="navbar">
+                <AdminRoutes />
+                <MemberRoutes />
+              </div>
+              <div className="container">
+                {routes}
+              </div>
+            </div>
+          </Router>
         );
       }
       return (
-        <div>
-          <MemberRoutes />
-        </div>
+        <Router>
+          <div>
+            <div className="navbar">
+              <MemberRoutes />
+            </div>
+            <div className="container">
+              {routes}
+            </div>
+          </div>
+        </Router>
       );
     }
     return (
-      <div>
-        <GuestRoutes />
-      </div>
+      <Router>
+        <div>
+          <div className="navbar">
+            <GuestRoutes />
+          </div>
+          <div className="container">
+            {routes}
+          </div>
+        </div>
+      </Router>
     );
   }
 }

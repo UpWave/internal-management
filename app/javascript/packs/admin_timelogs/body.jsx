@@ -217,7 +217,7 @@ class AdminTimelogs extends React.Component {
       );
     }
     return (
-      <div>
+      <div className="well">
         Filter by:
         <button onClick={this.filterByDuration}>Duration</button>
         <button onClick={this.filterByStartTime}>Start time</button>

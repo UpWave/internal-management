@@ -75,7 +75,7 @@ class UserVacations extends React.Component {
       );
     }
     return (
-      <div>
+      <div className="well">
         <Vacations
           key={this.state.vacations.length.toString()}
           vacations={this.state.vacations}
