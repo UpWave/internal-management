@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Vacations from './vacations';
 import NewVacation from './new_vacation';
 
-class Body extends React.Component {
+class UserVacations extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -76,7 +75,7 @@ class Body extends React.Component {
       );
     }
     return (
-      <div>
+      <div className="well">
         <Vacations
           key={this.state.vacations.length.toString()}
           vacations={this.state.vacations}
@@ -92,7 +91,4 @@ class Body extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Body />,
-  document.getElementById('root'),
-);
+export default UserVacations;

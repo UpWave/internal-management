@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  Link,
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import Collapsible from 'react-collapsible';
@@ -443,11 +446,13 @@ class User extends React.Component {
         Status:{status}<br />
         <button className="btn btn-default" onClick={this.handleDelete}>Delete</button>
         <button className="btn btn-default" onClick={this.handleEdit}>{this.state.editable ? 'Submit' : 'Edit'}</button>
-        <a
+        <Link
           className="btn btn-default"
-          href={'/admin/users/'.concat(this.props.user.id).concat('/timelogs')}
-        >Timelogs
-        </a><br />
+          to={'/admin/users/'.concat(this.props.user.id).concat('/timelogs')}
+        >
+          Timelogs
+        </Link>
+        <br />
         Salary:{salary}<br />
         {warningImg}
         Review date:{reviewDate}<br />
@@ -463,9 +468,9 @@ class User extends React.Component {
 }
 
 User.propTypes = {
-  user: PropTypes.shape.isRequired,
-  roles: PropTypes.arrayOf.isRequired,
-  statuses: PropTypes.arrayOf.isRequired,
+  user: PropTypes.shape().isRequired,
+  roles: PropTypes.arrayOf().isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleUpdateSalary: PropTypes.func.isRequired,
   setNewSalary: PropTypes.func.isRequired,

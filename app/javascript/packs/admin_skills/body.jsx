@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import AlertContainer from 'react-alert';
 import Skills from './skills';
 
-class Body extends React.Component {
+class AdminSkills extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,10 +63,10 @@ class Body extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="well">
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         <Skills
-          key={Object.keys(this.state.skills).length.toString()}
+          key={this.state.skills.length.toString()}
           skills={this.state.skills}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
@@ -78,7 +77,4 @@ class Body extends React.Component {
 }
 
 
-ReactDOM.render(
-  <Body />,
-  document.getElementById('root'),
-);
+export default AdminSkills;

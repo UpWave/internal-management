@@ -17,11 +17,11 @@ class Skills extends React.Component {
   }
 
   render() {
-    const skills = Object.keys(this.props.skills).map(skill => (
+    const skills = this.props.skills.map(skill => (
       <Skill
-        id={this.props.skills[skill]}
-        key={this.props.skills[skill].toString()}
-        skill={skill}
+        id={skill.id}
+        key={skill.id}
+        skill={skill.name}
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
       />

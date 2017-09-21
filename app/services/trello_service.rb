@@ -1,13 +1,13 @@
 require 'trello'
 class TrelloService
-  
+
   def initialize(current_user)
     if current_user.has_trello?
       Trello.configure do |config|
-        config.consumer_key = ENV['TRELLO_DEVELOPER_PUBLIC_KEY'] 
+        config.consumer_key = ENV['TRELLO_DEVELOPER_PUBLIC_KEY']
         config.consumer_secret = ENV['TRELLO_SECRET']
-        config.oauth_token = current_user.identities.pluck("access_token").first
-        config.oauth_token_secret = current_user.identities.pluck("secret_token").first
+        config.oauth_token = current_user.identities.where(:provider => "trello").pluck("access_token").first
+        config.oauth_token_secret = current_user.identities.where(:provider => "trello").pluck("secret_token").first
       end
       @trello_member = Trello::Member.find(current_user.identities.where(:provider => "trello").pluck("uid").first)
     end
