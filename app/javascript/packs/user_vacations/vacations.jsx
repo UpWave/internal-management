@@ -30,7 +30,14 @@ class Vacations extends React.Component {
 }
 
 Vacations.propTypes = {
-  vacations: PropTypes.arrayOf.isRequired,
+  vacations: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    user_id: PropTypes.number,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    status: PropTypes.string,
+    type: PropTypes.string,
+  })).isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
 

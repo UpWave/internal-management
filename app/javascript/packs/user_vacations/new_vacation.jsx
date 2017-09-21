@@ -90,7 +90,7 @@ class NewVacation extends React.Component {
 
 NewVacation.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  types: PropTypes.arrayOf.isRequired,
+  types: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default NewVacation;
