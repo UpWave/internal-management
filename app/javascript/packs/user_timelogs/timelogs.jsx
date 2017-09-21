@@ -36,8 +36,14 @@ class Timelogs extends React.Component {
 }
 
 Timelogs.propTypes = {
-  timelogs: PropTypes.arrayOf.isRequired,
-  trelloCards: PropTypes.arrayOf.isRequired,
+  timelogs: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    trello_card: PropTypes.string,
+    duration: PropTypes.number,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+  })).isRequired,
+  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

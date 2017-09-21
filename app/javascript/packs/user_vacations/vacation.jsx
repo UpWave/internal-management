@@ -29,7 +29,14 @@ class Vacation extends React.Component {
 }
 
 Vacation.propTypes = {
-  vacation: PropTypes.shape.isRequired,
+  vacation: PropTypes.shape({
+    id: PropTypes.number,
+    user_id: PropTypes.number,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    status: PropTypes.string,
+    type: PropTypes.string,
+  }).isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
 

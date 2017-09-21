@@ -63,7 +63,7 @@ class Skill extends React.Component {
 }
 
 Skill.propTypes = {
-  skill: PropTypes.shape.isRequired,
+  skill: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,

@@ -56,7 +56,7 @@ class NewTimelog extends React.Component {
 }
 
 NewTimelog.propTypes = {
-  trelloCards: PropTypes.arrayOf.isRequired,
+  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

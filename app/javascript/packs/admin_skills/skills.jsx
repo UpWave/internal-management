@@ -37,7 +37,10 @@ class Skills extends React.Component {
 }
 
 Skills.propTypes = {
-  skills: PropTypes.shape.isRequired,
+  skills: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  })).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

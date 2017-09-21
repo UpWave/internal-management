@@ -49,9 +49,14 @@ class Users extends React.Component {
 }
 
 Users.propTypes = {
-  users: PropTypes.arrayOf.isRequired,
-  roles: PropTypes.arrayOf.isRequired,
-  statuses: PropTypes.arrayOf.isRequired,
+  users: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.string,
+    role: PropTypes.string,
+    status: PropTypes.string,
+  })).isRequired,
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.string).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdateSalary: PropTypes.func.isRequired,
