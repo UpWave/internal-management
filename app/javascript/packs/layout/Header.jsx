@@ -47,7 +47,7 @@ class Header extends React.Component {
 
     const MemberLinks = () => (
       <ul className="nav navbar-nav">
-        <li><a href="/user/profile">Profile</a></li>
+        <li><Link to="/user/profile">Profile</Link></li>
         <li><Link to="/user/vacations">My Vacations</Link></li>
         <li><Link to="/user/timelogs">Timelogs</Link></li>
         {googleLink}
