@@ -33,3 +33,5 @@ yarn.lock
 /config/application.yml
 /public/packs
 /node_modules
+
+.idea

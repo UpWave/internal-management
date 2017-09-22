@@ -424,11 +424,8 @@ class User extends React.Component {
       <Select
           className="mySelect"
           onChange={this.saveChanges}>
-        <option value="language">Language</option>
-        <option value="foreign_language">Foreign Language</option>
-        <option value="framework">Framework</option>
-        <option value="devops">Devops</option>
-        <option value="library">Library</option>
+          {this.state.types.map(type =>
+              <option key={type} value={type}>{type.replace('_',' ')}</option>)}
       </Select>
       <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
     </div>);
