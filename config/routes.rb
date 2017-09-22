@@ -34,7 +34,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :admin do
-        resources :vacations
+        resources :vacations do
+          collection do
+            get :users
+            get :statuses
+          end
+        end
         resources :salaries
         resources :skills
         resources :users do

@@ -19,8 +19,34 @@ RSpec.describe Api::V1::Admin::VacationsController, type: :controller do
       vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
       get :index, format: :json
       api_response = JSON.parse(response.body)
-      expect(api_response["vacations"][0]["id"]).to eql(vacation.id)
-      expect(api_response["users"][0]["id"]).to eql(other_user.id)
+      expect(api_response[0]["id"]).to eql(vacation.id)
+    end
+  end
+
+  describe "GET #users" do
+    it "allows authenticated access" do
+      get :users, format: :json
+      expect(response).to be_success
+    end
+
+    it "returns correct data" do
+      vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
+      get :users, format: :json
+      api_response = JSON.parse(response.body)
+      expect(api_response[0]["id"]).to eql(other_user.id)
+    end
+  end
+
+  describe "GET #statuses" do
+    it "allows authenticated access" do
+      get :statuses, format: :json
+      expect(response).to be_success
+    end
+
+    it "returns correct data" do
+      vacation = FactoryGirl.create(:vacation, user_id: other_user.id)
+      get :statuses, format: :json
+      api_response = JSON.parse(response.body)
       expect(api_response["approved_status"]).to eql(Vacation.approved_status)
       expect(api_response["rejected_status"]).to eql(Vacation.rejected_status)
     end

@@ -13,10 +13,14 @@ class AdminVacations extends React.Component {
     };
     this.handleUpdate = this.handleUpdate.bind(this);
     this.loadVacations = this.loadVacations.bind(this);
+    this.loadUsers = this.loadUsers.bind(this);
+    this.loadStatuses = this.loadStatuses.bind(this);
   }
 
   componentDidMount() {
     this.loadVacations();
+    this.loadUsers();
+    this.loadStatuses();
   }
 
   loadVacations() {
@@ -27,8 +31,34 @@ class AdminVacations extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({
-          vacations: data.vacations,
-          users: data.users,
+          vacations: data,
+        });
+      },
+    });
+  }
+
+  loadUsers() {
+    $.ajax({
+      url: '/api/v1/admin/vacations/users',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({
+          users: data,
+        });
+      },
+    });
+  }
+
+  loadStatuses() {
+    $.ajax({
+      url: '/api/v1/admin/vacations/statuses',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({
           approved: data.approved_status,
           rejected: data.rejected_status,
         });
@@ -45,6 +75,7 @@ class AdminVacations extends React.Component {
       success: () => {
         this.msg.success(`Vacation status setted to ${status}`);
         this.loadVacations();
+        this.loadUsers();
       },
       error: (xhr) => {
         this.msg.error($.parseJSON(xhr.responseText).errors);
