@@ -1,9 +1,0 @@
-<div class="well">
-  <p>
-    User: <%= vacation.user.email %><br>
-    Start date: <%= vacation.start_date %><br>
-    End date: <%= vacation.end_date %><br>
-    <%= link_to 'Approve request', admin_vacation_path(vacation, vacation: { status: Vacation.approved_status }), class: 'btn btn-xs', method: :patch, data: { confirm: "Are you sure?" } %><br>
-    <%= link_to 'Cancel request', admin_vacation_path(vacation, vacation: { status: Vacation.rejected_status }), class: 'btn btn-xs btn-danger', method: :patch, data: { confirm: "Are you sure?" } %>
-  </p>
-</div>
