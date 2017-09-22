@@ -35,6 +35,6 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
 
   private
     def skill_params
-      params.require(:skill).permit(:id, :name)
+      params.require(:skill).permit(:id, :name, :type)
     end
 end
