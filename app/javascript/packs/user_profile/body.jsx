@@ -10,6 +10,8 @@ class Body extends React.Component {
       avatar: '',
     };
     this.loadUser = this.loadUser.bind(this);
+    this.changeFile = this.changeFile.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,35 @@ class Body extends React.Component {
     });
   }
 
+  changeFile(e) {
+    this.setState({ file: e.target.files[0] });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const avatar = new FormData();
+    avatar.append('avatar', this.state.file);
+    $.ajax({
+      url: '/api/v1/profile',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      type: 'PATCH',
+      data: avatar,
+      dataType: 'json',
+      processData: false,
+      contentType: false,
+      success: () => {
+        this.msg.success('Avatar updated');
+        this.setState({ file: null });
+        document.getElementById('fileInput').value = '';
+        this.loadUser();
+      },
+      error: (xhr) => {
+        this.msg.error($.parseJSON(xhr.responseText).errors);
+      },
+    });
+  }
+
+
   render() {
     const avatar = <img src={this.state.avatar} alt="avatar" className="img-responsive" />;
     const email = this.state.user.email;
@@ -45,6 +76,24 @@ class Body extends React.Component {
           <p className="lead">Role: {role}</p>
           <p className="lead">Salary: {salary}</p>
         </div>
+        <form onSubmit={this.handleSubmit}>
+          <p className="lead">Select image to upload</p>
+          <input
+            id="fileInput"
+            className="file"
+            type="file"
+            accept="image/*"
+            onChange={this.changeFile}
+          />
+          <button
+            className="btn btn-info"
+            type="submit"
+            style={this.state.file ? { visibility: 'visible' } : { visibility: 'hidden' }}
+            onClick={this.handleSubmit}
+          >
+          Upload avatar
+          </button>
+        </form>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );

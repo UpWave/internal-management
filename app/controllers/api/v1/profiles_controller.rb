@@ -6,16 +6,11 @@ class Api::V1::ProfilesController < Api::V1::BaseController
   end
 
   def update
-    if current_user.update_attributes(profile_params)
+    if current_user.update_attributes(avatar: params["avatar"])
       respond_with current_user, json: current_user
     else
       render json: { errors: current_user.errors.full_messages }, status: 422
     end
   end
-
-  private
-    def profile_params
-      params.require(:user).permit(:avatar)
-    end
 
 end
