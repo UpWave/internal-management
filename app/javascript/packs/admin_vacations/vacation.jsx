@@ -6,7 +6,6 @@ class Vacation extends React.Component {
     super(props, context);
     this.handleApprove = this.handleApprove.bind(this);
     this.handleReject = this.handleReject.bind(this);
-    this.userIdToEmail = this.userIdToEmail.bind(this);
   }
 
 
@@ -18,16 +17,8 @@ class Vacation extends React.Component {
     this.props.handleUpdate(this.props.vacation.id, this.props.rejected);
   }
 
-  userIdToEmail(id) {
-    const user = this.props.users.find((elem) => {
-      return elem.id === id;
-    });
-    return user.email;
-  }
-
-
   render() {
-    const email = this.userIdToEmail(this.props.vacation.user_id);
+    const email = this.props.vacation.user.email;
     const startDate = this.props.vacation.start_date;
     const endDate = this.props.vacation.end_date;
     const type = this.props.vacation.type;
@@ -52,13 +43,8 @@ Vacation.propTypes = {
     end_date: PropTypes.string,
     status: PropTypes.string,
     type: PropTypes.string,
+    user: PropTypes.object,
   }).isRequired,
-  users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    email: PropTypes.string,
-    role: PropTypes.string,
-    status: PropTypes.string,
-  })).isRequired,
   approved: PropTypes.string.isRequired,
   rejected: PropTypes.string.isRequired,
   handleUpdate: PropTypes.func.isRequired,

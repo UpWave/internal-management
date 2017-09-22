@@ -22,17 +22,6 @@ describe VacationPolicy do
     end
   end
 
-  permissions :users? do
-
-    it 'allows admin to access users action' do
-      expect(subject).to permit(admin)
-    end
-
-    it 'forbids user to access users action' do
-      expect(subject).not_to permit(current_user)
-    end
-  end
-
   permissions :statuses? do
 
     it 'allows admin to access statuses action' do

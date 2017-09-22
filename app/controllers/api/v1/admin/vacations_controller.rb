@@ -7,13 +7,6 @@ class Api::V1::Admin::VacationsController < Api::V1::BaseController
     render json: @vacations
   end
 
-  def users
-    authorize(:vacation, :users?)
-    @users = []
-    Vacation.pending.each { |vac| @users.push(vac.user) }
-    render json: @users
-  end
-
   def statuses
     authorize(:vacation, :statuses?)
     render json: { "approved_status": Vacation.approved_status, "rejected_status": Vacation.rejected_status }

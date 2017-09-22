@@ -10,10 +10,6 @@
     @current_user.admin?
   end
 
-  def users?
-    @current_user.admin?
-  end
-
   def statuses?
     @current_user.admin?
   end

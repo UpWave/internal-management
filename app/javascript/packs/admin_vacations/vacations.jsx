@@ -21,7 +21,6 @@ class Vacations extends React.Component {
       <Vacation
         key={vacation.id}
         vacation={vacation}
-        users={this.props.users}
         approved={this.props.approved}
         rejected={this.props.rejected}
         handleDelete={this.handleDelete}
@@ -49,12 +48,7 @@ Vacations.propTypes = {
     end_date: PropTypes.string,
     status: PropTypes.string,
     type: PropTypes.string,
-  })).isRequired,
-  users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    email: PropTypes.string,
-    role: PropTypes.string,
-    status: PropTypes.string,
+    user: PropTypes.object,
   })).isRequired,
   approved: PropTypes.string.isRequired,
   rejected: PropTypes.string.isRequired,
