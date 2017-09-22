@@ -6,8 +6,6 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       user: [],
-      salary: 0,
-      avatar: '',
     };
     this.loadUser = this.loadUser.bind(this);
     this.changeFile = this.changeFile.bind(this);
@@ -26,9 +24,7 @@ class Body extends React.Component {
       type: 'GET',
       success: (data) => {
         this.setState({
-          user: data.user,
-          salary: data.salary,
-          avatar: data.avatar,
+          user: data,
         });
       },
     });
@@ -64,10 +60,10 @@ class Body extends React.Component {
 
 
   render() {
-    const avatar = <img src={this.state.avatar} alt="avatar" className="img-responsive" />;
+    const avatar = <img src={this.state.user.photo} alt="avatar" className="img-responsive" />;
     const email = this.state.user.email;
     const role = this.state.user.role;
-    const salary = this.state.salary;
+    const salary = this.state.user.salary;
     return (
       <div>
         <div className="well" key={this.state.user.id}>

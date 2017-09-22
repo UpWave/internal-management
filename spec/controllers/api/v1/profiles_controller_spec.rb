@@ -13,6 +13,14 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       get :show, format: :json
       expect(response).to be_success
     end
+
+    it "returns correct data" do
+      get :show, format: :json
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["id"]).to eql(user.id)
+      expect(parsed_response["salary"]).to eql(user.salary)
+      expect(parsed_response["photo"]).to eql(user.photo)
+    end
   end
 
   describe "PATCH #update" do

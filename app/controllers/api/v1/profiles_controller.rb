@@ -3,7 +3,7 @@ class Api::V1::ProfilesController < Api::V1::BaseController
 
   def show
     authorize(:profile, :show?)
-    render json: { "user": current_user, "salary": current_user.salary, "avatar": current_user.photo }.to_json()
+    render json: current_user
   end
 
   def update
