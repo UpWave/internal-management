@@ -62,4 +62,12 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
           }.to change(Skill, :count).by(-1)
     end
   end
+
+  describe "GET skill_types" do
+    it "should return skill types" do
+      get :skill_types, format: :json
+      expect(response).to have_http_status(:success)
+    end
+  end
+
 end
