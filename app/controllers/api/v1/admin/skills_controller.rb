@@ -32,6 +32,11 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
     respond_with :api, :v1, :admin, Skill.find(params[:id]).destroy
   end
 
+  def skill_types
+    @skill_types = Skill.types
+    respond_with @skill_types
+  end
+
 
   private
     def skill_params

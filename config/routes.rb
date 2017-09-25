@@ -31,7 +31,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :admin do
         resources :salaries
-        resources :skills
+        resources :skills do
+          collection do
+            get :skill_types
+          end
+        end
         resources :users do
           collection do
             get :count_users

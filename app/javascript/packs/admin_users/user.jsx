@@ -20,7 +20,7 @@ class User extends React.Component {
       amount: 0,
       reviewDate: '',
       skills: [],
-      types: ["language", "foreign_language", "framework", "devops", "library"],
+      types: [],
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       selectedRate: 0,
       missingSkills: [],
@@ -39,6 +39,7 @@ class User extends React.Component {
     this.mouseOverGrey = this.mouseOverGrey.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
     this.loadSkills = this.loadSkills.bind(this);
+    this.loadSkillTypes = this.loadSkillTypes.bind(this);
     this.loadUserSkills = this.loadUserSkills.bind(this);
     this.loadMissingSkills = this.loadMissingSkills.bind(this);
     this.handleRateChange = this.handleRateChange.bind(this);
@@ -49,7 +50,7 @@ class User extends React.Component {
     this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
     this.addCustomSkill = this.addCustomSkill.bind(this);
     this.findSkillTitleById = this.findSkillTitleById.bind(this);
-    this.saveChanges = this.saveChanges.bind(this)
+    this.saveChanges = this.saveChanges.bind(this);
   }
 
   componentDidMount() {
@@ -81,6 +82,7 @@ class User extends React.Component {
     this.loadSkills();
     this.loadUserSkills();
     this.loadMissingSkills();
+    this.loadSkillTypes();
   }
 
   setNewSalary() {
@@ -130,6 +132,18 @@ class User extends React.Component {
         }
       },
     });
+  }
+
+  loadSkillTypes() {
+      $.ajax({
+          url: '/api/v1/admin/skills/skill_types',
+          beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+          dataType: 'json',
+          type: 'GET',
+          success: (data) => {
+              this.setState({ types: Object.keys(data) });
+          },
+      });
   }
 
   checkValues() {
@@ -236,7 +250,7 @@ class User extends React.Component {
 
   saveChanges(data) {
     this.setState({
-        type: data.target.value
+      type: data.target.value
     })
   }
 
