@@ -47,7 +47,7 @@ class Header extends React.Component {
 
     const MemberLinks = () => (
       <ul className="nav navbar-nav">
-        <li><a href="/user/profile">Profile</a></li>
+        <li><Link to="/user/profile">Profile</Link></li>
         <li><Link to="/user/vacations">My Vacations</Link></li>
         <li><Link to="/user/timelogs">Timelogs</Link></li>
         {googleLink}
@@ -67,28 +67,34 @@ class Header extends React.Component {
     if (this.props.logged) {
       if (this.props.admin) {
         return (
-          <div>
-            <div className="navbar">
-              <AdminLinks />
-              <MemberLinks />
+          <nav className="navbar navbar-default navbar-fixed-top">
+            <div className="container">
+              <div className="navbar-header">
+                <AdminLinks />
+                <MemberLinks />
+              </div>
             </div>
-          </div>
+          </nav>
         );
       }
       return (
-        <div>
-          <div className="navbar">
-            <MemberLinks />
+        <nav className="navbar navbar-default navbar-fixed-top">
+          <div className="container">
+            <div className="navbar-header">
+              <MemberLinks />
+            </div>
           </div>
-        </div>
+        </nav>
       );
     }
     return (
-      <div>
-        <div className="navbar">
-          <GuestLinks />
+      <nav className="navbar navbar-default navbar-fixed-top">
+        <div className="container">
+          <div className="navbar-header">
+            <GuestLinks />
+          </div>
         </div>
-      </div>
+      </nav>
     );
   }
 }

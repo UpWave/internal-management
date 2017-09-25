@@ -11,7 +11,7 @@ class UserTimelogs extends React.Component {
       trelloCards: [],
       page: 0,
       pageCount: 1,
-      perPage: 5,
+      perPage: 3,
       startTime: 0,
       endTime: 0,
       filter: '',
