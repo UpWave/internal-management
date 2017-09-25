@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
+      resource :profile
       resources :vacations
       namespace :vacation_types do
         resources :types, only: [:index]
@@ -34,6 +35,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :admin do
+        resources :vacations do
+          collection do
+            get :users
+            get :statuses
+          end
+        end
         resources :salaries
         resources :skills
         resources :users do

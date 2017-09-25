@@ -10,6 +10,10 @@
     @current_user.admin?
   end
 
+  def statuses?
+    @current_user.admin?
+  end
+
   def create?
     @current_user.admin? || (@vacation.user_id == @current_user.id)
   end
@@ -25,5 +29,5 @@
   def new?
     @current_user.admin? || (@vacation.user_id == @current_user.id)
   end
-  
+
 end

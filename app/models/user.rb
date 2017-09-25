@@ -38,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def salary
-    salaries.last.amount
+    salaries.last.try(:amount) || 0
   end
 
   def active_for_authentication?

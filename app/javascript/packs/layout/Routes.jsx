@@ -7,6 +7,8 @@ import AdminTimelogs from '../admin_timelogs/body';
 import UserVacations from '../user_vacations/body';
 import UserTimelogs from '../user_timelogs/body';
 import SignIn from '../sign_in/body';
+import AdminVacations from '../admin_vacations/body';
+import UserProfile from '../user_profile/body';
 
 class Routes extends React.Component {
   render() {
@@ -15,9 +17,11 @@ class Routes extends React.Component {
       <Route path="/admin/users/:user_id/timelogs" component={AdminTimelogs} />
       <Route exact path="/admin/users" component={AdminUsers} />
       <Route exact path="/admin/skills" component={AdminSkills} />
+      <Route exact path="/admin/vacations" component={AdminVacations} />
     </div>);
     const memberRoutes =
     (<div>
+      <Route exact path="/user/profile" component={UserProfile} />
       <Route exact path="/user/vacations" component={UserVacations} />
       <Route exact path="/user/timelogs" component={UserTimelogs} />
     </div>);
@@ -28,14 +32,14 @@ class Routes extends React.Component {
     if (this.props.logged) {
       if (this.props.admin) {
         return (
-          <div className="container">
+          <div>
             {adminRoutes}
             {memberRoutes}
           </div>
         );
       }
       return (
-        <div className="container">
+        <div>
           {memberRoutes}
         </div>
       );
