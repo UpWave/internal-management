@@ -6,7 +6,7 @@ class Skill extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
-      name: this.props.skill,
+      name: this.props.skillName,
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
