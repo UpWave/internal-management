@@ -9,9 +9,9 @@ class Footer extends React.Component {
             <p className="navbar-text pull-left">© 2017 -
               <a href="http://upwave.net" rel="noopener noreferrer" target="_blank"> UpWave</a></p>
           </h4>
-          <a href="https://www.linkedin.com/company/upwaveagency" className="navbar-btn btn pull-right">
+          <a href="https://www.linkedin.com/company/upwaveagency" className="btn pull-right">
             <i className="fa fa-linkedin-square fa-3x" aria-hidden="true" /></a>
-          <a href="https://github.com/UpWave" className="navbar-btn btn pull-right">
+          <a href="https://github.com/UpWave" className="btn pull-right">
             <i className="fa fa-github fa-3x" aria-hidden="true" /></a>
         </div>
       </div>
