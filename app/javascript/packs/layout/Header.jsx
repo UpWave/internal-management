@@ -58,7 +58,7 @@ class Header extends React.Component {
 
     const GuestLinks = () => (
       <ul className="nav navbar-nav">
-        <li><a id="signin" href="/users/sign_in">Sign in</a></li>
+        <li><Link to="/users/sign_in">Sign in</Link></li>
         {googleLink}
         {trelloLink}
       </ul>

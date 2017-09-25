@@ -6,6 +6,7 @@ import AdminSkills from '../admin_skills/body';
 import AdminTimelogs from '../admin_timelogs/body';
 import UserVacations from '../user_vacations/body';
 import UserTimelogs from '../user_timelogs/body';
+import SignIn from '../sign_in/body';
 import AdminVacations from '../admin_vacations/body';
 import UserProfile from '../user_profile/body';
 
@@ -24,6 +25,10 @@ class Routes extends React.Component {
       <Route exact path="/user/vacations" component={UserVacations} />
       <Route exact path="/user/timelogs" component={UserTimelogs} />
     </div>);
+    const guestRoutes =
+    (<div>
+      <Route exact path="/users/sign_in" component={SignIn} />
+    </div>);
     if (this.props.logged) {
       if (this.props.admin) {
         return (
@@ -40,7 +45,9 @@ class Routes extends React.Component {
       );
     }
     return (
-      null
+      <div className="container">
+        {guestRoutes}
+      </div>
     );
   }
 }
