@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import React from 'react';
 import AlertContainer from 'react-alert';
 import Skills from './skills';
@@ -18,14 +19,14 @@ class AdminSkills extends React.Component {
   }
 
   loadSkills() {
-    $.ajax({
-      url: '/api/v1/admin/skills',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ skills: data });
-      },
+    fetch('/api/v1/admin/skills.json', {
+      credentials: 'same-origin',
+    }).then((response) => {
+      return response.json();
+    }).then((json) => {
+      this.setState({ skills: json });
+    }).catch((ex) => {
+      this.msg.error(ex);
     });
   }
 
