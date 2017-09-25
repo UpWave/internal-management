@@ -135,15 +135,15 @@ class User extends React.Component {
   }
 
   loadSkillTypes() {
-      $.ajax({
-          url: '/api/v1/admin/skills/skill_types',
-          beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-          dataType: 'json',
-          type: 'GET',
-          success: (data) => {
-              this.setState({ types: Object.keys(data) });
-          },
-      });
+    $.ajax({
+      url: '/api/v1/admin/skills/skill_types',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ types: Object.keys(data) });
+      },
+    });
   }
 
   checkValues() {
