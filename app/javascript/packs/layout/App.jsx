@@ -53,8 +53,7 @@ class App extends React.Component {
       type: 'DELETE',
       success: () => {
         this.setState({ logged: false });
-        this.setState({ hasGoogle: false });
-        this.setState({ hasTrello: false });
+        location.reload();
       },
     });
   }
