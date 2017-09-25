@@ -38,11 +38,7 @@ class User < ApplicationRecord
   end
 
   def salary
-    if salaries.length != 0
-      salaries.last.amount
-    else
-      0
-    end
+    salaries.last.try(:amount) || 0
   end
 
   def active_for_authentication?

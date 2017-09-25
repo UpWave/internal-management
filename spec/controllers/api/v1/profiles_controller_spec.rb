@@ -25,8 +25,8 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
 
   describe "PATCH #update" do
     it "assigns avatar" do
-    patch :update, format: :json, params: { avatar: fixture_file_upload('images/default_img.png', 'image/png') }
-    expect(user.avatar_file_name).to eql("default_img.png")
+      patch :update, format: :json, params: { avatar: fixture_file_upload('images/default_img.png', 'image/png') }
+      expect(user.avatar_file_name).to eql("default_img.png")
     end
   end
 
