@@ -1,10 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import Header from './Header';
-import Routes from './Routes';
+import Content from './Content';
+import Footer from './Footer';
 
 class App extends React.Component {
   constructor(props, context) {
@@ -66,13 +67,15 @@ class App extends React.Component {
             logged={this.state.logged}
             admin={this.state.admin}
             hasGoogle={this.state.hasGoogle}
-            hasTrello={this.state.hasTrello}
             signOutClick={this.signOutClick}
+            hasTrello={this.state.hasTrello}
           />
-          <Routes
+          <br /><br /><br /><br />
+          <Content
             logged={this.state.logged}
             admin={this.state.admin}
           />
+          <Footer />
         </div>
       </Router>
     );
@@ -80,9 +83,7 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-  <div>
-    <App />
-  </div>,
+  <App />,
   document.getElementById('root'),
 );
 

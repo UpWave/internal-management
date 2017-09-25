@@ -67,28 +67,34 @@ class Header extends React.Component {
     if (this.props.logged) {
       if (this.props.admin) {
         return (
-          <div>
-            <div className="navbar">
-              <AdminLinks />
-              <MemberLinks />
-            </div>
-          </div>
+            <nav className="navbar navbar-default navbar-fixed-top">
+              <div className="container">
+                <div className="navbar-header">
+                  <AdminLinks />
+                  <MemberLinks />
+                </div>
+              </div>
+            </nav>
         );
       }
       return (
-        <div>
-          <div className="navbar">
-            <MemberLinks />
-          </div>
-        </div>
+          <nav className="navbar navbar-default navbar-fixed-top">
+            <div className="container">
+              <div className="navbar-header">
+                <MemberLinks />
+              </div>
+            </div>
+          </nav>
       );
     }
     return (
-      <div>
-        <div className="navbar">
-          <GuestLinks />
-        </div>
-      </div>
+        <nav className="navbar navbar-default navbar-fixed-top">
+          <div className="container">
+            <div className="navbar-header">
+              <GuestLinks />
+            </div>
+          </div>
+        </nav>
     );
   }
 }

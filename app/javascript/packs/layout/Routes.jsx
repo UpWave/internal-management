@@ -27,14 +27,14 @@ class Routes extends React.Component {
     if (this.props.logged) {
       if (this.props.admin) {
         return (
-          <div className="container">
+          <div>
             {adminRoutes}
             {memberRoutes}
           </div>
         );
       }
       return (
-        <div className="container">
+        <div>
           {memberRoutes}
         </div>
       );
