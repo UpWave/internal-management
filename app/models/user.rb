@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   enum role: { admin: 0, member: 1 }
   enum status: { inactive: 0, active: 1 }
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable,
+  devise :database_authenticatable,
+         :rememberable, :trackable,
          :validatable, :omniauthable
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ":style/default.png"
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/

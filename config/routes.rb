@@ -4,19 +4,6 @@ Rails.application.routes.draw do
     get 'is_signed_in', to: 'auth#is_signed_in?'
     get 'check_identities', to: 'auth#check_identities'
   end
-  resource :user, only: [] do
-    resources :timelogs
-    resources :vacations
-    resource :profile
-  end
-  namespace :admin do
-    resources :users
-    resources :vacations
-    resources :skills
-    resources :users, only: [] do
-      resources :timelogs
-    end
-  end
   namespace :api do
     namespace :v1 do
       resource :profile
@@ -70,5 +57,6 @@ Rails.application.routes.draw do
   end
   get 'pages/index'
   root to: "pages#index"
+  get '*path' => redirect('/')
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
