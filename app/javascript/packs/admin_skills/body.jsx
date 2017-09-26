@@ -1,6 +1,6 @@
-import 'whatwg-fetch';
 import React from 'react';
 import AlertContainer from 'react-alert';
+import Fetch from 'fetch-rails';
 import Skills from './skills';
 
 class AdminSkills extends React.Component {
@@ -19,46 +19,32 @@ class AdminSkills extends React.Component {
   }
 
   loadSkills() {
-    fetch('/api/v1/admin/skills.json', {
-      credentials: 'same-origin',
-    }).then((response) => {
-      return response.json();
-    }).then((json) => {
-      this.setState({ skills: json });
-    }).catch((ex) => {
-      this.msg.error(ex);
-    });
+    Fetch.json('/api/v1/admin/skills')
+      .then((data) => {
+        this.setState({ skills: data });
+      });
   }
 
   handleUpdate(skill) {
-    $.ajax({
-      url: `/api/v1/admin/skills/${skill.id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { skill },
-      success: () => {
+    Fetch.putJSON(`/api/v1/admin/skills/${skill.id}`, {
+      skill: skill,
+    })
+      .then(() => {
         this.msg.success('Successfully updated skill');
         this.loadSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleDelete(id) {
-    $.ajax({
-      url: `/api/v1/admin/skills/${id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      success: () => {
+    Fetch.deleteJSON(`/api/v1/admin/skills/${id}`)
+      .then(() => {
         this.msg.success('Successfully deleted skill');
         this.loadSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
 

@@ -12,6 +12,7 @@
     "compression-webpack-plugin": "^1.0.0",
     "css-loader": "^0.28.5",
     "extract-text-webpack-plugin": "^3.0.0",
+    "fetch-rails": "^0.5.4",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "glob": "^7.1.2",

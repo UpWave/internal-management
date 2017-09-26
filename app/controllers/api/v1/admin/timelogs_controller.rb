@@ -41,6 +41,8 @@ class Api::V1::Admin::TimelogsController < Api::V1::BaseController
   def update
     if @timelog.update_attributes(timelogs_params)
       respond_with @timelog, json: @timelog
+    else
+      render json: { errors: @timelog.errors.full_messages }, status: 422
     end
   end
 

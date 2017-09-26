@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Link,
 } from 'react-router-dom';
+import Fetch from 'fetch-rails';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import Collapsible from 'react-collapsible';
@@ -54,15 +55,10 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/api/v1/admin/salaries',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        id: this.props.user.id,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/salaries', {
+      id: this.props.user.id,
+    })
+      .then((data) => {
         // data will be null when user is created,
         // but salary not assigned yet
         if (data !== null) {
@@ -77,8 +73,7 @@ class User extends React.Component {
             reviewDate: 'Not set yet',
           });
         }
-      },
-    });
+      });
     this.loadSkills();
     this.loadUserSkills();
     this.loadMissingSkills();
@@ -93,44 +88,38 @@ class User extends React.Component {
   }
 
   loadSkills() {
-    $.ajax({
-      url: '/api/v1/admin/skills',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/skills')
+      .then((data) => {
         this.setState({ allSkills: data });
-      },
-    });
+      });
   }
+
   loadUserSkills() {
-    $.ajax({
-      url: `/api/v1/admin/user/users/${this.props.user.id}/skills`,
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ skills: data });
+    Fetch.json(`/api/v1/admin/user/users/${this.props.user.id}/skills`)
+      .then((data) => {
+        this.setState({
+          skills: data,
+        });
         if (data.length !== 0) {
-          this.setState({ selectedDestroySkillRate: data[0].skill_id });
+          this.setState({
+            selectedDestroySkillRate: data[0].skill_id,
+          });
         }
-      },
-    });
+      });
   }
 
   loadMissingSkills() {
-    $.ajax({
-      url: `/api/v1/admin/user/users/${this.props.user.id}/skills/missing`,
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ missingSkills: data });
+    Fetch.json(`/api/v1/admin/user/users/${this.props.user.id}/skills/missing`)
+      .then((data) => {
+        this.setState({
+          missingSkills: data,
+        });
         if (data.length !== 0) {
-          this.setState({ selectedSkill: data[0].id });
+          this.setState({
+            selectedSkill: data[0].id,
+          });
         }
-      },
-    });
+      });
   }
 
   checkValues() {
@@ -196,37 +185,28 @@ class User extends React.Component {
       rate: this.state.selectedRate,
       user_id: this.props.user.id,
     };
-    $.ajax({
-      url: `/api/v1/admin/user/users/${this.props.user.id}/skills`,
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_skill: userSkill },
-      success: () => {
+    Fetch.postJSON(`/api/v1/admin/user/users/${this.props.user.id}/skills`, {
+      user_skill: userSkill,
+    })
+      .then(() => {
         this.msg.success('Successfully setted new skill');
         this.loadUserSkills();
         this.loadMissingSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   destroySkillRate() {
-    $.ajax({
-      url: `/api/v1/admin/user/users/${this.props.user.id}/skills/${this.state.selectedDestroySkillRate}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      success: () => {
+    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.props.user.id}/skills/${this.state.selectedDestroySkillRate}`)
+      .then(() => {
         this.msg.success('Successfully deleted');
         this.loadSkills();
         this.loadUserSkills();
         this.loadMissingSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   customSkillChange(event) {
@@ -236,21 +216,17 @@ class User extends React.Component {
   }
 
   addCustomSkill() {
-    $.ajax({
-      url: '/api/v1/admin/skills',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { skill: { name: this.state.customSkill } },
-      success: () => {
+    Fetch.postJSON('/api/v1/admin/skills', {
+      skill: { name: this.state.customSkill },
+    })
+      .then(() => {
         this.msg.success(`Successfully added ${this.state.customSkill} to a list`);
         this.loadSkills();
         this.loadUserSkills();
         this.loadMissingSkills();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   checkCustomSkillButton() {

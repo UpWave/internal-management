@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import Fetch from 'fetch-rails';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
@@ -20,10 +21,8 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    $.ajax({
-      url: '/auth/is_signed_in',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/auth/is_signed_in')
+      .then((data) => {
         this.setState({ logged: data.signed_in });
         if (data.signed_in) {
           this.setState({ admin: data.user.role === 'admin' });
@@ -31,31 +30,25 @@ class App extends React.Component {
         } else {
           this.setState({ admin: false });
         }
-      },
-    });
+      });
   }
 
   checkIdentities() {
-    $.ajax({
-      url: '/auth/check_identities',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ hasGoogle: data.has_google });
-        this.setState({ hasTrello: data.has_trello });
-      },
-    });
+    Fetch.json('/auth/check_identities')
+      .then((data) => {
+        this.setState({
+          hasGoogle: data.has_google,
+          hasTrello: data.has_trello,
+        });
+      });
   }
 
   signOutClick() {
-    $.ajax({
-      url: '/users/sign_out',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      type: 'DELETE',
-      success: () => {
+    Fetch.deleteJSON('/users/sign_out')
+      .then(() => {
         this.setState({ logged: false });
         location.reload();
-      },
-    });
+      });
   }
 
   render() {

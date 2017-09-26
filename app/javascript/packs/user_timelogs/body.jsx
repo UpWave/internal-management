@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
+import Fetch from 'fetch-rails';
+import AlertContainer from 'react-alert';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 
@@ -20,7 +22,6 @@ class UserTimelogs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.removeTimelog = this.removeTimelog.bind(this);
-    this.updateTimelogs = this.updateTimelogs.bind(this);
     this.loadTimelogs = this.loadTimelogs.bind(this);
     this.filterByDuration = this.filterByDuration.bind(this);
     this.filterByStartTime = this.filterByStartTime.bind(this);
@@ -34,45 +35,36 @@ class UserTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trelloCards: response }); });
+    Fetch.json('/api/v1/timelogs/trello_cards')
+      .then((data) => {
+        this.setState({ trelloCards: data });
+      });
     this.loadTimelogs();
   }
 
   loadTimelogs() {
     // Get number of timelogs for pageCount
-    $.ajax({
-      url: '/api/v1/timelogs/count_timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: 0,
-        page: 0,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/timelogs/count_timelogs', {
+      limit: 0,
+      page: 0,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+    })
+      .then((data) => {
         this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
-      },
-    });
+      });
     // Get only few timelogs for current page
-    $.ajax({
-      url: '/api/v1/timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: this.state.perPage,
-        page: this.state.page,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/timelogs', {
+      limit: this.state.perPage,
+      page: this.state.page,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+    })
+      .then((data) => {
         this.setState({ timelogs: data });
-      },
-    });
+      });
   }
 
   handleSubmit() {
@@ -80,14 +72,11 @@ class UserTimelogs extends React.Component {
   }
 
   handleDelete(id) {
-    $.ajax({
-      url: `/api/v1/timelogs/${id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      success: () => {
+    Fetch.deleteJSON(`/api/v1/timelogs/${id}`)
+      .then(() => {
+        this.msg.success('Successfully removed timelog');
         this.removeTimelog(id);
-      },
-    });
+      });
   }
 
   filterByDuration() {
@@ -124,19 +113,13 @@ class UserTimelogs extends React.Component {
   }
 
   handleUpdate(timelog) {
-    $.ajax({
-      url: `/api/v1/timelogs/${timelog.id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { timelog },
-      success: () => {
-        this.updateTimelogs();
-      },
-    });
-  }
-
-  updateTimelogs() {
-    this.loadTimelogs();
+    Fetch.putJSON(`/api/v1/timelogs/${timelog.id}`, {
+      timelog: timelog,
+    })
+      .then(() => {
+        this.msg.success('Successfully updated timelog');
+        this.loadTimelogs();
+      });
   }
 
   handlePageClick(page) {
@@ -233,6 +216,7 @@ class UserTimelogs extends React.Component {
           trelloCards={this.state.trelloCards}
           handleSubmit={this.handleSubmit}
         />
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

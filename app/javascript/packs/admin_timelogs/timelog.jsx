@@ -8,8 +8,8 @@ class Timelog extends React.Component {
     this.state = {
       editable: false,
       value: '0',
-      card: this.props.timelog.trelloCard,
-      startTime: this.props.timelog.start_time,
+      card: this.props.timelog.trello_card,
+      startTime: this.props.timelog.start_date,
       duration: this.props.timelog.duration,
     };
     this.handleEdit = this.handleEdit.bind(this);

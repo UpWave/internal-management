@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Fetch from 'fetch-rails';
 import Select from 'react-normalized-select';
+import AlertContainer from 'react-alert';
 
 class NewTimelog extends React.Component {
   constructor(props, context) {
@@ -19,15 +21,18 @@ class NewTimelog extends React.Component {
     const startTime = this.state.startTime;
     const duration = this.state.duration;
     const trelloCard = this.state.card || this.props.trelloCards[0];
-    $.ajax({
-      url: '/api/v1/admin/timelogs',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_id: this.props.userId, timelog: { start_time: startTime, duration, trello_card: trelloCard } },
-      success: () => {
-        this.props.handleSubmit();
+    Fetch.postJSON('/api/v1/timelogs', {
+      user_id: this.props.userId,
+      timelog: {
+        start_time: startTime,
+        duration,
+        trello_card: trelloCard,
       },
-    });
+    })
+      .then(() => {
+        this.msg.success('Successfully created timelog!');
+        this.props.handleSubmit();
+      });
   }
 
   handleStartDateChange(event) {
@@ -50,6 +55,7 @@ class NewTimelog extends React.Component {
         </Select>
         <br />
         <button onClick={this.handleClick}>Create</button><br />
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

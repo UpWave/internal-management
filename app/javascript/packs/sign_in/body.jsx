@@ -1,4 +1,6 @@
+//  import 'whatwg-fetch';
 import React from 'react';
+// import Fetch from 'fetch-rails';
 import AlertContainer from 'react-alert';
 
 class Body extends React.Component {
@@ -23,6 +25,29 @@ class Body extends React.Component {
   }
 
   handleSubmit() {
+    // fetch('/users/sign_in', {
+    //   credentials: 'same-origin',
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     user: {
+    //       email: this.state.email,
+    //       password: this.state.password,
+    //     },
+    //   }),
+    // });
+    // Fetch.postJSON('/users/sign_in')
+    //   .then(() => {
+    //   }).catch((errorResponse) => {
+    //     if (errorResponse.length < 50) {
+    //       this.msg.error(errorResponse);
+    //     } else {
+    //       this.msg.error('Some errors prevented you from accessing. Reload page or try again later');
+    //     }
+    //   });
+
     $.ajax({
       url: '/users/sign_in',
       type: 'POST',

@@ -27,7 +27,11 @@ class Api::V1::VacationsController < Api::V1::BaseController
   end
 
   def destroy
-    respond_with @vacation.destroy
+    if @vacation.destroy
+      render json: { response: 'Success' }, status: 200
+    else
+      render json: { errors: "Error when deleting!" }, status: 422
+    end
   end
 
 

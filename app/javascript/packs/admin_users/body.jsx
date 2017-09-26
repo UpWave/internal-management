@@ -1,5 +1,6 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
+import Fetch from 'fetch-rails';
 import ReactPaginate from 'react-paginate';
 import Users from './users';
 
@@ -23,106 +24,77 @@ class AdminUsers extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/api/v1/admin/roles',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/roles')
+      .then((data) => {
         this.setState({ roles: data });
-      },
-    });
-    $.ajax({
-      url: '/api/v1/admin/statuses',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+      });
+    Fetch.json('/api/v1/admin/statuses')
+      .then((data) => {
         this.setState({ statuses: data });
-      },
-    });
-    // Get number of users for pageCount
-    $.ajax({
-      url: '/api/v1/admin/users/count_users',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
-      },
-    });
+      });
     this.loadUsers();
   }
 
   setNewSalary(salary, id) {
-    $.ajax({
-      url: '/api/v1/admin/salaries',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { salary: salary, id: id },
-      success: () => {
+    Fetch.postJSON('/api/v1/admin/salaries', {
+      salary: salary,
+      id: id,
+    })
+      .then(() => {
         this.msg.success('Successfully setted new salary');
         this.loadUsers();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   loadUsers() {
-    $.ajax({
-      url: '/api/v1/admin/users',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      data: { page: this.state.currentPage, per_page: this.state.perPage },
-      success: (data) => {
+    if (this.state.currentPage === this.state.pageCount - 1) {
+      this.setState({ currentPage: this.state.currentPage - 1 });
+    }
+    // Get number of users for pageCount
+    Fetch.json('/api/v1/admin/users/count_users')
+      .then((data) => {
+        this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
+      });
+    Fetch.json('/api/v1/admin/users', {
+      page: this.state.currentPage,
+      per_page: this.state.perPage,
+    })
+      .then((data) => {
         this.setState({ users: data });
-      },
-    });
+      });
   }
 
   handleDelete(id) {
-    $.ajax({
-      url: `/api/v1/admin/users/${id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      success: () => {
-        this.msg.success('User deleted');
+    Fetch.deleteJSON(`/api/v1/admin/users/${id}`)
+      .then(() => {
         this.loadUsers();
-      },
-    });
+        this.msg.success('User deleted');
+      });
   }
 
   handleUpdateSalary(salary, id) {
-    $.ajax({
-      url: `/api/v1/admin/salaries/${id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { salary: salary, id: id },
-      success: () => {
+    Fetch.putJSON(`/api/v1/admin/salaries/${id}`, {
+      salary: salary,
+      id: id,
+    })
+      .then(() => {
         this.msg.success('Salary updated');
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
   handleUpdate(user) {
-    $.ajax({
-      url: `/api/v1/admin/users/${user.id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user: user },
-      success: () => {
+    Fetch.putJSON(`/api/v1/admin/users/${user.id}`, {
+      user: user,
+    })
+      .then(() => {
         this.msg.success('User updated');
         this.loadUsers();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handlePageClick(page) {

@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
+import Fetch from 'fetch-rails';
+import AlertContainer from 'react-alert';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 
@@ -13,7 +15,7 @@ class AdminTimelogs extends React.Component {
       trelloCards: [],
       page: 0,
       pageCount: 1,
-      perPage: 5,
+      perPage: 2,
       startTime: 0,
       endTime: 0,
       filter: '',
@@ -38,58 +40,41 @@ class AdminTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/api/v1/admin/timelogs/trello_cards',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        user_id: this.state.userId,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/timelogs/trello_cards', {
+      user_id: this.state.userId,
+    })
+      .then((data) => {
         this.setState({ trelloCards: data });
-      },
-    });
+      });
     this.loadTimelogs();
   }
 
   loadTimelogs() {
     // Get number of timelogs for pageCount
-    $.ajax({
-      url: '/api/v1/admin/timelogs/count_timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: 0,
-        page: 0,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-        user_id: this.state.userId,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/timelogs/count_timelogs', {
+      limit: 0,
+      page: 0,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+      user_id: this.state.userId,
+    })
+      .then((data) => {
         this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
-      },
-    });
+      });
+
     // Get only few timelogs for current page
-    $.ajax({
-      url: '/api/v1/admin/timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: this.state.perPage,
-        page: this.state.page,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-        user_id: this.state.userId,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/timelogs', {
+      limit: this.state.perPage,
+      page: this.state.page,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+      user_id: this.state.userId,
+    })
+      .then((data) => {
         this.setState({ timelogs: data });
-      },
-    });
+      });
   }
 
   handleSubmit() {
@@ -97,6 +82,15 @@ class AdminTimelogs extends React.Component {
   }
 
   handleDelete(id) {
+    // Error(( Completed 404 Not Found in 3ms (ActiveRecord: 0.4ms) ActiveRecord::RecordNotFound (Couldn't find User with 'id'=): app/controllers/api/v1/admin/timelogs_controller.rb:71:in `load_user'
+
+    // Fetch.deleteJSON(`/api/v1/admin/timelogs/${id}`, {
+    //   user_id: this.state.userId,
+    // })
+    //   .then(() => {
+    //     this.removeTimelog(id);
+    //     this.msg.success('Timelog deleted');
+    //   });
     $.ajax({
       url: `/api/v1/admin/timelogs/${id}`,
       type: 'DELETE',
@@ -142,15 +136,16 @@ class AdminTimelogs extends React.Component {
   }
 
   handleUpdate(timelog) {
-    $.ajax({
-      url: `/api/v1/admin/timelogs/${timelog.id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_id: this.state.userId, timelog },
-      success: () => {
+    Fetch.putJSON(`/api/v1/admin/timelogs/${timelog.id}`, {
+      user_id: this.state.userId,
+      timelog: timelog,
+    })
+      .then(() => {
+        this.msg.success('Timelog updated');
         this.updateTimelogs();
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   updateTimelogs() {
@@ -274,6 +269,7 @@ class AdminTimelogs extends React.Component {
           userId={this.state.userId}
           handleSubmit={this.handleSubmit}
         />
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

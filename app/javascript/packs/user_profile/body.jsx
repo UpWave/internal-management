@@ -1,4 +1,6 @@
+// import 'whatwg-fetch';
 import React from 'react';
+import Fetch from 'fetch-rails';
 import AlertContainer from 'react-alert';
 
 class Body extends React.Component {
@@ -17,17 +19,10 @@ class Body extends React.Component {
   }
 
   loadUser() {
-    $.ajax({
-      url: '/api/v1/profile',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({
-          user: data,
-        });
-      },
-    });
+    Fetch.json('/api/v1/profile')
+      .then((data) => {
+        this.setState({ user: data });
+      });
   }
 
   changeFile(e) {
@@ -36,13 +31,24 @@ class Body extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const avatar = new FormData();
-    avatar.append('avatar', this.state.file);
+    const file = new FormData();
+    file.append('avatar', this.state.file);
+    // fetch('/api/v1/profile', {
+    //   credentials: 'include',
+    //   method: 'PATCH',
+    //   body: file,
+    // })
+    //   .then(() => {
+    //     this.msg.success('Avatar updated');
+    //     this.setState({ file: null });
+    //     document.getElementById('fileInput').value = '';
+    //     this.loadUser();
+    //   });
     $.ajax({
       url: '/api/v1/profile',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
       type: 'PATCH',
-      data: avatar,
+      data: file,
       dataType: 'json',
       processData: false,
       contentType: false,

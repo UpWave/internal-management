@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Fetch from 'fetch-rails';
 import Select from 'react-normalized-select';
 
 class NewVacation extends React.Component {
@@ -22,15 +23,16 @@ class NewVacation extends React.Component {
     const startDate = this.state.startDate;
     const endDate = this.state.endDate;
     const type = this.state.type;
-    $.ajax({
-      url: '/api/v1/vacations',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { start_date: startDate, end_date: endDate, type: type } },
-      success: () => {
-        this.props.handleSubmit();
+    Fetch.postJSON('/api/v1/vacations', {
+      vacation: {
+        start_date: startDate,
+        end_date: endDate,
+        type: type,
       },
-    });
+    })
+      .then(() => {
+        this.props.handleSubmit();
+      });
   }
 
   handleStartDateChange(event) {
