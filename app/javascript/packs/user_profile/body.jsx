@@ -61,6 +61,8 @@ class Body extends React.Component {
 
   render() {
     const avatar = <img src={this.state.user.photo} alt="avatar" className="img-responsive" />;
+    const first_name = this.state.first_name;
+    const last_name = this.state.last_name;
     const email = this.state.user.email;
     const role = this.state.user.role;
     const salary = this.state.user.salary;
@@ -68,6 +70,8 @@ class Body extends React.Component {
       <div>
         <div className="well" key={this.state.user.id}>
           {avatar}
+          <p className="lead">Name: {first_name}</p>
+          <p className="lead">Last name: {last_name}</p>
           <p className="lead">Email: {email}</p>
           <p className="lead">Role: {role}</p>
           <p className="lead">Salary: {salary}</p>
