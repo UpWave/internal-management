@@ -61,8 +61,8 @@ class Body extends React.Component {
 
   render() {
     const avatar = <img src={this.state.user.photo} alt="avatar" className="img-responsive" />;
-    const first_name = this.state.first_name;
-    const last_name = this.state.last_name;
+    const first_name = this.state.user.first_name;
+    const last_name = this.state.user.last_name;
     const email = this.state.user.email;
     const role = this.state.user.role;
     const salary = this.state.user.salary;
