@@ -21,7 +21,7 @@ class Skills extends React.Component {
       <Skill
         id={skill.id}
         key={skill.id}
-        skill={skill.name}
+        skillName={skill.name}
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
       />
@@ -37,10 +37,7 @@ class Skills extends React.Component {
 }
 
 Skills.propTypes = {
-  skills: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-  })).isRequired,
+  skills: PropTypes.shape.isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

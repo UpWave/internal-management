@@ -29,7 +29,11 @@ Rails.application.routes.draw do
           end
         end
         resources :salaries
-        resources :skills
+        resources :skills do
+          collection do
+            get :skill_types
+          end
+        end
         resources :users do
           collection do
             get :count_users
