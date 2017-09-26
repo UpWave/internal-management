@@ -416,8 +416,7 @@ class User extends React.Component {
           onChange={this.handleSkillChange}
         >
           {this.state.missingSkills.map(option =>
-            (<option
-              key={option.id}
+            (<option key={option.id}
               value={option.id}
             >
               {this.findSkillTitleById(option.id)}
@@ -436,10 +435,10 @@ class User extends React.Component {
     (<div><p>Add custom skill to list</p>
       <input type="text" placeholder="Skill name" onChange={this.customSkillChange} />
       <Select
-          className="mySelect"
-          onChange={this.saveChanges}>
-          {this.state.types.map(type =>
-              <option key={type} value={type}>{type.replace('_',' ')}</option>)}
+        className="mySelect"
+        onChange={this.saveChanges}>
+        {this.state.types.map(type =>
+          <option key={type} value={type}>{type.replace('_',' ')}</option>)}
       </Select>
       <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
     </div>);
