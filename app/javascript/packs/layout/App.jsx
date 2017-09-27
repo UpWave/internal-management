@@ -7,6 +7,7 @@ import Fetch from 'fetch-rails';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
+import SignIn from '../sign_in/body';
 
 class App extends React.Component {
   constructor(props, context) {
@@ -17,10 +18,15 @@ class App extends React.Component {
       hasGoogle: false,
       hasTrello: false,
     };
+    this.isSignedIn = this.isSignedIn.bind(this);
     this.signOutClick = this.signOutClick.bind(this);
   }
 
   componentWillMount() {
+    this.isSignedIn();
+  }
+
+  isSignedIn() {
     Fetch.json('/auth/is_signed_in')
       .then((data) => {
         this.setState({ logged: data.signed_in });
@@ -32,7 +38,6 @@ class App extends React.Component {
         }
       });
   }
-
   checkIdentities() {
     Fetch.json('/auth/check_identities')
       .then((data) => {
@@ -46,12 +51,22 @@ class App extends React.Component {
   signOutClick() {
     Fetch.deleteJSON('/users/sign_out')
       .then(() => {
-        this.setState({ logged: false });
-        location.reload();
+        this.setState({
+          logged: false,
+          admin: false,
+          hasTrello: false,
+          hasGoogle: false,
+        });
       });
   }
 
   render() {
+    const signIn = this.state.logged ?
+      null
+      :
+      (<SignIn
+        isSignedIn={this.isSignedIn}
+      />);
     return (
       <Router>
         <div>
@@ -63,6 +78,7 @@ class App extends React.Component {
             hasTrello={this.state.hasTrello}
           />
           <br /><br /><br /><br />
+          {signIn}
           <Content
             logged={this.state.logged}
             admin={this.state.admin}

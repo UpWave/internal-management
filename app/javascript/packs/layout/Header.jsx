@@ -6,6 +6,14 @@ import PropTypes from 'prop-types';
 
 
 class Header extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.makeVisible = this.makeVisible.bind(this);
+  }
+
+  makeVisible() {
+    $('#sign-in-container').css('visibility', 'visible')
+  }
   render() {
     const signOutLink =
       (<li>
@@ -58,7 +66,7 @@ class Header extends React.Component {
 
     const GuestLinks = () => (
       <ul className="nav navbar-nav">
-        <li><Link to="/users/sign_in">Sign in</Link></li>
+        <li><Link onClick={this.makeVisible} to="/users/sign_in">Sign in</Link></li>
         {googleLink}
         {trelloLink}
       </ul>

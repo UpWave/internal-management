@@ -52,7 +52,11 @@ class Api::V1::Admin::TimelogsController < Api::V1::BaseController
   end
 
   def destroy
-    respond_with @timelog.destroy
+    if @timelog.destroy
+      render json: { response: 'Success' }, status: 200
+    else
+      render json: { errors: "Error when deleting!" }, status: 422
+    end
   end
 
   private

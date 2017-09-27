@@ -82,24 +82,11 @@ class AdminTimelogs extends React.Component {
   }
 
   handleDelete(id) {
-    // Error(( Completed 404 Not Found in 3ms (ActiveRecord: 0.4ms) ActiveRecord::RecordNotFound (Couldn't find User with 'id'=): app/controllers/api/v1/admin/timelogs_controller.rb:71:in `load_user'
-
-    // Fetch.deleteJSON(`/api/v1/admin/timelogs/${id}`, {
-    //   user_id: this.state.userId,
-    // })
-    //   .then(() => {
-    //     this.removeTimelog(id);
-    //     this.msg.success('Timelog deleted');
-    //   });
-    $.ajax({
-      url: `/api/v1/admin/timelogs/${id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user_id: this.state.userId },
-      success: () => {
+    Fetch.deleteJSON(`/api/v1/admin/timelogs/${id}?user_id=${this.state.userId}`)
+      .then(() => {
         this.removeTimelog(id);
-      },
-    });
+        this.msg.success('Timelog deleted');
+      });
   }
 
   filterByDuration() {
