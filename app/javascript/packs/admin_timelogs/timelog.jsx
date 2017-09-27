@@ -9,7 +9,7 @@ class Timelog extends React.Component {
       editable: false,
       value: '0',
       card: this.props.timelog.trello_card,
-      startTime: this.props.timelog.start_date,
+      startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
     };
     this.handleEdit = this.handleEdit.bind(this);
@@ -82,8 +82,8 @@ Timelog.propTypes = {
     id: PropTypes.number,
     trello_card: PropTypes.string,
     duration: PropTypes.number,
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
+    start_time: PropTypes.string,
+    end_time: PropTypes.string,
   }).isRequired,
   trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleUpdate: PropTypes.func.isRequired,

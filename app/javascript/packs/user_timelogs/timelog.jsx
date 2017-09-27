@@ -7,7 +7,7 @@ class Timelog extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
-      card: this.props.timelog.trelloCard,
+      card: this.props.timelog.trello_card,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
     };
@@ -80,8 +80,8 @@ Timelog.propTypes = {
     id: PropTypes.number,
     trello_card: PropTypes.string,
     duration: PropTypes.number,
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
+    start_time: PropTypes.string,
+    end_time: PropTypes.string,
   }).isRequired,
   trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleUpdate: PropTypes.func.isRequired,
