@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
-import Fetch from 'fetch-rails';
 import AlertContainer from 'react-alert';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
+import Fetch from '../Fetch';
 
 class AdminTimelogs extends React.Component {
   constructor(props, context) {
@@ -200,35 +200,58 @@ class AdminTimelogs extends React.Component {
     }
     return (
       <div className="well">
-        Filter by:
-        <button onClick={this.filterByDuration}>Duration</button>
-        <button onClick={this.filterByStartTime}>Start time</button>
-        <button onClick={this.filterByEndTime}>End time</button><br /><br />
-            Select time range:
-        <input type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
-        <input type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
-        <button id="date_discard" onClick={this.discardFilter}>X</button>
-        <button id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
-        <a
-          className="btn"
-          href={'/api/v1/admin/timelogs.pdf'.concat('?user_id='.concat(this.state.userId)
-            .concat('&filter=')
-            .concat(this.state.filter)
-            .concat('&start_time=')
-            .concat(this.state.startTime)
-            .concat('&end_time=')
-            .concat(this.state.endTime))}
-        ><button>Download PDF</button></a>
-        <a
-          className="btn"
-          href={'/api/v1/admin/timelogs.csv'.concat('?user_id='.concat(this.state.userId)
-            .concat('&filter=')
-            .concat(this.state.filter)
-            .concat('&start_time=')
-            .concat(this.state.startTime)
-            .concat('&end_time=')
-            .concat(this.state.endTime))}
-        ><button>Download CSV</button></a>
+        <div className="row">
+          <div className="col-md-4">
+            <h3>Filter by</h3>
+            <button className="btn btn-info" onClick={this.filterByDuration}>Duration</button>
+            <button className="btn btn-info" onClick={this.filterByStartTime}>Start time</button>
+            <button className="btn btn-info" onClick={this.filterByEndTime}>End time</button>
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={<a href="">...</a>}
+              breakClassName={'break-me'}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
+          </div>
+          <div className="col-md-3">
+            <h3>Select time range</h3>
+            <input className="form-control" type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
+            <input className="form-control" type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
+            <button className="btn btn-info" id="date_discard" onClick={this.discardFilter}>X</button>
+            <button className="btn btn-info" id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button>
+          </div>
+          <div className="col-md-3">
+            <h3>Download</h3>
+            <a
+              className="btn"
+              href={'/api/v1/admin/timelogs.pdf'.concat('?user_id='.concat(this.state.userId)
+                .concat('&filter=')
+                .concat(this.state.filter)
+                .concat('&start_time=')
+                .concat(this.state.startTime)
+                .concat('&end_time=')
+                .concat(this.state.endTime))}
+            ><button>Download PDF</button></a>
+            <a
+              className="btn"
+              href={'/api/v1/admin/timelogs.csv'.concat('?user_id='.concat(this.state.userId)
+                .concat('&filter=')
+                .concat(this.state.filter)
+                .concat('&start_time=')
+                .concat(this.state.startTime)
+                .concat('&end_time=')
+                .concat(this.state.endTime))}
+            ><button>Download CSV</button></a>
+          </div>
+        </div>
+        <h3>Timelogs</h3>
         <Timelogs
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}
@@ -236,19 +259,6 @@ class AdminTimelogs extends React.Component {
           userId={this.state.userId}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
-        />
-        <ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
-          breakLabel={<a href="">...</a>}
-          breakClassName={'break-me'}
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
         />
         <NewTimelog
           key="new_timelog"

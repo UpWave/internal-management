@@ -1,7 +1,7 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
-import Fetch from 'fetch-rails';
 import ReactPaginate from 'react-paginate';
+import Fetch from '../Fetch';
 import Users from './users';
 
 class AdminUsers extends React.Component {

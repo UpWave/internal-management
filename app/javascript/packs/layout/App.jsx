@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import Fetch from 'fetch-rails';
+import Fetch from '../Fetch';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';

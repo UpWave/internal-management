@@ -1,5 +1,5 @@
 import React from 'react';
-import Fetch from 'fetch-rails';
+import Fetch from '../Fetch';
 import Vacations from './vacations';
 import NewVacation from './new_vacation';
 

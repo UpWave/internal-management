@@ -1,6 +1,6 @@
 import React from 'react';
-import Fetch from 'fetch-rails';
 import AlertContainer from 'react-alert';
+import Fetch from '../Fetch';
 import Vacations from './vacations';
 
 class AdminVacations extends React.Component {

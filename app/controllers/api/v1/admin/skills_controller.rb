@@ -30,7 +30,7 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
   def destroy
     authorize Skill
     if Skill.find(params[:id]).destroy
-      render json: { response: 'Success' }, status: 200
+      render json: { }, status: 200
     else
       render json: { errors: "Error when deleting!" }, status: 422
     end

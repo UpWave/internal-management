@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Fetch from 'fetch-rails';
 import Select from 'react-normalized-select';
+import Fetch from '../Fetch';
 
 class NewVacation extends React.Component {
   constructor(props, context) {
@@ -67,24 +67,35 @@ class NewVacation extends React.Component {
 
   render() {
     return (
-      <div id="new_vacation">
-        <h3>Request a new vacation!</h3>
-        Select type of vacation:
-        <Select
-          defaultValue={this.state.value}
-          className="mySelect"
-          onChange={this.handleTypeChange}
-        >
-          <option value="0" disabled hidden>Type</option>
-          {this.props.types.map(option =>
-            <option key={option} value={option}>{option}</option>)}
-        </Select><br />
-        Start Date:
-        <input type="date" onChange={this.handleStartDateChange} /><br />
-        End Date:
-        <input type="date" onChange={this.handleEndDateChange} /><br />
-        <br />
-        <button id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
+      <div className="row" id="new_vacation">
+        <div className="col-sm-5">
+          <div className="well">
+            <h3 className="display-3">Request a new vacation!</h3>
+            <div className="form-group">
+              <Select
+                className="form-control"
+                defaultValue={this.state.value}
+                onChange={this.handleTypeChange}
+              >
+                <option value="0" disabled hidden>Select type of vacation</option>
+                {this.props.types.map(option =>
+                  <option key={option} value={option}>{option}</option>)}
+              </Select>
+            </div>
+            <div className="row">
+              <div className="col-sm-5">
+                <h4>Start Date</h4>
+                <input type="date" className="form-control" onChange={this.handleStartDateChange} />
+              </div>
+              <div className="col-sm-5">
+                <h4>End Date</h4>
+                <input type="date" className="form-control" onChange={this.handleEndDateChange} />
+              </div>
+            </div>
+            <br />
+            <button className="btn btn-success center-block" id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
+          </div>
+        </div>
       </div>
     );
   }

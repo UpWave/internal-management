@@ -2,11 +2,11 @@ import React from 'react';
 import {
   Link,
 } from 'react-router-dom';
-import Fetch from 'fetch-rails';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import Collapsible from 'react-collapsible';
 import AlertContainer from 'react-alert';
+import Fetch from '../Fetch';
 import GreyWarnIcon from '../images/grey-warn-icon.png';
 import RedWarnIcon from '../images/red-warn-icon.png';
 

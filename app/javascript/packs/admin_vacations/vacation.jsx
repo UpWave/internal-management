@@ -23,7 +23,7 @@ class Vacation extends React.Component {
     const endDate = this.props.vacation.end_date;
     const type = this.props.vacation.type;
     return (
-      <div className="well" key={this.props.vacation.id}>
+      <div key={this.props.vacation.id}>
         <p className="lead">Email: {email}</p>
         <p className="lead">Start date: {startDate}</p>
         <p className="lead">End date: {endDate}</p>

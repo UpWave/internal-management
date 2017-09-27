@@ -1,6 +1,6 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
-import Fetch from 'fetch-rails';
+import Fetch from '../Fetch';
 import Skills from './skills';
 
 class AdminSkills extends React.Component {

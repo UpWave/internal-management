@@ -1,11 +1,10 @@
 import React from 'react';
-import Fetch from 'fetch-rails';
 import PropTypes from 'prop-types';
 import {
   Link,
 } from 'react-router-dom';
-import { browserHistory } from 'react-router';
 import AlertContainer from 'react-alert';
+import Fetch from '../Fetch';
 
 
 class Body extends React.Component {
@@ -38,8 +37,6 @@ class Body extends React.Component {
     })
       .then(() => {
         this.props.isSignedIn();
-        this.msg.success('Welcome back!');
-        browserHistory.push('/');
       }).catch((errorResponse) => {
         if (errorResponse.length < 50) {
           this.msg.error(errorResponse);

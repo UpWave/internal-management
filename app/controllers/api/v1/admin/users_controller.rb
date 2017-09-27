@@ -16,7 +16,7 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
 
   def destroy
     if @user.destroy
-      render json: { response: 'Success' }, status: 200
+      render json: { }, status: 200
     end
   end
 

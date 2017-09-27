@@ -35,6 +35,8 @@ class Api::V1::Admin::TimelogsController < Api::V1::BaseController
     authorize @timelog
     if @timelog.save
       respond_with :api, :v1, @timelog
+    else
+      render json: { errors: @timelog.errors.full_messages }, status: 422
     end
   end
 
@@ -53,7 +55,7 @@ class Api::V1::Admin::TimelogsController < Api::V1::BaseController
 
   def destroy
     if @timelog.destroy
-      render json: { response: 'Success' }, status: 200
+      render json: { }, status: 200
     else
       render json: { errors: "Error when deleting!" }, status: 422
     end

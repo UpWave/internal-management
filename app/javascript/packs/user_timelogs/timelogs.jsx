@@ -18,17 +18,21 @@ class Timelogs extends React.Component {
 
   render() {
     const timelogs = this.props.timelogs.map(timelog => (
-      <Timelog
-        id={timelog.id}
-        key={timelog.id.toString()}
-        trelloCards={this.props.trelloCards}
-        timelog={timelog}
-        handleDelete={this.handleDelete}
-        handleUpdate={this.onUpdate}
-      />
+      <div key={timelog.id} className="col-sm-6">
+        <div className="well">
+          <Timelog
+            id={timelog.id}
+            key={timelog.id.toString()}
+            trelloCards={this.props.trelloCards}
+            timelog={timelog}
+            handleDelete={this.handleDelete}
+            handleUpdate={this.onUpdate}
+          />
+        </div>
+      </div>
     ));
     return (
-      <div>
+      <div className="row">
         {timelogs}
       </div>
     );
