@@ -1,4 +1,4 @@
-// import 'whatwg-fetch';
+import 'whatwg-fetch';
 import React from 'react';
 import Fetch from 'fetch-rails';
 import AlertContainer from 'react-alert';
@@ -33,35 +33,21 @@ class Body extends React.Component {
     e.preventDefault();
     const file = new FormData();
     file.append('avatar', this.state.file);
-    // fetch('/api/v1/profile', {
-    //   credentials: 'include',
-    //   method: 'PATCH',
-    //   body: file,
-    // })
-    //   .then(() => {
-    //     this.msg.success('Avatar updated');
-    //     this.setState({ file: null });
-    //     document.getElementById('fileInput').value = '';
-    //     this.loadUser();
-    //   });
-    $.ajax({
-      url: '/api/v1/profile',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      type: 'PATCH',
-      data: file,
-      dataType: 'json',
-      processData: false,
-      contentType: false,
-      success: () => {
+    fetch('/api/v1/profile', {
+      method: 'PATCH',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+      },
+      body: file,
+      credentials: 'same-origin',
+    })
+      .then(() => {
         this.msg.success('Avatar updated');
         this.setState({ file: null });
         document.getElementById('fileInput').value = '';
         this.loadUser();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      });
   }
 
 
