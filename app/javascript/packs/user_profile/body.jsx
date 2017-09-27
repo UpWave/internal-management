@@ -6,19 +6,16 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       user: [],
-      editable_first_name: false,
-      editable_last_name: false
+      editable: false
     };
     this.loadUser = this.loadUser.bind(this);
     this.changeFile = this.changeFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleEditLastName = this.handleEditLastName.bind(this);
-    this.handleEditName = this.handleEditName.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleBackName = this.handleBackName.bind(this);
-    this.handleBackLastName = this.handleBackLastName.bind(this);
+    this.handleBack = this.handleBack.bind(this);
   }
 
   componentDidMount() {
@@ -70,7 +67,7 @@ class Body extends React.Component {
 
   handleUpdate(e) {
     e.preventDefault();
-    this.state.editable_first_name ? this.setState({ editable_first_name: !this.state.editable_first_name }) : this.setState({ editable_last_name: this.state.editable_lastst_name });
+    this.setState({ editable: !this.state.editable });
     const first_name = this.state.first_name;
     const last_name = this.state.last_name;
     $.ajax({
@@ -88,28 +85,16 @@ class Body extends React.Component {
     });
   }
 
-  handleEditName() {
-    if (this.state.editable_first_name) {
-      const user = { first_name: this.state.user.first_name };
+  handleEdit() {
+    if (this.state.editable) {
+      const user = { first_name: this.state.user.first_name, last_name: this.state.user.last_name };
       this.props.handleUpdate(user);
     }
-    this.setState({ editable_first_name: !this.state.editable_first_name });
+    this.setState({ editable: !this.state.editable });
   }
 
-  handleEditLastName() {
-    if (this.state.editable_last_name) {
-      const user = { last_name: this.state.user.last_name };
-      this.props.handleUpdate(user);
-    }
-    this.setState({ editable_last_name: !this.state.editable_last_name });
-  }
-
-  handleBackName() {
-    this.setState({ editable_first_name: !this.state.editable_first_name });
-  }
-
-  handleBackLastName() {
-    this.setState({ editable_last_name: !this.state.editable_last_name });
+  handleBack() {
+    this.setState({ editable: !this.state.editable });
   }
 
   handleNameChange(event) {
@@ -129,15 +114,17 @@ class Body extends React.Component {
     const role = this.state.user.role;
     const salary = this.state.user.salary;
 
-    const f_name = this.state.editable_first_name ?
+    const f_name = this.state.editable ?
       (<div>
+        <p className="lead">First name: </p>
         <input type="text" onChange={this.handleNameChange} defaultValue={first_name} /><br />
       </div>)
       :
       <p className="lead">Name: {first_name}</p>;
 
-    const l_name = this.state.editable_last_name ?
+    const l_name = this.state.editable ?
       (<div>
+        <p className="lead">Last name: </p>
         <input type="text" onChange={this.handleLastNameChange} defaultValue={last_name} /><br />
       </div>)
       :
@@ -150,24 +137,14 @@ class Body extends React.Component {
           {avatar}
 
           {f_name}
-          <button className="btn btn-default edit-btn" onClick={this.handleEditName} style={this.state.editable_first_name ? { display: 'none' } : { display: 'block' }}>Edit</button>
-          <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable_first_name ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
-          <button
-            id="back-button"
-            style={this.state.editable_first_name ? { visibility: 'visible' } : { visibility: 'hidden' }}
-            onClick={this.handleBackName}
-          >
-            Back
-          </button>
-
 
           {l_name}
-          <button className="btn btn-default edit-btn" onClick={this.handleEditLastName} style={this.state.editable_last_name ? { display: 'none' } : { display: 'block' }}>Edit</button>
-          <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable_last_name ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
+          <button className="btn btn-default edit-btn" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
+          <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
           <button
             id="back-button"
-            style={this.state.editable_last_name ? { visibility: 'visible' } : { visibility: 'hidden' }}
-            onClick={this.handleBackLastName}
+            style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
+            onClick={this.handleBack}
           >
             Back
           </button>
