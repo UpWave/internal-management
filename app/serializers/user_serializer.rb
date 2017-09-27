@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :role, :status, :salary, :photo
+  attributes :id, :email, :role, :status, :salary, :photo, :first_name, :last_name
 
   def salary
     self.object.salary

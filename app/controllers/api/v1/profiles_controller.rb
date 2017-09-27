@@ -17,7 +17,7 @@ class Api::V1::ProfilesController < Api::V1::BaseController
 
   private
     def profile_params
-      params.permit(:avatar)
+      params.permit(:avatar, :first_name, :last_name)
     end
 
 end
