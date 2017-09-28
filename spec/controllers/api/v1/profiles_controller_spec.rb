@@ -28,6 +28,13 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       patch :update, format: :json, params: { avatar: fixture_file_upload('images/default_img.png', 'image/png') }
       expect(user.avatar_file_name).to eql("default_img.png")
     end
+
+    it "updates first_name and last_name" do
+      patch :update, format: :json, params: { first_name: "Name", last_name: "Last Name"}
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["first_name"]).to eql(user.first_name)
+      expect(parsed_response["last_name"]).to eql(user.last_name)
+    end
   end
 
 end
