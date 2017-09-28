@@ -20,13 +20,8 @@ class Skills extends React.Component {
     const skills = this.props.skills.map(skill => (
       <Skill
         id={skill.id}
-<<<<<<< HEAD
         key={skill.id}
         skillName={skill.name}
-=======
-        key={skill.id.toString()}
-        skill={skill}
->>>>>>> modal for creating user
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
       />

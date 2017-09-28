@@ -1,24 +1,8 @@
 Rails.application.routes.draw do
-<<<<<<< HEAD
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks', sessions: 'sessions' }
   scope :auth do
     get 'is_signed_in', to: 'auth#is_signed_in?'
     get 'check_identities', to: 'auth#check_identities'
-=======
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }, path_names: { sign_up: '' }
-  resource :user, only: [] do
-    resources :timelogs
-    resources :vacations
-    resource :profile
-  end
-  namespace :admin do
-    resources :users
-    resources :vacations
-    resources :skills
-    resources :users, only: [] do
-      resources :timelogs
-    end
->>>>>>> modal for creating user
   end
   namespace :api do
     namespace :v1 do
