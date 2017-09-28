@@ -26,4 +26,8 @@ class SkillPolicy
    @current_user.admin?
  end
 
+ def skill_types?
+   @current_user.admin?
+ end
+
 end

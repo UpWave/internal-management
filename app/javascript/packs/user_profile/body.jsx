@@ -7,7 +7,7 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       user: [],
-      editable: false
+      editable: false,
     };
     this.loadUser = this.loadUser.bind(this);
     this.changeFile = this.changeFile.bind(this);
@@ -98,17 +98,19 @@ class Body extends React.Component {
     const salary = this.state.user.salary;
 
     const fName = this.state.editable ?
-      (<div>
-        <p className="lead">First name: </p>
-        <input type="text" onChange={this.handleNameChange} defaultValue={firstName} /><br />
+      (<div className="row">
+        <div className="col-md-4">
+          <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={firstName} />
+        </div>
       </div>)
       :
       <p className="lead">Name: {firstName}</p>;
 
     const lName = this.state.editable ?
-      (<div>
-        <p className="lead">Last name: </p>
-        <input type="text" onChange={this.handleLastNameChange} defaultValue={lastName} /><br />
+      (<div className="row">
+        <div className="col-md-4">
+          <input className="form-control" type="text" onChange={this.handleLastNameChange} defaultValue={lastName} />
+        </div>
       </div>)
       :
       <p className="lead">Last name: {lastName}</p>;
@@ -118,13 +120,13 @@ class Body extends React.Component {
       <div>
         <div className="well" key={this.state.user.id}>
           {avatar}
-
+          <br />
           {fName}
-
           {lName}
-          <button className="btn btn-default edit-btn" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
-          <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
+          <button className="btn btn-default" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
+          <button className="btn btn-default" onClick={this.handleUpdate} style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
           <button
+            className="btn btn-default"
             id="back-button"
             style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
             onClick={this.handleBack}

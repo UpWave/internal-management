@@ -39,31 +39,30 @@ class Skill extends React.Component {
   render() {
     const name = this.state.editable ?
       (<div>
-        <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
+        <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
       </div>)
       :
       <h4>{this.props.skillName}</h4>;
     return (
       <div key={this.props.id}>
         {name}
-        <button onClick={this.handleDelete}> Delete</button>
-        <button onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
+        <button className="btn btn-danger" onClick={this.handleDelete}> Delete</button>
+        <button className="btn btn-info" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
         <button
+          className="btn btn-default"
           id="back-button"
           style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
           onClick={this.handleBack}
         >
           Back
         </button>
-        <br />
-        <br />
       </div>
     );
   }
 }
 
 Skill.propTypes = {
-  skill: PropTypes.string.isRequired,
+  skillName: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,

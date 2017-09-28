@@ -68,6 +68,11 @@ RSpec.describe Api::V1::Admin::SkillsController, type: :controller do
       get :skill_types, format: :json
       expect(response).to have_http_status(:success)
     end
+
+    it "returns hash with correct skill types" do
+      get :skill_types, format: :json
+      expect(JSON.parse(response.body)).to eq(Skill.types)
+    end
   end
 
 end

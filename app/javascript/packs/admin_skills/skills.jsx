@@ -18,26 +18,35 @@ class Skills extends React.Component {
 
   render() {
     const skills = this.props.skills.map(skill => (
-      <Skill
-        id={skill.id}
-        key={skill.id}
-        skillName={skill.name}
-        handleDelete={this.handleDelete}
-        handleUpdate={this.onUpdate}
-      />
+      <div key={skill.id} className="col-sm-4">
+        <div className="well">
+          <Skill
+            id={skill.id}
+            key={skill.id}
+            skillName={skill.name}
+            handleDelete={this.handleDelete}
+            handleUpdate={this.onUpdate}
+          />
+        </div>
+      </div>
     ));
     return (
       <div>
         <h3>Skills</h3>
-        {skills}
-        <br />
+        <div className="row">
+          {skills}
+        </div>
       </div>
     );
   }
 }
 
 Skills.propTypes = {
-  skills: PropTypes.shape.isRequired,
+  skills: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    type: PropTypes.string,
+  })).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

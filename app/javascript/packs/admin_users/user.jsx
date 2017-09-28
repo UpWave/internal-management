@@ -56,7 +56,7 @@ class User extends React.Component {
     this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
     this.addCustomSkill = this.addCustomSkill.bind(this);
     this.findSkillTitleById = this.findSkillTitleById.bind(this);
-    this.saveChanges = this.saveChanges.bind(this);
+    this.skillTypeChange = this.skillTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -129,15 +129,17 @@ class User extends React.Component {
   }
 
   loadSkillTypes() {
-    $.ajax({
-      url: '/api/v1/admin/skills/skill_types',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ types: Object.keys(data) });
-      },
-    });
+    Fetch.json('/api/v1/admin/skills/skill_types')
+      .then((data) => {
+        this.setState({
+          types: Object.keys(data),
+        });
+        if (Object.keys(data).length !== 0) {
+          this.setState({
+            selectedType: Object.keys(data)[0],
+          });
+        }
+      });
   }
 
   checkValues() {
@@ -241,15 +243,16 @@ class User extends React.Component {
     });
   }
 
-  saveChanges(data) {
-    this.setState({
-      type: data.target.value
-    })
+  skillTypeChange(event) {
+    this.setState({ selectedType: event.target.value });
   }
 
   addCustomSkill() {
     Fetch.postJSON('/api/v1/admin/skills', {
-      skill: { name: this.state.customSkill },
+      skill: {
+        name: this.state.customSkill,
+        type: this.state.selectedType,
+      },
     })
       .then(() => {
         this.msg.success(`Successfully added ${this.state.customSkill} to a list`);
@@ -429,10 +432,11 @@ class User extends React.Component {
     (<div><p className="lead">Add custom skill to list</p>
       <input className="form-control" type="text" placeholder="Skill name" onChange={this.customSkillChange} />
       <Select
-        className="mySelect"
-        onChange={this.saveChanges}>
+        className="form-control"
+        onChange={this.skillTypeChange}
+      >
         {this.state.types.map(type =>
-          <option key={type} value={type}>{type.replace('_',' ')}</option>)}
+          <option key={type} value={type}>{type.replace('_', ' ')}</option>)}
       </Select>
       <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
     </div>);
