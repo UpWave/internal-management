@@ -36,9 +36,14 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
     end
   end
 
+  def skill_types
+    @skill_types = Skill.types
+    respond_with @skill_types
+  end
+
 
   private
     def skill_params
-      params.require(:skill).permit(:id, :name)
+      params.require(:skill).permit(:id, :name, :type)
     end
 end

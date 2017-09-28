@@ -6,7 +6,7 @@ class Skill extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
-      name: this.props.skill,
+      name: this.props.skillName,
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -39,10 +39,10 @@ class Skill extends React.Component {
   render() {
     const name = this.state.editable ?
       (<div>
-        <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skill} /><br />
+        <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
       </div>)
       :
-      <h4>{this.props.skill}</h4>;
+      <h4>{this.props.skillName}</h4>;
     return (
       <div key={this.props.id}>
         {name}

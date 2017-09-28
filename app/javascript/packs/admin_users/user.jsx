@@ -24,6 +24,7 @@ class User extends React.Component {
       amount: 0,
       reviewDate: '',
       skills: [],
+      types: [],
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       selectedRate: 0,
       missingSkills: [],
@@ -44,6 +45,7 @@ class User extends React.Component {
     this.mouseOverGrey = this.mouseOverGrey.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
     this.loadSkills = this.loadSkills.bind(this);
+    this.loadSkillTypes = this.loadSkillTypes.bind(this);
     this.loadUserSkills = this.loadUserSkills.bind(this);
     this.loadMissingSkills = this.loadMissingSkills.bind(this);
     this.handleRateChange = this.handleRateChange.bind(this);
@@ -54,6 +56,7 @@ class User extends React.Component {
     this.checkCustomSkillButton = this.checkCustomSkillButton.bind(this);
     this.addCustomSkill = this.addCustomSkill.bind(this);
     this.findSkillTitleById = this.findSkillTitleById.bind(this);
+    this.saveChanges = this.saveChanges.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +82,7 @@ class User extends React.Component {
     this.loadSkills();
     this.loadUserSkills();
     this.loadMissingSkills();
+    this.loadSkillTypes();
   }
 
   setNewSalary() {
@@ -122,6 +126,18 @@ class User extends React.Component {
           });
         }
       });
+  }
+
+  loadSkillTypes() {
+    $.ajax({
+      url: '/api/v1/admin/skills/skill_types',
+      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
+      dataType: 'json',
+      type: 'GET',
+      success: (data) => {
+        this.setState({ types: Object.keys(data) });
+      },
+    });
   }
 
   checkValues() {
@@ -220,9 +236,15 @@ class User extends React.Component {
   }
 
   customSkillChange(event) {
-    this.setState({ customSkill: event.target.value }, () => {
+    this.setState({ customSkill: event.target.value}, () => {
       this.checkCustomSkillButton();
     });
+  }
+
+  saveChanges(data) {
+    this.setState({
+      type: data.target.value
+    })
   }
 
   addCustomSkill() {
@@ -388,8 +410,7 @@ class User extends React.Component {
           onChange={this.handleSkillChange}
         >
           {this.state.missingSkills.map(option =>
-            (<option
-              key={option.id}
+            (<option key={option.id}
               value={option.id}
             >
               {this.findSkillTitleById(option.id)}
@@ -407,6 +428,12 @@ class User extends React.Component {
     const addCustomSkill =
     (<div><p className="lead">Add custom skill to list</p>
       <input className="form-control" type="text" placeholder="Skill name" onChange={this.customSkillChange} />
+      <Select
+        className="mySelect"
+        onChange={this.saveChanges}>
+        {this.state.types.map(type =>
+          <option key={type} value={type}>{type.replace('_',' ')}</option>)}
+      </Select>
       <button id="submit-custom-skill" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.addCustomSkill}>Submit</button>
     </div>);
     const destroySkillRatesCollapse = this.state.skills.length === 0 ?
