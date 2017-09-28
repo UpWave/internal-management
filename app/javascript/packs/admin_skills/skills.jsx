@@ -24,6 +24,7 @@ class Skills extends React.Component {
             id={skill.id}
             key={skill.id}
             skillName={skill.name}
+            skillType={skill.type}
             handleDelete={this.handleDelete}
             handleUpdate={this.onUpdate}
           />

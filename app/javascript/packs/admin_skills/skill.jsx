@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 class Skill extends React.Component {
   constructor(props, context) {
@@ -39,10 +40,12 @@ class Skill extends React.Component {
   render() {
     const name = this.state.editable ?
       (<div>
-        <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
+        <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} />
       </div>)
       :
-      <h4>{this.props.skillName}</h4>;
+      (<div>
+        <text data-tip={this.props.skillType} className="lead">{this.props.skillName}</text><br />
+      </div>);
     return (
       <div key={this.props.id}>
         {name}
@@ -56,14 +59,16 @@ class Skill extends React.Component {
         >
           Back
         </button>
+        <ReactTooltip />
       </div>
     );
   }
 }
 
 Skill.propTypes = {
-  skillName: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  skillName: PropTypes.string.isRequired,
+  skillType: PropTypes.string.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
