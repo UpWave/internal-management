@@ -68,13 +68,13 @@ class Body extends React.Component {
   handleUpdate(e) {
     e.preventDefault();
     this.setState({ editable: !this.state.editable });
-    const first_name = this.state.first_name;
-    const last_name = this.state.last_name;
+    const firstName = this.state.firstName;
+    const lastName = this.state.lastName;
     $.ajax({
       url: `/api/v1/profile`,
       type: 'PATCH',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { first_name, last_name },
+      data: { firstName, lastName },
       success: () => {
         this.msg.success('Successfully updated');
         this.loadUser();
@@ -87,7 +87,7 @@ class Body extends React.Component {
 
   handleEdit() {
     if (this.state.editable) {
-      const user = { first_name: this.state.user.first_name, last_name: this.state.user.last_name };
+      const user = { firstName: this.state.user.first_name, lastName: this.state.user.last_name };
       this.props.handleUpdate(user);
     }
     this.setState({ editable: !this.state.editable });
@@ -98,37 +98,37 @@ class Body extends React.Component {
   }
 
   handleNameChange(event) {
-    this.setState({ first_name: event.target.value });
+    this.setState({ firstName: event.target.value });
   }
 
   handleLastNameChange(event) {
-    this.setState({ last_name: event.target.value });
+    this.setState({ lastName: event.target.value });
   }
 
 
   render() {
     const avatar = <img src={this.state.user.photo} alt="avatar" className="img-responsive" />;
-    const first_name = this.state.user.first_name;
-    const last_name = this.state.user.last_name;
+    const firstName = this.state.user.first_name;
+    const lastName = this.state.user.last_name;
     const email = this.state.user.email;
     const role = this.state.user.role;
     const salary = this.state.user.salary;
 
-    const f_name = this.state.editable ?
+    const fName = this.state.editable ?
       (<div>
         <p className="lead">First name: </p>
-        <input type="text" onChange={this.handleNameChange} defaultValue={first_name} /><br />
+        <input type="text" onChange={this.handleNameChange} defaultValue={firstName} /><br />
       </div>)
       :
-      <p className="lead">Name: {first_name}</p>;
+      <p className="lead">Name: {firstName}</p>;
 
-    const l_name = this.state.editable ?
+    const lName = this.state.editable ?
       (<div>
         <p className="lead">Last name: </p>
-        <input type="text" onChange={this.handleLastNameChange} defaultValue={last_name} /><br />
+        <input type="text" onChange={this.handleLastNameChange} defaultValue={lastName} /><br />
       </div>)
       :
-      <p className="lead">Last name: {last_name}</p>;
+      <p className="lead">Last name: {lastName}</p>;
 
 
     return (
@@ -136,9 +136,9 @@ class Body extends React.Component {
         <div className="well" key={this.state.user.id}>
           {avatar}
 
-          {f_name}
+          {fName}
 
-          {l_name}
+          {lName}
           <button className="btn btn-default edit-btn" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
           <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
           <button
