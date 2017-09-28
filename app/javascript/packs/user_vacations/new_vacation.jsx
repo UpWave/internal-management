@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
+import Fetch from '../Fetch';
 
 class NewVacation extends React.Component {
   constructor(props, context) {
@@ -22,15 +23,16 @@ class NewVacation extends React.Component {
     const startDate = this.state.startDate;
     const endDate = this.state.endDate;
     const type = this.state.type;
-    $.ajax({
-      url: '/api/v1/vacations',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { start_date: startDate, end_date: endDate, type: type } },
-      success: () => {
-        this.props.handleSubmit();
+    Fetch.postJSON('/api/v1/vacations', {
+      vacation: {
+        start_date: startDate,
+        end_date: endDate,
+        type: type,
       },
-    });
+    })
+      .then(() => {
+        this.props.handleSubmit();
+      });
   }
 
   handleStartDateChange(event) {
@@ -65,24 +67,35 @@ class NewVacation extends React.Component {
 
   render() {
     return (
-      <div id="new_vacation">
-        <h3>Request a new vacation!</h3>
-        Select type of vacation:
-        <Select
-          defaultValue={this.state.value}
-          className="mySelect"
-          onChange={this.handleTypeChange}
-        >
-          <option value="0" disabled hidden>Type</option>
-          {this.props.types.map(option =>
-            <option key={option} value={option}>{option}</option>)}
-        </Select><br />
-        Start Date:
-        <input type="date" onChange={this.handleStartDateChange} /><br />
-        End Date:
-        <input type="date" onChange={this.handleEndDateChange} /><br />
-        <br />
-        <button id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
+      <div className="row" id="new_vacation">
+        <div className="col-sm-5">
+          <div className="well">
+            <h3 className="display-3">Request a new vacation!</h3>
+            <div className="form-group">
+              <Select
+                className="form-control"
+                defaultValue={this.state.value}
+                onChange={this.handleTypeChange}
+              >
+                <option value="0" disabled hidden>Select type of vacation</option>
+                {this.props.types.map(option =>
+                  <option key={option} value={option}>{option}</option>)}
+              </Select>
+            </div>
+            <div className="row">
+              <div className="col-sm-5">
+                <h4>Start Date</h4>
+                <input type="date" className="form-control" onChange={this.handleStartDateChange} />
+              </div>
+              <div className="col-sm-5">
+                <h4>End Date</h4>
+                <input type="date" className="form-control" onChange={this.handleEndDateChange} />
+              </div>
+            </div>
+            <br />
+            <button className="btn btn-success center-block" id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
+          </div>
+        </div>
       </div>
     );
   }

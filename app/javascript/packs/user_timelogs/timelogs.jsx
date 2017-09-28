@@ -18,17 +18,21 @@ class Timelogs extends React.Component {
 
   render() {
     const timelogs = this.props.timelogs.map(timelog => (
-      <Timelog
-        id={timelog.id}
-        key={timelog.id.toString()}
-        trelloCards={this.props.trelloCards}
-        timelog={timelog}
-        handleDelete={this.handleDelete}
-        handleUpdate={this.onUpdate}
-      />
+      <div key={timelog.id} className="col-sm-6">
+        <div className="well">
+          <Timelog
+            id={timelog.id}
+            key={timelog.id.toString()}
+            trelloCards={this.props.trelloCards}
+            timelog={timelog}
+            handleDelete={this.handleDelete}
+            handleUpdate={this.onUpdate}
+          />
+        </div>
+      </div>
     ));
     return (
-      <div>
+      <div className="row">
         {timelogs}
       </div>
     );
@@ -40,8 +44,8 @@ Timelogs.propTypes = {
     id: PropTypes.number,
     trello_card: PropTypes.string,
     duration: PropTypes.number,
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
+    start_time: PropTypes.string,
+    end_time: PropTypes.string,
   })).isRequired,
   trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   onUpdate: PropTypes.func.isRequired,

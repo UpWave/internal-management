@@ -3,9 +3,11 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import Fetch from '../Fetch';
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
+import SignIn from '../sign_in/body';
 
 class App extends React.Component {
   constructor(props, context) {
@@ -16,14 +18,17 @@ class App extends React.Component {
       hasGoogle: false,
       hasTrello: false,
     };
+    this.isSignedIn = this.isSignedIn.bind(this);
     this.signOutClick = this.signOutClick.bind(this);
   }
 
   componentWillMount() {
-    $.ajax({
-      url: '/auth/is_signed_in',
-      type: 'GET',
-      success: (data) => {
+    this.isSignedIn();
+  }
+
+  isSignedIn() {
+    Fetch.json('/auth/is_signed_in')
+      .then((data) => {
         this.setState({ logged: data.signed_in });
         if (data.signed_in) {
           this.setState({ admin: data.user.role === 'admin' });
@@ -31,34 +36,37 @@ class App extends React.Component {
         } else {
           this.setState({ admin: false });
         }
-      },
-    });
+      });
   }
-
   checkIdentities() {
-    $.ajax({
-      url: '/auth/check_identities',
-      type: 'GET',
-      success: (data) => {
-        this.setState({ hasGoogle: data.has_google });
-        this.setState({ hasTrello: data.has_trello });
-      },
-    });
+    Fetch.json('/auth/check_identities')
+      .then((data) => {
+        this.setState({
+          hasGoogle: data.has_google,
+          hasTrello: data.has_trello,
+        });
+      });
   }
 
   signOutClick() {
-    $.ajax({
-      url: '/users/sign_out',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      type: 'DELETE',
-      success: () => {
-        this.setState({ logged: false });
-        location.reload();
-      },
-    });
+    Fetch.deleteJSON('/users/sign_out')
+      .then(() => {
+        this.setState({
+          logged: false,
+          admin: false,
+          hasTrello: false,
+          hasGoogle: false,
+        });
+      });
   }
 
   render() {
+    const signIn = this.state.logged ?
+      null
+      :
+      (<SignIn
+        isSignedIn={this.isSignedIn}
+      />);
     return (
       <Router>
         <div>
@@ -70,6 +78,7 @@ class App extends React.Component {
             hasTrello={this.state.hasTrello}
           />
           <br /><br /><br /><br />
+          {signIn}
           <Content
             logged={this.state.logged}
             admin={this.state.admin}

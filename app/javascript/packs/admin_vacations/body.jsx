@@ -1,5 +1,6 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
+import Fetch from '../Fetch';
 import Vacations from './vacations';
 
 class AdminVacations extends React.Component {
@@ -21,47 +22,31 @@ class AdminVacations extends React.Component {
   }
 
   loadVacations() {
-    $.ajax({
-      url: '/api/v1/admin/vacations',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
-        this.setState({
-          vacations: data,
-        });
-      },
-    });
+    Fetch.json('/api/v1/admin/vacations')
+      .then((data) => {
+        this.setState({ vacations: data });
+      });
   }
   loadStatuses() {
-    $.ajax({
-      url: '/api/v1/admin/vacations/statuses',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/admin/vacations/statuses')
+      .then((data) => {
         this.setState({
           approved: data.approved_status,
           rejected: data.rejected_status,
         });
-      },
-    });
+      });
   }
 
   handleUpdate(id, status) {
-    $.ajax({
-      url: `/api/v1/admin/vacations/${id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { vacation: { status: status } },
-      success: () => {
+    Fetch.putJSON(`/api/v1/admin/vacations/${id}`, {
+      vacation: { status: status },
+    })
+      .then(() => {
         this.msg.success(`Vacation status setted to ${status}`);
         this.loadVacations();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
 

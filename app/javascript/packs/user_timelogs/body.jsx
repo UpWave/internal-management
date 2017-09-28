@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
+import AlertContainer from 'react-alert';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
+import Fetch from '../Fetch';
 
 class UserTimelogs extends React.Component {
   constructor(props, context) {
@@ -11,7 +13,7 @@ class UserTimelogs extends React.Component {
       trelloCards: [],
       page: 0,
       pageCount: 1,
-      perPage: 3,
+      perPage: 2,
       startTime: 0,
       endTime: 0,
       filter: '',
@@ -20,7 +22,6 @@ class UserTimelogs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.removeTimelog = this.removeTimelog.bind(this);
-    this.updateTimelogs = this.updateTimelogs.bind(this);
     this.loadTimelogs = this.loadTimelogs.bind(this);
     this.filterByDuration = this.filterByDuration.bind(this);
     this.filterByStartTime = this.filterByStartTime.bind(this);
@@ -34,45 +35,36 @@ class UserTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    $.getJSON('/api/v1/timelogs/trello_cards.json', (response) => { this.setState({ trelloCards: response }); });
+    Fetch.json('/api/v1/timelogs/trello_cards')
+      .then((data) => {
+        this.setState({ trelloCards: data });
+      });
     this.loadTimelogs();
   }
 
   loadTimelogs() {
     // Get number of timelogs for pageCount
-    $.ajax({
-      url: '/api/v1/timelogs/count_timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: 0,
-        page: 0,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/timelogs/count_timelogs', {
+      limit: 0,
+      page: 0,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+    })
+      .then((data) => {
         this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
-      },
-    });
+      });
     // Get only few timelogs for current page
-    $.ajax({
-      url: '/api/v1/timelogs',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: {
-        limit: this.state.perPage,
-        page: this.state.page,
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        filter: this.state.filter,
-      },
-      dataType: 'json',
-      type: 'GET',
-      success: (data) => {
+    Fetch.json('/api/v1/timelogs', {
+      limit: this.state.perPage,
+      page: this.state.page,
+      start_time: this.state.startTime,
+      end_time: this.state.endTime,
+      filter: this.state.filter,
+    })
+      .then((data) => {
         this.setState({ timelogs: data });
-      },
-    });
+      });
   }
 
   handleSubmit() {
@@ -80,14 +72,11 @@ class UserTimelogs extends React.Component {
   }
 
   handleDelete(id) {
-    $.ajax({
-      url: `/api/v1/timelogs/${id}`,
-      type: 'DELETE',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      success: () => {
+    Fetch.deleteJSON(`/api/v1/timelogs/${id}`)
+      .then(() => {
+        this.msg.success('Successfully removed timelog');
         this.removeTimelog(id);
-      },
-    });
+      });
   }
 
   filterByDuration() {
@@ -124,19 +113,13 @@ class UserTimelogs extends React.Component {
   }
 
   handleUpdate(timelog) {
-    $.ajax({
-      url: `/api/v1/timelogs/${timelog.id}`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { timelog },
-      success: () => {
-        this.updateTimelogs();
-      },
-    });
-  }
-
-  updateTimelogs() {
-    this.loadTimelogs();
+    Fetch.putJSON(`/api/v1/timelogs/${timelog.id}`, {
+      timelog: timelog,
+    })
+      .then(() => {
+        this.msg.success('Successfully updated timelog');
+        this.loadTimelogs();
+      });
   }
 
   handlePageClick(page) {
@@ -199,15 +182,36 @@ class UserTimelogs extends React.Component {
     }
     return (
       <div className="well">
-        Filter by:
-        <button onClick={this.filterByDuration}>Duration</button>
-        <button onClick={this.filterByStartTime}>Start time</button>
-        <button onClick={this.filterByEndTime}>End time</button><br /><br />
-            Select time range:
-        <input type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
-        <input type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
-        <button id="date_discard" onClick={this.discardFilter}>X</button>
-        <button id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
+        <div className="row">
+          <div className="col-md-4">
+            <h3>Filter by</h3>
+            <button className="btn btn-info" onClick={this.filterByDuration}>Duration</button>
+            <button className="btn btn-info" onClick={this.filterByStartTime}>Start time</button>
+            <button className="btn btn-info" onClick={this.filterByEndTime}>End time</button>
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={<a href="">...</a>}
+              breakClassName={'break-me'}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
+          </div>
+          <div className="col-md-3">
+            <h3>Select time range</h3>
+            <input className="form-control" type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
+            <input className="form-control" type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
+            <button className="btn btn-info" id="date_discard" onClick={this.discardFilter}>X</button>
+            {'  '}
+            <button className="btn btn-info" id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
+          </div>
+        </div>
+        <h3>Timelogs</h3>
         <Timelogs
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}
@@ -215,24 +219,12 @@ class UserTimelogs extends React.Component {
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
         />
-        <ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
-          breakLabel={<a href="">...</a>}
-          breakClassName={'break-me'}
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
-        />
         <NewTimelog
           key="new_timelog"
           trelloCards={this.state.trelloCards}
           handleSubmit={this.handleSubmit}
         />
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

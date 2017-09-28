@@ -29,7 +29,11 @@ class Api::V1::Admin::SkillsController < Api::V1::BaseController
 
   def destroy
     authorize Skill
-    respond_with :api, :v1, :admin, Skill.find(params[:id]).destroy
+    if Skill.find(params[:id]).destroy
+      render json: { }, status: 200
+    else
+      render json: { errors: "Error when deleting!" }, status: 422
+    end
   end
 
   def skill_types

@@ -8,7 +8,7 @@ class Timelog extends React.Component {
     this.state = {
       editable: false,
       value: '0',
-      card: this.props.timelog.trelloCard,
+      card: this.props.timelog.trello_card,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
     };
@@ -16,6 +16,7 @@ class Timelog extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
+    this.handleBack = this.handleBack.bind(this);
   }
 
   handleDelete() {
@@ -42,27 +43,31 @@ class Timelog extends React.Component {
     this.setState({ duration: event.target.value });
   }
 
+  handleBack() {
+    this.setState({ editable: !this.state.editable });
+  }
+
   render() {
     const startTime = this.state.editable ?
-      <input type="datetime-local" onChange={this.handleStartDateChange} defaultValue={this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)} />
+      <input type="datetime-local" className="form-control" onChange={this.handleStartDateChange} defaultValue={this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)} />
       :
-      <p>Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+      <p className="lead">Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
     const duration = this.state.editable ?
-      <input type="number" onChange={this.handleDurationChange} defaultValue={this.props.timelog.duration} />
+      <input type="number" className="form-control" onChange={this.handleDurationChange} defaultValue={this.props.timelog.duration} />
       :
-      <p>Duration: {this.props.timelog.duration}</p>;
+      <p className="lead">Duration: {this.props.timelog.duration}</p>;
     const trelloCard = this.state.editable ?
-      (<Select className="mySelect" value={this.state.value} onChange={e => this.setState({ card: e.target.value })}>
+      (<Select className="form-control" value={this.state.value} onChange={e => this.setState({ card: e.target.value })}>
         <option value="0" disabled hidden>Select trello card</option>
         {this.props.trelloCards.map(option =>
           <option key={option} value={option}>{option}</option>)}
       </Select>)
       :
-      <p>Trello card: {this.props.timelog.trello_card}</p>;
+      <p className="lead">Trello card: {this.props.timelog.trello_card}</p>;
     const endTime = this.state.editable ?
       null
       :
-      <p>End time: {this.props.timelog.end_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+      <p className="lead">End time: {this.props.timelog.end_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
 
     return (
       <div key={this.props.timelog.id}>
@@ -70,8 +75,16 @@ class Timelog extends React.Component {
         {duration}
         {trelloCard}
         {endTime}
-        <button onClick={this.handleDelete}> Delete</button>
-        <button onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
+        <button className="btn btn-danger" onClick={this.handleDelete}> Delete</button>
+        <button className="btn btn-primary" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
+        <button
+          id="back-button"
+          className="btn btn-info"
+          style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
+          onClick={this.handleBack}
+        >
+          Back
+        </button>
       </div>
     );
   }
@@ -82,8 +95,8 @@ Timelog.propTypes = {
     id: PropTypes.number,
     trello_card: PropTypes.string,
     duration: PropTypes.number,
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
+    start_time: PropTypes.string,
+    end_time: PropTypes.string,
   }).isRequired,
   trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleUpdate: PropTypes.func.isRequired,
