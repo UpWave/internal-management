@@ -36,7 +36,7 @@ class AdminUsers extends React.Component {
   }
 
   setNewSalary(salary, id) {
-    Fetch.postJSON(`/api/v1/admin/user/users/${id}/salaries/`, {
+    Fetch.postJSON(`/api/v1/admin/user/users/${id}/salaries`, {
       salary: salary,
     })
       .then(() => {
