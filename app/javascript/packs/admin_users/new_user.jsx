@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import Select from 'react-normalized-select';
+import AlertContainer from 'react-alert';
 
 
 const customStyles = {
@@ -33,6 +34,7 @@ class NewUser extends React.Component {
     this.checkNewUserButton = this.checkNewUserButton.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleKeyPressed = this.handleKeyPressed.bind(this);
   }
 
   handleClick() {
@@ -42,7 +44,17 @@ class NewUser extends React.Component {
       role: this.state.role,
       status: this.state.status,
     };
+    this.setState({
+      password: '',
+      email: '',
+    });
     this.props.handleCreateNewUser(user);
+  }
+
+  handleKeyPressed(event) {
+    if ((event.charCode === 13) && (document.getElementById('new-user-button').style.visibility === 'visible')) {
+      this.handleClick();
+    }
   }
 
   handleEmailChange(event) {
@@ -76,7 +88,7 @@ class NewUser extends React.Component {
   render() {
     return (
       <div className="form-group" id="new_user">
-        <button onClick={this.openModal}>Create new user</button>
+        <button className="btn btn-info" onClick={this.openModal}>Create new user</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -85,36 +97,48 @@ class NewUser extends React.Component {
           contentLabel="New user"
         >
           <h2>Create new user!</h2>
-          <form>
-            <Select
-              className="selectpicker"
-              onChange={e => this.setState({ role: e.target.value })}
-              defaultValue={this.state.value}
-            >
-              <option value="0" disabled hidden>Select role</option>
-              {this.props.roles.map(option =>
-                <option key={option} value={option}>{option}</option>)}
-            </Select>
-            <br />
-            <Select
-              className="selectpicker"
-              onChange={e => this.setState({ status: e.target.value })}
-              defaultValue={this.state.value}
-            >
-              <option value="0" disabled hidden>Select status</option>
-              {this.props.statuses.map(option =>
-                <option key={option} value={option}>{option}</option>)}
-            </Select>
-            <br />
-            <label htmlFor="input-mail">Email:</label><br />
-            <input id="input-mail" type="email" onChange={this.handleEmailChange} />
-            <br />
-            <label htmlFor="input-pass">Password:</label><br />
-            <input id="input-pass" type="password" minLength="6" onChange={this.handlePasswordChange} />
-            <br />
-            <button id="new-user-button" className="btn-primary" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Create</button><br />
-          </form>
+          <Select
+            className="form-control"
+            onChange={e => this.setState({ role: e.target.value })}
+            defaultValue={this.state.value}
+          >
+            <option value="0" disabled hidden>Select role</option>
+            {this.props.roles.map(option =>
+              <option key={option} value={option}>{option}</option>)}
+          </Select>
+          <br />
+          <Select
+            className="form-control"
+            onChange={e => this.setState({ status: e.target.value })}
+            defaultValue={this.state.value}
+          >
+            <option value="0" disabled hidden>Select status</option>
+            {this.props.statuses.map(option =>
+              <option key={option} value={option}>{option}</option>)}
+          </Select>
+          <br />
+          <label htmlFor="input-mail">Email:</label><br />
+          <input
+            className="form-control"
+            id="input-mail"
+            type="email"
+            onKeyPress={this.handleKeyPressed}
+            onChange={this.handleEmailChange}
+          />
+          <br />
+          <label htmlFor="input-pass">Password:</label><br />
+          <input
+            className="form-control"
+            id="input-pass"
+            type="password"
+            minLength="6"
+            onKeyPress={this.handleKeyPressed}
+            onChange={this.handlePasswordChange}
+          />
+          <br />
+          <button id="new-user-button" className="btn btn-success" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Create</button><br />
         </Modal>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

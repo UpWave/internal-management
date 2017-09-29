@@ -5,6 +5,13 @@ import Fetch from '../Fetch';
 import Users from './users';
 import NewUser from './new_user';
 
+
+const clearFields = function clearFields() {
+  document.getElementById('input-pass').value = '';
+  document.getElementById('input-mail').value = '';
+  document.getElementById('new-user-button').style.visibility = 'hidden';
+};
+
 class AdminUsers extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -50,26 +57,7 @@ class AdminUsers extends React.Component {
       });
   }
 
-  handleCreateNewUser(newUser) {
-    $.ajax({
-      url: '/api/v1/admin/users',
-      type: 'POST',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { user: newUser },
-      success: () => {
-        this.msg.success('Successfully created new user');
-        this.loadUsers();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
-  }
-
   loadUsers() {
-    if (this.state.currentPage === this.state.pageCount - 1) {
-      this.setState({ currentPage: this.state.currentPage - 1 });
-    }
     // Get number of users for pageCount
     Fetch.json('/api/v1/admin/users/count_users')
       .then((data) => {
@@ -84,9 +72,26 @@ class AdminUsers extends React.Component {
       });
   }
 
+  handleCreateNewUser(newUser) {
+    Fetch.postJSON('/api/v1/admin/users', {
+      user: newUser,
+    })
+      .then(() => {
+        clearFields();
+        this.msg.success('Successfully created new user');
+        this.loadUsers();
+      }).catch((errorResponse) => {
+        clearFields();
+        this.msg.error(errorResponse.errors);
+      });
+  }
+
   handleDelete(id) {
     Fetch.deleteJSON(`/api/v1/admin/users/${id}`)
       .then(() => {
+        if (this.state.currentPage === this.state.pageCount - 1) {
+          this.setState({ currentPage: this.state.currentPage - 1 });
+        }
         this.loadUsers();
         this.msg.success('User deleted');
       });
