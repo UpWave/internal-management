@@ -21,8 +21,7 @@ class NewTimelog extends React.Component {
     const startTime = this.state.startTime;
     const duration = this.state.duration;
     const trelloCard = this.state.card || this.props.trelloCards[0];
-    Fetch.postJSON('/api/v1/admin/timelogs', {
-      user_id: this.props.userId,
+    Fetch.postJSON(`/api/v1/admin/user/users/${this.props.userId}/timelogs`, {
       timelog: {
         start_time: startTime,
         duration,
