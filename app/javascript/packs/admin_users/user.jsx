@@ -484,6 +484,12 @@ class User extends React.Component {
               >
                 Timelogs
               </Link>
+              <Link
+                className="btn btn-default"
+                to={'/admin/users/'.concat(this.props.user.id).concat('/invoices')}
+              >
+                Invoice
+              </Link>
             </div>
           </div>
           <div className="col-sm-4">
