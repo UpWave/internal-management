@@ -30,8 +30,7 @@ class NewUser extends React.Component {
       modalIsOpen: false,
     };
     this.handleClick = this.handleClick.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
@@ -76,15 +75,12 @@ class NewUser extends React.Component {
     }
   }
 
-  handleEmailChange(event) {
-    this.setState({ email: event.target.value }, () => {
-      this.checkNewUserButton();
-    });
-  }
-
-  handlePasswordChange(event) {
-    this.setState({ password: event.target.value }, () => {
-      this.checkNewUserButton();
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value,
     });
   }
 
@@ -130,23 +126,25 @@ class NewUser extends React.Component {
           <br />
           <label htmlFor="input-mail">Email:</label><br />
           <input
+            name="email"
             value={this.state.email}
             className="form-control"
             id="input-mail"
             type="email"
             onKeyPress={this.handleKeyPressed}
-            onChange={this.handleEmailChange}
+            onChange={this.handleInputChange}
           />
           <br />
           <label htmlFor="input-pass">Password:</label><br />
           <input
+            name="password"
             value={this.state.password}
             className="form-control"
             id="input-pass"
             type="password"
             minLength="6"
             onKeyPress={this.handleKeyPressed}
-            onChange={this.handlePasswordChange}
+            onChange={this.handleInputChange}
           />
           <br />
           <button
