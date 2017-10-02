@@ -23,7 +23,7 @@ class User extends React.Component {
       newSalary: false,
       amount: 0,
       reviewDate: '',
-      salaryType: '',
+      salaryType: this.props.salaryTypes[0],
       skills: [],
       types: [],
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -511,6 +511,7 @@ class User extends React.Component {
               <Link
                 className="btn btn-default"
                 to={'/admin/users/'.concat(this.props.user.id).concat('/invoices')}
+                style={this.state.amount === 0 ? { visibility: 'hidden' } : { visibility: 'visible' }}
               >
                 Invoice
               </Link>
