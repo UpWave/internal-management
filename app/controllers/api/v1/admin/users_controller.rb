@@ -1,6 +1,6 @@
 class Api::V1::Admin::UsersController < Api::V1::BaseController
   before_action :authenticate_user!
-  before_action :load_user, except: [:index, :count_users]
+  before_action :load_user, except: [:index, :count_users, :create]
   after_action :verify_authorized
 
   def index
@@ -12,6 +12,16 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
   def count_users
     authorize current_user, :count_users
     respond_with User.all.count
+  end
+
+  def create
+    @user = User.new(new_user_params)
+    authorize @user
+    if @user.save
+      respond_with @user, json: @user
+    else
+      render json: { errors: @user.errors.full_messages }, status: 422
+    end
   end
 
   def destroy
@@ -31,6 +41,10 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
   private
     def user_params
       params.require(:user).permit(:email, :role, :status)
+    end
+
+    def new_user_params
+      params.require(:user).permit(:email, :password, :role, :status)
     end
 
     def load_user

@@ -24,6 +24,22 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
+  describe "GET #create" do
+    it "creates a user" do
+      expect{
+            post :create, format: :json, params: { user: { email: 'basicmail@gmail.com', role: 'member', status: 'active', password: "qwerty12" } }
+            }.to change(User, :count).by(1)
+    end
+
+    it "won't create a user with invalid data" do
+      new_user = FactoryGirl.create(:user)
+      post :create, format: :json, params: { user: { email: new_user.email, role: 'member', status: 'active', password: "qwerty12" } }
+      expect(JSON.parse(response.body)["errors"][0]).to eq("Email has already been taken")
+      post :create, format: :json, params: { user: { email: "wowmail@such.com", role: 'member', status: 'active', password: "pass" } }
+      expect(JSON.parse(response.body)["errors"][0]).to eq("Password is too short (minimum is 6 characters)")
+    end
+  end
+
   describe "DELETE #destroy" do
     it "deletes the user" do
       get :destroy, format: :json, params: { id: other_user.id }

@@ -3,6 +3,8 @@ import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
 import Fetch from '../Fetch';
 import Users from './users';
+import NewUser from './new_user';
+
 
 class AdminUsers extends React.Component {
   constructor(props, context) {
@@ -49,9 +51,6 @@ class AdminUsers extends React.Component {
   }
 
   loadUsers() {
-    if (this.state.currentPage === this.state.pageCount - 1) {
-      this.setState({ currentPage: this.state.currentPage - 1 });
-    }
     // Get number of users for pageCount
     Fetch.json('/api/v1/admin/users/count_users')
       .then((data) => {
@@ -69,6 +68,9 @@ class AdminUsers extends React.Component {
   handleDelete(id) {
     Fetch.deleteJSON(`/api/v1/admin/users/${id}`)
       .then(() => {
+        if (this.state.currentPage === this.state.pageCount - 1) {
+          this.setState({ currentPage: this.state.currentPage - 1 });
+        }
         this.loadUsers();
         this.msg.success('User deleted');
       });
@@ -129,6 +131,12 @@ class AdminUsers extends React.Component {
           containerClassName={'pagination'}
           subContainerClassName={'pages pagination'}
           activeClassName={'active'}
+        />
+        <NewUser
+          key="new_user"
+          roles={this.state.roles}
+          statuses={this.state.statuses}
+          loadUsers={this.loadUsers}
         />
       </div>
     );
