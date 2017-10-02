@@ -96,6 +96,8 @@ class Body extends React.Component {
     const email = this.state.user.email;
     const role = this.state.user.role;
     const salary = this.state.user.salary;
+    const pendingVacations = this.state.user.pending_vacations;
+    const approvedVacations = this.state.user.approved_vacations;
 
     const fName = this.state.editable ?
       (<div>
@@ -136,6 +138,8 @@ class Body extends React.Component {
           <p className="lead">Email: {email}</p>
           <p className="lead">Role: {role}</p>
           <p className="lead">Salary: {salary}</p>
+          <p className="lead">Pending vacation days: {pendingVacations}</p>
+          <p className="lead">Approved vacation days: {approvedVacations}</p>
           <div className="row">
             <div className="col-md-4">
               <div className="well">

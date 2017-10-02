@@ -42,7 +42,7 @@ class AdminVacations extends React.Component {
       vacation: { status: status },
     })
       .then(() => {
-        this.msg.success(`Vacation status setted to ${status}`);
+        this.msg.success(`Vacation status set to ${status}`);
         this.loadVacations();
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);

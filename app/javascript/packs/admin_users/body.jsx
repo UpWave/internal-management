@@ -41,7 +41,7 @@ class AdminUsers extends React.Component {
       id: id,
     })
       .then(() => {
-        this.msg.success('Successfully setted new salary');
+        this.msg.success('Successfully set new salary');
         this.loadUsers();
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);
