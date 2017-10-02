@@ -1,6 +1,8 @@
 class Api::V1::VacationsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_vacation, only: [:update, :destroy]
+  protect_from_forgery prepend: true
+
 
   def index
     @vacations = current_user.vacations
