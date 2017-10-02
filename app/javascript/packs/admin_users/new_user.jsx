@@ -32,7 +32,6 @@ class NewUser extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.checkNewUserButton = this.checkNewUserButton.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
@@ -69,9 +68,6 @@ class NewUser extends React.Component {
       password: '',
       email: '',
     });
-    document.getElementById('input-pass').value = '';
-    document.getElementById('input-mail').value = '';
-    document.getElementById('new-user-button').style.visibility = 'hidden';
   }
 
   handleKeyPressed(event) {
@@ -90,14 +86,6 @@ class NewUser extends React.Component {
     this.setState({ password: event.target.value }, () => {
       this.checkNewUserButton();
     });
-  }
-
-  checkNewUserButton() {
-    if ((this.state.password.length > 6) && (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(this.state.email))) {
-      $('#new-user-button').css('visibility', 'visible');
-    } else {
-      $('#new-user-button').css('visibility', 'hidden');
-    }
   }
 
   openModal() {
@@ -142,6 +130,7 @@ class NewUser extends React.Component {
           <br />
           <label htmlFor="input-mail">Email:</label><br />
           <input
+            value={this.state.email}
             className="form-control"
             id="input-mail"
             type="email"
@@ -151,6 +140,7 @@ class NewUser extends React.Component {
           <br />
           <label htmlFor="input-pass">Password:</label><br />
           <input
+            value={this.state.password}
             className="form-control"
             id="input-pass"
             type="password"
@@ -159,7 +149,21 @@ class NewUser extends React.Component {
             onChange={this.handlePasswordChange}
           />
           <br />
-          <button id="new-user-button" className="btn btn-success" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Create</button><br />
+          <button
+            id="new-user-button"
+            className="btn btn-success"
+            style={
+              (this.state.password.length > 6) && (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(this.state.email))
+                ?
+                { visibility: 'visible' }
+                :
+                { visibility: 'hidden' }
+            }
+            onClick={this.handleClick}
+          >
+            Create
+          </button>
+          <br />
         </Modal>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
