@@ -17,6 +17,13 @@ const customStyles = {
   },
 };
 
+const clearFields = function clearFields() {
+  document.getElementById('input-pass').value = '';
+  document.getElementById('input-mail').value = '';
+  document.getElementById('new-user-button').style.visibility = 'hidden';
+};
+
+
 class NewUser extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -86,6 +93,9 @@ class NewUser extends React.Component {
   }
 
   render() {
+    if (this.props.clearFields) {
+      clearFields();
+    }
     return (
       <div className="form-group" id="new_user">
         <button className="btn btn-info" onClick={this.openModal}>Create new user</button>
@@ -148,6 +158,7 @@ NewUser.propTypes = {
   roles: PropTypes.arrayOf.isRequired,
   statuses: PropTypes.arrayOf.isRequired,
   handleCreateNewUser: PropTypes.func.isRequired,
+  clearFields: PropTypes.bool.isRequired,
 };
 
 export default NewUser;

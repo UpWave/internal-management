@@ -6,12 +6,6 @@ import Users from './users';
 import NewUser from './new_user';
 
 
-const clearFields = function clearFields() {
-  document.getElementById('input-pass').value = '';
-  document.getElementById('input-mail').value = '';
-  document.getElementById('new-user-button').style.visibility = 'hidden';
-};
-
 class AdminUsers extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -22,6 +16,7 @@ class AdminUsers extends React.Component {
       currentPage: 0,
       perPage: 1,
       pageCount: 1,
+      clearFields: false,
     };
     this.loadUsers = this.loadUsers.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -77,11 +72,12 @@ class AdminUsers extends React.Component {
       user: newUser,
     })
       .then(() => {
-        clearFields();
+        this.setState({ clearFields: true });
         this.msg.success('Successfully created new user');
         this.loadUsers();
+        this.setState({ clearFields: false });
       }).catch((errorResponse) => {
-        clearFields();
+        this.setState({ clearFields: true });
         this.msg.error(errorResponse.errors);
       });
   }
@@ -158,6 +154,7 @@ class AdminUsers extends React.Component {
           roles={this.state.roles}
           statuses={this.state.statuses}
           handleCreateNewUser={this.handleCreateNewUser}
+          clearFields={this.state.clearFields}
         />
       </div>
     );
