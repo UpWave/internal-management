@@ -20,6 +20,8 @@ RSpec.describe Api::V1::ProfilesController, type: :controller do
       expect(parsed_response["id"]).to eql(user.id)
       expect(parsed_response["salary"]).to eql(user.salary)
       expect(parsed_response["photo"]).to eql(user.photo)
+      expect(parsed_response["first_name"]).to eql(user.first_name)
+      expect(parsed_response["last_name"]).to eql(user.last_name)
     end
   end
 

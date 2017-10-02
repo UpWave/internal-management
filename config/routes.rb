@@ -28,7 +28,6 @@ Rails.application.routes.draw do
             get :statuses
           end
         end
-        resources :salaries
         resources :skills do
           collection do
             get :skill_types
@@ -49,6 +48,7 @@ Rails.application.routes.draw do
                 get :count_timelogs
               end
             end
+            resources :salaries 
             resources :skills do
               collection do
                 get :missing

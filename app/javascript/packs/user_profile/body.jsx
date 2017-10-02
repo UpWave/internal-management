@@ -7,11 +7,11 @@ class Body extends React.Component {
     super(props, context);
     this.state = {
       user: [],
-      editable: false
+      editable: false,
     };
     this.loadUser = this.loadUser.bind(this);
     this.changeFile = this.changeFile.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitAvatar = this.handleSubmitAvatar.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -34,7 +34,7 @@ class Body extends React.Component {
     this.setState({ file: e.target.files[0] });
   }
 
-  handleSubmit(e) {
+  handleSubmitAvatar(e) {
     e.preventDefault();
     const file = new FormData();
     file.append('avatar', this.state.file);
@@ -48,30 +48,25 @@ class Body extends React.Component {
   }
 
 
-  handleUpdate(e) {
-    e.preventDefault();
-    this.setState({ editable: !this.state.editable });
-    const firstName = this.state.firstName;
-    const lastName = this.state.lastName;
-    $.ajax({
-      url: `/api/v1/profile`,
-      type: 'PATCH',
-      beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { firstName, lastName },
-      success: () => {
-        this.msg.success('Successfully updated');
+  handleUpdate() {
+    Fetch.putJSON('/api/v1/profile', {
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+    })
+      .then(() => {
+        this.msg.success('User updated');
+        this.setState({ editable: !this.state.editable });
         this.loadUser();
-      },
-      error: (xhr) => {
-        this.msg.error($.parseJSON(xhr.responseText).errors);
-      },
-    });
+      })
+      .catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleEdit() {
     if (this.state.editable) {
       const user = { firstName: this.state.user.first_name, lastName: this.state.user.last_name };
-      this.props.handleUpdate(user);
+      this.handleUpdate(user);
     }
     this.setState({ editable: !this.state.editable });
   }
@@ -98,17 +93,19 @@ class Body extends React.Component {
     const salary = this.state.user.salary;
 
     const fName = this.state.editable ?
-      (<div>
-        <p className="lead">First name: </p>
-        <input type="text" onChange={this.handleNameChange} defaultValue={firstName} /><br />
+      (<div className="row">
+        <div className="col-md-4">
+          <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={firstName} />
+        </div>
       </div>)
       :
       <p className="lead">Name: {firstName}</p>;
 
     const lName = this.state.editable ?
-      (<div>
-        <p className="lead">Last name: </p>
-        <input type="text" onChange={this.handleLastNameChange} defaultValue={lastName} /><br />
+      (<div className="row">
+        <div className="col-md-4">
+          <input className="form-control" type="text" onChange={this.handleLastNameChange} defaultValue={lastName} />
+        </div>
       </div>)
       :
       <p className="lead">Last name: {lastName}</p>;
@@ -118,28 +115,26 @@ class Body extends React.Component {
       <div>
         <div className="well" key={this.state.user.id}>
           {avatar}
-
+          <br />
           {fName}
-
           {lName}
-          <button className="btn btn-default edit-btn" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
-          <button className="btn btn-default edit-btn" onClick={this.handleUpdate} style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}> Submit</button>
+          <button className="btn btn-default" onClick={this.handleEdit} style={this.state.editable ? { display: 'none' } : { display: 'block' }}>Edit</button>
+          <button className="btn btn-default" onClick={this.handleUpdate} style={this.state.editable ? { display: 'block' } : { display: 'none' }}> Submit</button>
           <button
+            className="btn btn-default"
             id="back-button"
-            style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
+            style={this.state.editable ? { display: 'block' } : { display: 'none' }}
             onClick={this.handleBack}
           >
             Back
           </button>
-
-
           <p className="lead">Email: {email}</p>
           <p className="lead">Role: {role}</p>
           <p className="lead">Salary: {salary}</p>
           <div className="row">
             <div className="col-md-4">
               <div className="well">
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmitAvatar}>
                   <p className="lead">Select image to upload</p>
                   <input
                     id="fileInput"
@@ -151,7 +146,7 @@ class Body extends React.Component {
                     className="btn btn-info"
                     type="submit"
                     style={this.state.file ? { visibility: 'visible' } : { visibility: 'hidden' }}
-                    onClick={this.handleSubmit}
+                    onClick={this.handleSubmitAvatar}
                   >
                   Upload avatar
                   </button>
