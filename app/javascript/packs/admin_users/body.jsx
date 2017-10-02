@@ -16,7 +16,6 @@ class AdminUsers extends React.Component {
       currentPage: 0,
       perPage: 1,
       pageCount: 1,
-      clearFields: false,
     };
     this.loadUsers = this.loadUsers.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -24,7 +23,6 @@ class AdminUsers extends React.Component {
     this.handleUpdateSalary = this.handleUpdateSalary.bind(this);
     this.setNewSalary = this.setNewSalary.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
-    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
   }
 
   componentDidMount() {
@@ -64,21 +62,6 @@ class AdminUsers extends React.Component {
     })
       .then((data) => {
         this.setState({ users: data });
-      });
-  }
-
-  handleCreateNewUser(newUser) {
-    Fetch.postJSON('/api/v1/admin/users', {
-      user: newUser,
-    })
-      .then(() => {
-        this.setState({ clearFields: true });
-        this.msg.success('Successfully created new user');
-        this.loadUsers();
-        this.setState({ clearFields: false });
-      }).catch((errorResponse) => {
-        this.setState({ clearFields: true });
-        this.msg.error(errorResponse.errors);
       });
   }
 
@@ -153,8 +136,7 @@ class AdminUsers extends React.Component {
           key="new_user"
           roles={this.state.roles}
           statuses={this.state.statuses}
-          handleCreateNewUser={this.handleCreateNewUser}
-          clearFields={this.state.clearFields}
+          loadUsers={this.loadUsers}
         />
       </div>
     );

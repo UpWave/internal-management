@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
+import Fetch from '../Fetch';
 
 
 const customStyles = {
@@ -16,13 +17,6 @@ const customStyles = {
     backgroundColor: 'rgba(235, 235, 235, 0.5)',
   },
 };
-
-const clearFields = function clearFields() {
-  document.getElementById('input-pass').value = '';
-  document.getElementById('input-mail').value = '';
-  document.getElementById('new-user-button').style.visibility = 'hidden';
-};
-
 
 class NewUser extends React.Component {
   constructor(props, context) {
@@ -42,6 +36,8 @@ class NewUser extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
+    this.clearFields = this.clearFields.bind(this);
+    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
   }
 
   handleClick() {
@@ -51,11 +47,31 @@ class NewUser extends React.Component {
       role: this.state.role,
       status: this.state.status,
     };
+    this.handleCreateNewUser(user);
+  }
+
+
+  handleCreateNewUser(newUser) {
+    Fetch.postJSON('/api/v1/admin/users', {
+      user: newUser,
+    })
+      .then(() => {
+        this.msg.success('Successfully created new user');
+        this.clearFields();
+        this.props.loadUsers();
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
+  }
+
+  clearFields() {
     this.setState({
       password: '',
       email: '',
     });
-    this.props.handleCreateNewUser(user);
+    document.getElementById('input-pass').value = '';
+    document.getElementById('input-mail').value = '';
+    document.getElementById('new-user-button').style.visibility = 'hidden';
   }
 
   handleKeyPressed(event) {
@@ -93,9 +109,6 @@ class NewUser extends React.Component {
   }
 
   render() {
-    if (this.props.clearFields) {
-      clearFields();
-    }
     return (
       <div className="form-group" id="new_user">
         <button className="btn btn-info" onClick={this.openModal}>Create new user</button>
@@ -155,10 +168,9 @@ class NewUser extends React.Component {
 }
 
 NewUser.propTypes = {
-  roles: PropTypes.arrayOf.isRequired,
-  statuses: PropTypes.arrayOf.isRequired,
-  handleCreateNewUser: PropTypes.func.isRequired,
-  clearFields: PropTypes.bool.isRequired,
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  statuses: PropTypes.arrayOf(PropTypes.string).isRequired,
+  loadUsers: PropTypes.func.isRequired,
 };
 
 export default NewUser;
