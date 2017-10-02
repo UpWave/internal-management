@@ -16,6 +16,16 @@ describe SkillPolicy do
     end
   end
 
+  permissions :skill_types? do
+    it 'prevents other users from accessing types' do
+      expect(subject).not_to permit(other_user)
+    end
+
+    it 'allows an admin to access types' do
+      expect(subject).to permit(admin)
+    end
+  end
+
   permissions :create? do
     it 'prevents other users from accessing create' do
       expect(subject).not_to permit(other_user)

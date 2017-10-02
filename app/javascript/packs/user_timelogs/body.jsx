@@ -170,7 +170,7 @@ class UserTimelogs extends React.Component {
       );
     } else if (this.state.timelogs.length === 0) {
       return (
-        <div>
+        <div className="well">
           <h3>There are no timelogs</h3>
           <NewTimelog
             key="new_timelog"

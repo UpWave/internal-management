@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 class Skill extends React.Component {
   constructor(props, context) {
@@ -39,32 +40,35 @@ class Skill extends React.Component {
   render() {
     const name = this.state.editable ?
       (<div>
-        <input type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} /><br />
+        <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={this.props.skillName} />
       </div>)
       :
-      <h4>{this.props.skillName}</h4>;
+      (<div>
+        <text data-tip={this.props.skillType} className="lead">{this.props.skillName}</text><br />
+      </div>);
     return (
       <div key={this.props.id}>
         {name}
-        <button onClick={this.handleDelete}> Delete</button>
-        <button onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
+        <button className="btn btn-danger" onClick={this.handleDelete}> Delete</button>
+        <button className="btn btn-info" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
         <button
+          className="btn btn-default"
           id="back-button"
           style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
           onClick={this.handleBack}
         >
           Back
         </button>
-        <br />
-        <br />
+        <ReactTooltip />
       </div>
     );
   }
 }
 
 Skill.propTypes = {
-  skill: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  skillName: PropTypes.string.isRequired,
+  skillType: PropTypes.string.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
