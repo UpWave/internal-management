@@ -40,15 +40,15 @@ Rails.application.routes.draw do
         end
         resources :roles, only: [:index]
         resources :statuses, only: [:index]
-        resources :timelogs do
-          collection do
-            get :trello_cards
-            get :count_timelogs
-          end
-        end
         namespace :user do
           resources :users, only: [] do
-            resources :salaries
+            resources :timelogs do
+              collection do
+                get :trello_cards
+                get :count_timelogs
+              end
+            end
+            resources :salaries 
             resources :skills do
               collection do
                 get :missing

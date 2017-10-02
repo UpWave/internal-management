@@ -40,9 +40,7 @@ class AdminTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    Fetch.json('/api/v1/admin/timelogs/trello_cards', {
-      user_id: this.state.userId,
-    })
+    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs/trello_cards`)
       .then((data) => {
         this.setState({ trelloCards: data });
       });
@@ -51,26 +49,24 @@ class AdminTimelogs extends React.Component {
 
   loadTimelogs() {
     // Get number of timelogs for pageCount
-    Fetch.json('/api/v1/admin/timelogs/count_timelogs', {
+    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs/count_timelogs`, {
       limit: 0,
       page: 0,
       start_time: this.state.startTime,
       end_time: this.state.endTime,
       filter: this.state.filter,
-      user_id: this.state.userId,
     })
       .then((data) => {
         this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
       });
 
     // Get only few timelogs for current page
-    Fetch.json('/api/v1/admin/timelogs', {
+    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs`, {
       limit: this.state.perPage,
       page: this.state.page,
       start_time: this.state.startTime,
       end_time: this.state.endTime,
       filter: this.state.filter,
-      user_id: this.state.userId,
     })
       .then((data) => {
         this.setState({ timelogs: data });
@@ -82,7 +78,7 @@ class AdminTimelogs extends React.Component {
   }
 
   handleDelete(id) {
-    Fetch.deleteJSON(`/api/v1/admin/timelogs/${id}?user_id=${this.state.userId}`)
+    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.state.userId}/timelogs/${id}`)
       .then(() => {
         this.removeTimelog(id);
         this.msg.success('Timelog deleted');
@@ -123,8 +119,7 @@ class AdminTimelogs extends React.Component {
   }
 
   handleUpdate(timelog) {
-    Fetch.putJSON(`/api/v1/admin/timelogs/${timelog.id}`, {
-      user_id: this.state.userId,
+    Fetch.putJSON(`/api/v1/admin/user/users/${this.state.userId}/timelogs/${timelog.id}`, {
       timelog: timelog,
     })
       .then(() => {

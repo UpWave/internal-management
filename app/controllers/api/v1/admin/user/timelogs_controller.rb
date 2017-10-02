@@ -1,5 +1,5 @@
 require 'trello'
-class Api::V1::Admin::TimelogsController < Api::V1::BaseController
+class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_user
   before_action :load_timelog, only: [:update, :destroy]
