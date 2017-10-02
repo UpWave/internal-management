@@ -31,7 +31,7 @@ class Api::V1::Admin::User::SkillsController < Api::V1::BaseController
     @user_skill = UserSkill.find_by(user_id: params[:user_id], skill_id: params[:id])
     authorize @user_skill
     if @user_skill.destroy
-      render json: { response: 'Success' }, status: 200
+      render json: { }, status: 200
     else
       render json: { errors: "Something went wrong" }, status: 422
     end

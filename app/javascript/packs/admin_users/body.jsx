@@ -38,9 +38,8 @@ class AdminUsers extends React.Component {
   }
 
   setNewSalary(salary, id) {
-    Fetch.postJSON('/api/v1/admin/salaries', {
+    Fetch.postJSON(`/api/v1/admin/user/users/${id}/salaries`, {
       salary: salary,
-      id: id,
     })
       .then(() => {
         this.msg.success('Successfully setted new salary');
@@ -77,9 +76,8 @@ class AdminUsers extends React.Component {
   }
 
   handleUpdateSalary(salary, id) {
-    Fetch.putJSON(`/api/v1/admin/salaries/${id}`, {
+    Fetch.putJSON(`/api/v1/admin/user/users/${id}/salaries/${id}`, {
       salary: salary,
-      id: id,
     })
       .then(() => {
         this.msg.success('Salary updated');

@@ -60,9 +60,7 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    Fetch.json('/api/v1/admin/salaries', {
-      id: this.props.user.id,
-    })
+    Fetch.json(`/api/v1/admin/user/users/${this.props.user.id}/salaries`)
       .then((data) => {
         // data will be null when user is created,
         // but salary not assigned yet

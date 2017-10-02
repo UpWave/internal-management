@@ -1,4 +1,4 @@
-class Api::V1::Admin::SalariesController < Api::V1::BaseController
+class Api::V1::Admin::User::SalariesController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_salaries
 
@@ -9,9 +9,9 @@ class Api::V1::Admin::SalariesController < Api::V1::BaseController
   def create
     new_salary = SalaryCreator.new(@salaries, salary_params)
     if new_salary.create
-      respond_with :api, :v1, :admin, @salaries.last
+      respond_with :api, :v1, :admin, @salaries.last.user, @salaries.last.user, @salaries.last
     else
-      render json: { errors: "Something went wrong" }, status: 422
+      render json: { errors: new_salary.errors.full_messages }, status: 422
     end
   end
 
@@ -29,7 +29,11 @@ class Api::V1::Admin::SalariesController < Api::V1::BaseController
   end
 
   def destroy
-    respond_with @salaries.last.destroy
+    if @salaries.last.destroy
+      render json: { }, status: 200
+    else
+      render json: { errors: "Something went wrong" }, status: 422
+    end
   end
 
   private
@@ -38,7 +42,7 @@ class Api::V1::Admin::SalariesController < Api::V1::BaseController
     end
 
     def load_salaries
-      @salaries = User.find(params[:id]).salaries
+      @salaries = User.find(params[:user_id]).salaries
       authorize @salaries
     end
 
