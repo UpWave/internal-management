@@ -31,7 +31,7 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
             }.to change(User, :count).by(1)
     end
 
-    it "won't create a user with unvalid data" do
+    it "won't create a user with ivalid data" do
       new_user = FactoryGirl.create(:user)
       post :create, format: :json, params: { user: { email: new_user.email, role: 'member', status: 'active', password: "qwerty12" } }
       expect(JSON.parse(response.body)["errors"][0]).to eq("Email has already been taken")
