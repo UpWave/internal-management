@@ -24,7 +24,6 @@ class Api::V1::Admin::User::SalariesController < Api::V1::BaseController
   end
 
   def new
-    authorize @salaries
     @salaries.build
   end
 
@@ -38,7 +37,7 @@ class Api::V1::Admin::User::SalariesController < Api::V1::BaseController
 
   private
     def salary_params
-      params.require(:salary).permit(:amount, :review_date)
+      params.require(:salary).permit(:amount, :review_date, :type)
     end
 
     def load_salaries

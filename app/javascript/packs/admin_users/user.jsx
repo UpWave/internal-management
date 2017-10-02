@@ -23,6 +23,7 @@ class User extends React.Component {
       newSalary: false,
       amount: 0,
       reviewDate: '',
+      salaryType: '',
       skills: [],
       types: [],
       rates: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -68,6 +69,7 @@ class User extends React.Component {
           this.setState({
             amount: data.amount,
             reviewDate: data.review_date,
+            salaryType: data.type,
           });
           this.checkValues();
         } else {
@@ -87,6 +89,7 @@ class User extends React.Component {
     const salary = {
       amount: this.state.amount,
       review_date: this.state.reviewDate,
+      type: this.state.salaryType,
     };
     this.props.setNewSalary(salary, this.props.user.id);
   }
@@ -158,6 +161,7 @@ class User extends React.Component {
       const salary = {
         amount: this.state.amount,
         review_date: this.state.reviewDate,
+        type: this.state.salaryType,
       };
       this.props.handleUpdateSalary(salary, this.props.user.id);
     }
@@ -236,7 +240,7 @@ class User extends React.Component {
   }
 
   customSkillChange(event) {
-    this.setState({ customSkill: event.target.value}, () => {
+    this.setState({ customSkill: event.target.value }, () => {
       this.checkCustomSkillButton();
     });
   }
@@ -353,6 +357,17 @@ class User extends React.Component {
       <input className="form-control" type="number" min="0" onChange={this.handleSalaryChange} defaultValue={this.state.amount} />
       :
       <p className="lead">Amount: {this.state.amount} $</p>;
+    const salaryType = this.state.editableSalary ?
+      (<Select
+        className="form-control"
+        defaultValue={this.state.salaryType}
+        onChange={e => this.setState({ salaryType: e.target.value })}
+      >
+        {this.props.salaryTypes.map(option =>
+          <option key={option} value={option}>{option}</option>)}
+      </Select>)
+      :
+      <p className="lead">Type: {this.state.salaryType}</p>;
     const warningImg = this.warningIcon();
     const reviewDate = this.state.editableSalary ?
       <input className="form-control" type="date" defaultValue={this.state.reviewDate} onChange={this.handleReviewDateChange} />
@@ -380,6 +395,15 @@ class User extends React.Component {
         />
         <text className="lead">Review date:</text>
         <input className="form-control" type="date" onChange={this.handleReviewDateChange} />
+        <text className="lead">Type:</text>
+        <Select
+          className="form-control"
+          defaultValue={this.state.salaryType}
+          onChange={e => this.setState({ salaryType: e.target.value })}
+        >
+          {this.props.salaryTypes.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
         <button id="edit_submit" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.setNewSalary}>Submit</button>
       </Collapsible>);
     const skillRates = this.state.skills.length === 0 ?
@@ -497,6 +521,7 @@ class User extends React.Component {
             <div className="well">
               {warningImg}
               {salary}
+              {salaryType}
               {reviewDate}
               {editSubmitButton}
               <button
@@ -539,6 +564,7 @@ User.propTypes = {
   handleUpdateSalary: PropTypes.func.isRequired,
   setNewSalary: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  salaryTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default User;

@@ -26,10 +26,11 @@ RSpec.describe Api::V1::Admin::User::SalariesController, type: :controller do
 
   describe "PATCH #update" do
     it "updates a salary" do
-      salary_params = FactoryGirl.attributes_for(:salary)
+      salary_params = FactoryGirl.attributes_for(:salary, type: "per hour")
       FactoryGirl.create(:salary, user_id: other_user.id)
       patch :update, format: :json, params: { user_id: other_user.id, salary: salary_params, id: other_user.id  }
       expect(Salary.last.amount).to eql(salary_params[:amount])
+      expect(Salary.last.type).to eql("per hour")
     end
   end
 
