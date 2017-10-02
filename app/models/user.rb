@@ -41,6 +41,20 @@ class User < ApplicationRecord
     salaries.last.try(:amount) || 0
   end
 
+  def salary_type
+    salaries.last.try(:type)
+  end
+
+  def count_day_offs_this_month
+    duration = 0
+    @vacations = vacations.all.approved.where("type" == "unpaid day offs").where("start_date >= ?", Date.today.beginning_of_month)
+    @vacations.each do |vac|
+      working_days = (vac.start_date..vac.end_date).select { |d| (1..5).include?(d.wday) }.size
+      duration = duration + working_days
+    end
+    duration
+  end
+
   def active_for_authentication?
     super && active?
   end

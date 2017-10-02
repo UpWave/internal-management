@@ -9,6 +9,10 @@ class AdminInvoices extends React.Component {
     const userIdPattern = /users\/\d+/g;
     this.state = {
       invoices: [],
+      user: [],
+      salaryType: '',
+      salary: 0,
+      dayOffs: 0,
       userId: window.location.href.match(userIdPattern)[0].replace('users/', ''),
     };
     this.loadInvoices = this.loadInvoices.bind(this);
@@ -27,6 +31,9 @@ class AdminInvoices extends React.Component {
         this.setState({
           invoices: data[0],
           user: data[1],
+          salaryType: data[2],
+          salary: data[3],
+          dayOffs: data[4],
         });
       });
   }
@@ -46,7 +53,7 @@ class AdminInvoices extends React.Component {
     const defaultDate = year.concat('-') + month;
     const title =
     (<div>
-      <h2>Invoice of {this.state.user}</h2>
+      <h2>Invoice of {this.state.user.email}</h2>
       <div className="row">
         <div className="col-sm-3">
           <input
@@ -65,6 +72,9 @@ class AdminInvoices extends React.Component {
         <Content
           invoices={this.state.invoices}
           loadInvoices={this.loadInvoices}
+          salaryType={this.state.salaryType}
+          salary={this.state.salary}
+          dayOffs={this.state.dayOffs}
         />
       </div>
     );

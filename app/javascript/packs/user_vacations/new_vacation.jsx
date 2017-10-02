@@ -66,6 +66,9 @@ class NewVacation extends React.Component {
   }
 
   render() {
+    const date = new Date();
+    const firstDay = (new Date(date.getFullYear(), date.getMonth(), 1)).toISOString().slice(0, 10);
+    const lastDay = (new Date(date.getFullYear(), date.getMonth() + 1, 0)).toISOString().slice(0, 10);
     return (
       <div className="row" id="new_vacation">
         <div className="col-sm-5">
@@ -85,11 +88,23 @@ class NewVacation extends React.Component {
             <div className="row">
               <div className="col-sm-5">
                 <h4>Start Date</h4>
-                <input type="date" className="form-control" onChange={this.handleStartDateChange} />
+                <input
+                  type="date"
+                  className="form-control"
+                  onChange={this.handleStartDateChange}
+                  min={firstDay}
+                  max={lastDay}
+                />
               </div>
               <div className="col-sm-5">
                 <h4>End Date</h4>
-                <input type="date" className="form-control" onChange={this.handleEndDateChange} />
+                <input
+                  type="date"
+                  className="form-control"
+                  onChange={this.handleEndDateChange}
+                  min={firstDay}
+                  max={lastDay}
+                />
               </div>
             </div>
             <br />
