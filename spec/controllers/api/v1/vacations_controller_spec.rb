@@ -24,7 +24,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
     end
   end
 
-  describe "GET #create" do
+  describe "POST #create" do
     it "creates your vacation" do
       vacation = FactoryGirl.build(:vacation, user_id: user.id)
       expect{
@@ -37,6 +37,20 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
       expect{
             post :create, format: :json, params: { vacation: vacation.attributes }
             }.to_not change(Vacation, :count)
+    end
+
+    it "refuses to create vacation with valid type and bad date data" do
+      vacation = FactoryGirl.build(:vacation, user_id: user.id, type: 'sick leave', start_date: Date.today, end_date: Date.today + 6.days)
+      expect{
+        post :create, format: :json, params: { vacation: vacation.attributes }
+      }.to_not change(Vacation, :count)
+    end
+
+    it "creates vacation with valid type and valid date data" do
+      vacation = FactoryGirl.build(:vacation, user_id: user.id, type: 'sick leave', start_date: Date.today, end_date: Date.today + 5.days)
+      expect{
+        post :create, format: :json, params: { vacation: vacation.attributes }
+      }.to change(Vacation, :count).by(1)
     end
   end
 
