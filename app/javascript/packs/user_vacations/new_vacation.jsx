@@ -58,6 +58,7 @@ class NewVacation extends React.Component {
     const start = Date.parse(this.state.startDate);
     const end = Date.parse(this.state.endDate);
     const days = parseInt((end - start) / (1000 * 60 * 60 * 24));
+    console.log(days);
 
     const plannedVacation = this.state.type == 'planned vacation' && Math.abs(days) > 0 && Math.abs(days) <= 20;
     const sickLeave = this.state.type == 'sick leave' && Math.abs(days) > 0 && Math.abs(days) <= 5;
@@ -73,6 +74,10 @@ class NewVacation extends React.Component {
       }
     } else {
       $('#submit').css('visibility', 'hidden');
+    }
+
+    if (Math.abs(days) == 0) {
+      $('#message').css('visibility', 'hidden');
     }
   }
 
