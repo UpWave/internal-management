@@ -42,17 +42,14 @@ Rails.application.routes.draw do
         resources :statuses, only: [:index]
         namespace :user do
           resources :users, only: [] do
-<<<<<<< HEAD
             resources :timelogs do
               collection do
                 get :trello_cards
                 get :count_timelogs
               end
             end
-            resources :salaries 
-=======
+            resources :salaries
             resources :invoices
->>>>>>> component and logic setup
             resources :skills do
               collection do
                 get :missing
