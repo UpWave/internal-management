@@ -60,6 +60,10 @@ class User < ApplicationRecord
     duration
   end
 
+  def new_counter(date)
+    vacations.approved.where("type" == "unpaid day offs").day_offs(date)
+  end
+
   def active_for_authentication?
     super && active?
   end
