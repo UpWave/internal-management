@@ -47,10 +47,15 @@ class User < ApplicationRecord
 
   def count_day_offs_of_month(date)
     duration = 0
-    vacations = self.vacations.approved.where("type" == "unpaid day offs").where("start_date >= ? AND end_date <= ?", date.beginning_of_month, date.end_of_month)
+    vacations = self.vacations.approved.where("type" == "unpaid day offs")
     vacations.each do |vac|
-      working_days = (vac.start_date..vac.end_date).select { |day| (1..5).include?(day.wday) }.size
-      duration = duration + working_days
+      (vac.start_date..vac.end_date).select do |day|
+        if day.month == date.month
+           if (1..5).include?(day.wday)
+             duration = duration + 1
+           end
+         end
+       end
     end
     duration
   end

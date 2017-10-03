@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
+import moment from 'moment';
 import Fetch from '../Fetch';
 
 class NewVacation extends React.Component {
@@ -66,9 +67,6 @@ class NewVacation extends React.Component {
   }
 
   render() {
-    const date = new Date();
-    const firstDay = (new Date(date.getFullYear(), date.getMonth(), 1)).toISOString().slice(0, 10);
-    const lastDay = (new Date(date.getFullYear(), date.getMonth() + 1, 0)).toISOString().slice(0, 10);
     return (
       <div className="row" id="new_vacation">
         <div className="col-sm-5">
@@ -92,8 +90,7 @@ class NewVacation extends React.Component {
                   type="date"
                   className="form-control"
                   onChange={this.handleStartDateChange}
-                  min={firstDay}
-                  max={lastDay}
+                  min={moment().format('YYYY-MM-DD')}
                 />
               </div>
               <div className="col-sm-5">
@@ -102,8 +99,7 @@ class NewVacation extends React.Component {
                   type="date"
                   className="form-control"
                   onChange={this.handleEndDateChange}
-                  min={firstDay}
-                  max={lastDay}
+                  min={moment().format('YYYY-MM-DD')}
                 />
               </div>
             </div>
