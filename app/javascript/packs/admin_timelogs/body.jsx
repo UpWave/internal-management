@@ -9,7 +9,9 @@ class AdminTimelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
     // regex for parsing user_id from URL
-    const userIdPattern = /users\/\d+/g;
+    this.userIdPattern = /users\/\d+/g;
+    // parsing user_id from current URL
+    this.userId = window.location.href.match(this.userIdPattern)[0].replace('users/', '');
     this.state = {
       timelogs: [],
       trelloCards: [],
@@ -19,8 +21,6 @@ class AdminTimelogs extends React.Component {
       startTime: 0,
       endTime: 0,
       filter: '',
-      // parsing user_id from current URL
-      userId: window.location.href.match(userIdPattern)[0].replace('users/', ''),
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -40,7 +40,7 @@ class AdminTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs/trello_cards`)
+    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs/trello_cards`)
       .then((data) => {
         this.setState({ trelloCards: data });
       });
@@ -49,7 +49,7 @@ class AdminTimelogs extends React.Component {
 
   loadTimelogs() {
     // Get number of timelogs for pageCount
-    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs/count_timelogs`, {
+    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs/count_timelogs`, {
       limit: 0,
       page: 0,
       start_time: this.state.startTime,
@@ -61,7 +61,7 @@ class AdminTimelogs extends React.Component {
       });
 
     // Get only few timelogs for current page
-    Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs`, {
+    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs`, {
       limit: this.state.perPage,
       page: this.state.page,
       start_time: this.state.startTime,
@@ -78,7 +78,7 @@ class AdminTimelogs extends React.Component {
   }
 
   handleDelete(id) {
-    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.state.userId}/timelogs/${id}`)
+    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.userId}/timelogs/${id}`)
       .then(() => {
         this.removeTimelog(id);
         this.msg.success('Timelog deleted');
@@ -119,7 +119,7 @@ class AdminTimelogs extends React.Component {
   }
 
   handleUpdate(timelog) {
-    Fetch.putJSON(`/api/v1/admin/user/users/${this.state.userId}/timelogs/${timelog.id}`, {
+    Fetch.putJSON(`/api/v1/admin/user/users/${this.userId}/timelogs/${timelog.id}`, {
       timelog: timelog,
     })
       .then(() => {
@@ -186,7 +186,7 @@ class AdminTimelogs extends React.Component {
           <h3>There are no timelogs</h3>
           <NewTimelog
             key="new_timelog"
-            userId={this.state.userId}
+            userId={this.userId}
             trelloCards={this.state.trelloCards}
             handleSubmit={this.handleSubmit}
           />
@@ -226,7 +226,7 @@ class AdminTimelogs extends React.Component {
             <h3>Download</h3>
             <a
               className="btn"
-              href={'/api/v1/admin/timelogs.pdf'.concat('?user_id='.concat(this.state.userId)
+              href={'/api/v1/admin/timelogs.pdf'.concat('?user_id='.concat(this.userId)
                 .concat('&filter=')
                 .concat(this.state.filter)
                 .concat('&start_time=')
@@ -236,7 +236,7 @@ class AdminTimelogs extends React.Component {
             ><button>Download PDF</button></a>
             <a
               className="btn"
-              href={'/api/v1/admin/timelogs.csv'.concat('?user_id='.concat(this.state.userId)
+              href={'/api/v1/admin/timelogs.csv'.concat('?user_id='.concat(this.userId)
                 .concat('&filter=')
                 .concat(this.state.filter)
                 .concat('&start_time=')
@@ -251,14 +251,14 @@ class AdminTimelogs extends React.Component {
           key={this.state.timelogs.length.toString()}
           trelloCards={this.state.trelloCards}
           timelogs={this.state.timelogs}
-          userId={this.state.userId}
+          userId={this.userId}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
         />
         <NewTimelog
           key="new_timelog"
           trelloCards={this.state.trelloCards}
-          userId={this.state.userId}
+          userId={this.userId}
           handleSubmit={this.handleSubmit}
         />
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />

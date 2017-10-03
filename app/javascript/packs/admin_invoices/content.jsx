@@ -1,50 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import 'moment-timezone';
+import 'moment-duration-format';
+import 'moment-business-days';
 
-function timeToDecimal(time) {
-  const arr = time.split(':');
-  return parseFloat(parseInt(arr[0], 10) + '.' + parseInt((arr[1]/6)*10, 10));
-}
-
-function getBusinessDatesCount(startDate, endDate) {
-  let count = 0;
-  const curDate = startDate;
-  while (curDate <= endDate) {
-    const dayOfWeek = curDate.getDay();
-    if (!((dayOfWeek === 6) || (dayOfWeek === 0))) {
-      count += 1;
-    }
-    curDate.setDate(curDate.getDate() + 1);
-  }
-  return count;
-}
 
 class Content extends React.Component {
   render() {
-    const timelogs = this.props.invoices.sort((a, b) => (
-      a.start_time > b.start_time
-    ));
+    const timelogs = this.props.invoices;
     const totalDuration =
     timelogs.map(timelog => (timelog.duration)).reduce((sum, value) => (sum + value), 0);
-    const minutes = totalDuration % 60;
-    const hours = (totalDuration - minutes) / 60;
-    const hoursMins = hours.toString().concat(':').concat((minutes < 10 ? '0' : '')).concat(minutes.toString());
+    const hoursMins = moment.duration(totalDuration, 'minutes').format('HH:mm');
+    const decimalTotalDuration = moment.duration(totalDuration, 'minutes').format('h', 2);
     const income = this.props.salaryType === 'per hour' ?
-      Math.round((timeToDecimal(hoursMins) * this.props.salary))
+      Math.round(decimalTotalDuration * this.props.salary)
       :
       this.props.salary;
     const dayOffs = this.props.dayOffs;
-    const date = new Date();
-    const workingDays = getBusinessDatesCount(new Date(date.getFullYear(), date.getMonth(), 1), new Date(date.getFullYear(), date.getMonth() + 1, 0));
-    const salaryPerDay = Math.round(this.props.salary / workingDays);
+    const businessDays = (moment().monthBusinessDays()).length;
+    const salaryPerDay = Math.round(this.props.salary / businessDays);
     const missedIncome = dayOffs * salaryPerDay;
     const content = timelogs.map(timelog => (
       <div className="col-sm-4" key={timelog.id}>
         <div className="well">
           <p>Issue: {timelog.trello_card}</p>
           <p>Duration: {timelog.duration}</p>
-          <p>Start time: {timelog.start_time.substring(0, timelog.start_time.length - 5).replace('T', ' ')}</p>
-          <p>End time: {timelog.end_time.substring(0, timelog.end_time.length - 5).replace('T', ' ')}</p>
+          <p>
+            Start time: {moment(timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+          </p>
+          <p>
+            End time: {moment(timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+          </p>
         </div>
       </div>
     ));

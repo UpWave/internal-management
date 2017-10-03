@@ -41,7 +41,7 @@ class Body extends React.Component {
         if (errorResponse.length < 50) {
           this.msg.error(errorResponse);
         } else {
-          this.msg.error('Some errors prevented you from accessing. Reload page or try again later');
+          this.msg.error(errorResponse.error);
         }
       });
   }
