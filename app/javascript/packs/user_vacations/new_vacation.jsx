@@ -55,38 +55,37 @@ class NewVacation extends React.Component {
 
 
   checkSubmitVisibility() {
-    const start = Date.parse(this.state.startDate);
-    const end = Date.parse(this.state.endDate);
-    const days = parseInt((end - start) / (1000 * 60 * 60 * 24));
-    console.log(days);
-
-    const plannedVacation = this.state.type == 'planned vacation' && Math.abs(days) > 0 && Math.abs(days) <= 20;
-    const sickLeave = this.state.type == 'sick leave' && Math.abs(days) > 0 && Math.abs(days) <= 5;
-    const dayOffs = this.state.type == 'unpaid day offs' && Math.abs(days) > 0;
+    // const start = Date.parse(this.state.startDate);
+    // const end = Date.parse(this.state.endDate);
+    // const days = parseInt((end - start) / (1000 * 60 * 60 * 24));
+    //
+    // const plannedVacation = this.state.type == 'planned vacation' && Math.abs(days) > 0 && Math.abs(days) <= 20;
+    // const sickLeave = this.state.type == 'sick leave' && Math.abs(days) > 0 && Math.abs(days) <= 5;
+    // const dayOffs = this.state.type == 'unpaid day offs' && Math.abs(days) > 0;
 
     if ((this.state.type !== '') && (this.state.startDate.length !== 0)) {
-      if (sickLeave || plannedVacation || dayOffs ) {
+      if (this.state.endDate > this.state.startDate ) {
         $('#submit').css('visibility', 'visible');
-        $('#message').css('visibility', 'hidden');
+        // $('#message').css('visibility', 'hidden');
       } else {
         $('#submit').css('visibility', 'hidden');
-        $('#message').css('visibility', 'visible');
+        // $('#message').css('visibility', 'visible');
       }
     } else {
       $('#submit').css('visibility', 'hidden');
     }
 
-    if (Math.abs(days) == 0) {
-      $('#message').css('visibility', 'hidden');
-    }
+    // if (Math.abs(days) == 0) {
+    //   $('#message').css('visibility', 'hidden');
+    // }
   }
 
 
   render() {
-    const message = this.state.type == 'planned vacation' ?
-      (<p id="message" style={{visibility: 'hidden'}}>Planned vacation can not be longer than 20 days </p>)
-      :
-      (<p id="message" style={{visibility: 'hidden'}}>Sick leave can not be longer than 5 days</p>);
+    // const message = this.state.type == 'planned vacation' ?
+    //   (<p id="message" style={{visibility: 'hidden'}}>Planned vacation can not be longer than 20 days </p>)
+    //   :
+    //   (<p id="message" style={{visibility: 'hidden'}}>Sick leave can not be longer than 5 days</p>);
     return (
       <div className="row" id="new_vacation">
         <div className="col-sm-5">
@@ -114,7 +113,7 @@ class NewVacation extends React.Component {
               </div>
             </div>
             <br />
-            {message}
+            {/*{message}*/}
             <button className="btn btn-success center-block" id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
           </div>
         </div>

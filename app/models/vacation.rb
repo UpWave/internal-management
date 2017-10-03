@@ -6,7 +6,7 @@ class Vacation < ApplicationRecord
   belongs_to :user
   validates_presence_of :start_date, :end_date
   validate :date_is_valid?
-  validate :vacation_length
+  # validate :vacation_length
 
   private
 
@@ -24,12 +24,12 @@ class Vacation < ApplicationRecord
       end
     end
 
-    def vacation_length
-     if self.type == 'planned vacation' && (end_date - start_date).to_i > 20
-       errors.add(:type, 'Planned vacation can not be longer than 20 days')
-     elsif self.type == 'sick leave' && (end_date - start_date).to_i > 5
-       errors.add(:type, 'Sick leave can not be longer than 5 days')
-     end
-    end
+    # def vacation_length
+    #  if self.type == 'planned vacation' && (end_date - start_date).to_i > 20
+    #    errors.add(:type, 'Planned vacation can not be longer than 20 days')
+    #  elsif self.type == 'sick leave' && (end_date - start_date).to_i > 5
+    #    errors.add(:type, 'Sick leave can not be longer than 5 days')
+    #  end
+    # end
 
 end
