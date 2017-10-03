@@ -140,6 +140,7 @@ class Body extends React.Component {
           <p className="lead">Salary: {salary}</p>
           <p className="lead">Pending vacation days: {pendingVacations}</p>
           <p className="lead">Approved vacation days: {approvedVacations}</p>
+
           <div className="row">
             <div className="col-md-4">
               <div className="well">
