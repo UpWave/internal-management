@@ -4,9 +4,8 @@ import {
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import Fetch from '../Fetch';
-import Header from './Header';
+import Sidebar from './Sidebar';
 import Content from './Content';
-import Footer from './Footer';
 import SignIn from '../sign_in/body';
 
 class App extends React.Component {
@@ -70,20 +69,18 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          <Header
+          {signIn}
+          <Sidebar
             logged={this.state.logged}
             admin={this.state.admin}
             hasGoogle={this.state.hasGoogle}
             signOutClick={this.signOutClick}
             hasTrello={this.state.hasTrello}
           />
-          <br /><br /><br /><br />
-          {signIn}
           <Content
             logged={this.state.logged}
             admin={this.state.admin}
           />
-          <Footer />
         </div>
       </Router>
     );
