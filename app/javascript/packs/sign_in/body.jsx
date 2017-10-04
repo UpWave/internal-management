@@ -56,6 +56,17 @@ class Body extends React.Component {
         <div className="main-wthree">
           <div className="container">
             <div className="sin-w3-agile">
+              <div className="footer">
+                <div style={{ left: '50%' }}>
+                  <a href="/users/auth/google_oauth2">
+                    <i className="fa fa-google fa-3x" />
+                  </a>
+                  <span style={{ paddingLeft: '20px' }} />
+                  <a href="/users/auth/trello">
+                    <i className="fa fa-trello fa-3x" />
+                  </a>
+                </div>
+              </div>
               <h2>Sign In</h2>
               <form action="#" method="post">
                 <div className="username">
@@ -90,16 +101,7 @@ class Body extends React.Component {
                     onClick={this.handleSubmit}
                   />
                 </div>
-                <div className="clearfix" />
               </form>
-              <div className="footer">
-                <a href="/users/auth/google_oauth2">
-                  <i className="fa fa-google fa-5x" />
-                </a>
-                <a href="/users/auth/trello">
-                  <i className="fa fa-trello fa-5x" />
-                </a>
-              </div>
             </div>
           </div>
         </div>
