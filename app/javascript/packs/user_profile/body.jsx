@@ -51,13 +51,13 @@ class Body extends React.Component {
   handleUpdate(e) {
     e.preventDefault();
     this.setState({ editable: !this.state.editable });
-    const firstName = this.state.firstName;
-    const lastName = this.state.lastName;
+    const first_name = this.state.firstName;
+    const last_name = this.state.lastName;
     $.ajax({
       url: `/api/v1/profile`,
       type: 'PATCH',
       beforeSend(xhr) { xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')); },
-      data: { firstName, lastName },
+      data: { first_name, last_name },
       success: () => {
         this.msg.success('Successfully updated');
         this.loadUser();
