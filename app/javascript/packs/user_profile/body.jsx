@@ -96,8 +96,12 @@ class Body extends React.Component {
     const email = this.state.user.email;
     const role = this.state.user.role;
     const salary = this.state.user.salary;
-    const pendingVacations = this.state.user.pending_vacations;
-    const approvedVacations = this.state.user.approved_vacations;
+    const sickLeaveApproved = this.state.user.sick_leave_approved;
+    const sickLeavePending = this.state.user.sick_leave_pending;
+    const dayOffsApproved = this.state.user.day_offs_approved;
+    const dayOffsPending = this.state.user.day_offs_pending;
+    const plannedVacApproved = this.state.user.planned_vac_approved;
+    const plannedVacPending = this.state.user.planned_vac_pending;
 
     const fName = this.state.editable ?
       (<div>
@@ -134,12 +138,35 @@ class Body extends React.Component {
             Back
           </button>
 
+            <p className="lead">Email: {email}</p>
+            <p className="lead">Role: {role}</p>
+            <p className="lead">Salary: {salary}</p>
 
-          <p className="lead">Email: {email}</p>
-          <p className="lead">Role: {role}</p>
-          <p className="lead">Salary: {salary}</p>
-          <p className="lead">Pending vacation days: {pendingVacations}</p>
-          <p className="lead">Approved vacation days: {approvedVacations}</p>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="well">
+                <p className="lead"><strong>Sick leave</strong></p>
+                <p className="lead">pending: {sickLeavePending}</p>
+                <p className="lead">approved: {sickLeaveApproved}</p>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="well">
+                <p className="lead"><strong>Planned vacation</strong></p>
+                <p className="lead">pending: {plannedVacPending}</p>
+                <p className="lead">approved: {plannedVacApproved}</p>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="well">
+                <p className="lead"><strong>Unpaid day offs</strong></p>
+                <p className="lead">pending: {dayOffsPending}</p>
+                <p className="lead">approved: {dayOffsApproved}</p>
+              </div>
+            </div>
+          </div>
 
           <div className="row">
             <div className="col-md-4">
