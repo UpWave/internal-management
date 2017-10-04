@@ -70,4 +70,38 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0,20]
     end
   end
+
+  def sick_leave_approved
+    vacation_count("approved", "sick leave")
+  end
+
+  def sick_leave_pending
+    vacation_count("pending", "sick leave")
+  end
+
+  def day_offs_approved
+    vacation_count("approved", "unpaid day offs")
+  end
+
+  def day_offs_pending
+    vacation_count("pending", "unpaid day offs")
+  end
+
+  def planned_vac_approved
+    vacation_count("approved", "planned vacation")
+  end
+
+  def planned_vac_pending
+    vacation_count("pending", "planned vacation")
+  end
+
+
+  def vacation_count(status, type)
+    vacations = self.vacations.where(["status = ? and type = ?", Vacation.statuses["#{status}"],  Vacation.types["#{type}"]])
+    days = 0
+    vacations.each do |v|
+      days += (v.end_date - v.start_date).to_i
+    end
+    days
+  end
 end

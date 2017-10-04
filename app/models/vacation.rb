@@ -35,4 +35,5 @@ class Vacation < ApplicationRecord
         errors.add(:end_date, 'End date must be bigger than start date')
       end
     end
+
 end

@@ -18,6 +18,7 @@ class Body extends React.Component {
     this.changePassword = this.changePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
+    this.refreshPage = this.refreshPage.bind(this);
   }
 
   changeEmail(event) {
@@ -37,6 +38,7 @@ class Body extends React.Component {
     })
       .then(() => {
         this.props.isSignedIn();
+        this.refreshPage();
       }).catch((errorResponse) => {
         if (errorResponse.length < 50) {
           this.msg.error(errorResponse);
@@ -44,6 +46,10 @@ class Body extends React.Component {
           this.msg.error(errorResponse.error);
         }
       });
+  }
+
+  refreshPage() {
+    window.location.reload();
   }
 
   handleKeyPressed(event) {

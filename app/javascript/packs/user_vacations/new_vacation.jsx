@@ -54,9 +54,10 @@ class NewVacation extends React.Component {
     });
   }
 
+
   checkSubmitVisibility() {
     if ((this.state.type !== '') && (this.state.startDate.length !== 0)) {
-      if (this.state.endDate > this.state.startDate) {
+      if (this.state.endDate > this.state.startDate ) {
         $('#submit').css('visibility', 'visible');
       } else {
         $('#submit').css('visibility', 'hidden');
@@ -65,6 +66,7 @@ class NewVacation extends React.Component {
       $('#submit').css('visibility', 'hidden');
     }
   }
+
 
   render() {
     return (

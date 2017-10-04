@@ -24,7 +24,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
     end
   end
 
-  describe "GET #create" do
+  describe "POST #create" do
     it "creates your vacation" do
       vacation = FactoryGirl.build(:vacation, user_id: user.id)
       expect{
@@ -38,6 +38,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
             post :create, format: :json, params: { vacation: vacation.attributes }
             }.to_not change(Vacation, :count)
     end
+
   end
 
   describe "DELETE #destroy" do

@@ -219,7 +219,7 @@ class User extends React.Component {
       user_skill: userSkill,
     })
       .then(() => {
-        this.msg.success('Successfully setted new skill');
+        this.msg.success('Successfully set new skill');
         this.loadUserSkills();
         this.loadMissingSkills();
       }).catch((errorResponse) => {

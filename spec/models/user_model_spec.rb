@@ -1,16 +1,22 @@
 require "rails_helper"
 
+
 RSpec.describe User, type: :model do
 
-  describe "correct statuses" do
-    it "assigns correct status" do
-      expect(User.statuses["inactive"]).to eql(0)
-      expect(User.statuses["active"]).to eql(1)
-    end
+  let(:user) { FactoryGirl.create(:user) }
+  let!(:vacation) { FactoryGirl.build(:vacation, start_date: Date.today, end_date: Date.today + 2.days, user_id: user.id) }
+
+  describe "Associations" do
+    it { should have_many(:timelogs) }
+    it { should have_many(:identities) }
+    it { should have_many(:vacations) }
+    it { should have_many(:salaries) }
+    it { should have_many(:user_skills) }
+    it { should have_many(:skills) }
   end
 
   describe "correct roles" do
-    it "assigns correct types" do
+    it "assigns right roles" do
       expect(User.roles["admin"]).to eql(0)
       expect(User.roles["member"]).to eql(1)
     end
