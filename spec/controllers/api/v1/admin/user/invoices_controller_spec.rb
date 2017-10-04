@@ -10,7 +10,7 @@ RSpec.describe Api::V1::Admin::User::InvoicesController, type: :controller do
 
   describe "GET #index" do
     it "allows authenticated access" do
-      get :index, format: :json, params: { user_id: user.id }
+      get :index, format: :json, params: { user_id: user.id, date: Date.today }
       expect(response).to be_success
     end
 
@@ -18,7 +18,7 @@ RSpec.describe Api::V1::Admin::User::InvoicesController, type: :controller do
       timelog = FactoryGirl.create(:timelog, user_id: user.id, start_time: Date.today)
       FactoryGirl.create(:salary, user_id: user.id, type: "per hour", amount: 10)
       FactoryGirl.create(:vacation, user_id: user.id, start_date: Date.today, status: "approved", type: "unpaid day offs")
-      get :index, format: :json, params: { user_id: user.id }
+      get :index, format: :json, params: { user_id: user.id, date: Date.today }
       parsed_response = JSON.parse(response.body)
       expect(parsed_response["invoice"][0]["id"]).to eql(timelog.id)
       expect(parsed_response["user"]["id"]).to eql(user.id)

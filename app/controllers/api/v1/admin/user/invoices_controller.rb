@@ -10,9 +10,6 @@ class Api::V1::Admin::User::InvoicesController < Api::V1::BaseController
 
   private
     def requested_date
-      unless params[:date]
-        params[:date] = Date.today
-      end
       params.permit(:date)
     end
 
