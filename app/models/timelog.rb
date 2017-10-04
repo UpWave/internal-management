@@ -15,10 +15,11 @@ class Timelog < ApplicationRecord
   scope :ends_this_week, -> { where('end_time BETWEEN ? AND ?', Date.today, Date.today + 1.week) }
   scope :ends_this_month, -> { where('end_time BETWEEN ? AND ?', Date.today, Date.today + 1.month) }
   scope :date_range, lambda { |start_date, end_date| where ('start_time >= ? AND end_time <= ?'), start_date, end_date }
+  scope :date_invoice_range, lambda { |start_date| where ('start_time BETWEEN ? AND ?'), start_date.beginning_of_month.to_datetime, (start_date.end_of_month + 1.day).to_datetime - 1.second }
 
 
   def set_end_time
-    self.end_time = self.start_time + self.duration.to_i.minutes 
+    self.end_time = self.start_time + self.duration.to_i.minutes
   end
 
   def self.to_csv

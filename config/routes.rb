@@ -11,6 +11,9 @@ Rails.application.routes.draw do
       namespace :vacation_types do
         resources :types, only: [:index]
       end
+      namespace :salary_types do
+        resources :types, only: [:index]
+      end
       resources :timelogs do
         collection do
           get :trello_cards
@@ -48,7 +51,8 @@ Rails.application.routes.draw do
                 get :count_timelogs
               end
             end
-            resources :salaries 
+            resources :salaries
+            resources :invoices
             resources :skills do
               collection do
                 get :missing

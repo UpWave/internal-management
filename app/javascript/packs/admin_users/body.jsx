@@ -16,6 +16,7 @@ class AdminUsers extends React.Component {
       currentPage: 0,
       perPage: 1,
       pageCount: 1,
+      salaryTypes: [],
     };
     this.loadUsers = this.loadUsers.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -33,6 +34,10 @@ class AdminUsers extends React.Component {
     Fetch.json('/api/v1/admin/statuses')
       .then((data) => {
         this.setState({ statuses: data });
+      });
+    Fetch.json('/api/v1/salary_types/types')
+      .then((data) => {
+        this.setState({ salaryTypes: data });
       });
     this.loadUsers();
   }
@@ -116,6 +121,7 @@ class AdminUsers extends React.Component {
           onUpdate={this.handleUpdate}
           handleUpdateSalary={this.handleUpdateSalary}
           setNewSalary={this.setNewSalary}
+          salaryTypes={this.state.salaryTypes}
         />
         <ReactPaginate
           previousLabel={'previous'}

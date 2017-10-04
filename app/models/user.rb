@@ -41,6 +41,18 @@ class User < ApplicationRecord
     salaries.last.try(:amount) || 0
   end
 
+  def salary_type
+    salaries.last.try(:type)
+  end
+
+  def count_approved_day_offs_by_month(date)
+    duration = 0
+    vacations.approved.where("type" == "unpaid day offs").in_month(date).each do |vac|
+      duration = duration + vac.business_day_offs(date)
+    end
+    duration
+  end
+
   def active_for_authentication?
     super && active?
   end

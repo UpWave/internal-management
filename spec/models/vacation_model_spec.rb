@@ -19,4 +19,11 @@ RSpec.describe Vacation, type: :model do
       expect(Vacation.types["unpaid day offs"]).to eql(2)
     end
   end
+
+  describe "business_day_offs" do
+    it "does the right math" do
+      vacation = Vacation.new(start_date: "2017-10-10", end_date: "2017-10-20")
+      expect(vacation.business_day_offs(Date.parse("2017-10-01"))).to eql(9)
+    end
+  end
 end

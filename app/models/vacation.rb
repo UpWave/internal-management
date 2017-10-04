@@ -7,8 +7,21 @@ class Vacation < ApplicationRecord
   validates_presence_of :start_date, :end_date
   validate :date_is_valid?
 
-  private
+  scope :in_month, lambda { |date| where ('start_date BETWEEN ? AND ? OR end_date BETWEEN ? AND ?'), date.beginning_of_month, date.end_of_month, date.beginning_of_month, date.end_of_month }
 
+  def business_day_offs(date)
+    duration = 0
+    (start_date..end_date).select do |day|
+      if day.month == date.month
+        if (1..5).include?(day.wday)
+          duration = duration + 1
+        end
+      end
+     end
+    duration
+  end
+
+  private
     def self.approved_status
       Vacation.statuses.key(1)
     end

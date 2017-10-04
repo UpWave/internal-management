@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::VacationTypes::TypesController, type: :controller do
+RSpec.describe Api::V1::SalaryTypes::TypesController, type: :controller do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
   end
@@ -13,7 +13,7 @@ RSpec.describe Api::V1::VacationTypes::TypesController, type: :controller do
 
     it "returns correct response" do
       get :index, format: :json
-      expect(JSON.parse(response.body)).to eql(Vacation.types.keys)
+      expect(JSON.parse(response.body)).to eql(Salary.types.keys)
     end
   end
 end

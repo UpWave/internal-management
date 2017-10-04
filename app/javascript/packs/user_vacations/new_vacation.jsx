@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
+import moment from 'moment';
 import Fetch from '../Fetch';
 
 class NewVacation extends React.Component {
@@ -85,11 +86,21 @@ class NewVacation extends React.Component {
             <div className="row">
               <div className="col-sm-5">
                 <h4>Start Date</h4>
-                <input type="date" className="form-control" onChange={this.handleStartDateChange} />
+                <input
+                  type="date"
+                  className="form-control"
+                  onChange={this.handleStartDateChange}
+                  min={moment().format('YYYY-MM-DD')}
+                />
               </div>
               <div className="col-sm-5">
                 <h4>End Date</h4>
-                <input type="date" className="form-control" onChange={this.handleEndDateChange} />
+                <input
+                  type="date"
+                  className="form-control"
+                  onChange={this.handleEndDateChange}
+                  min={moment().format('YYYY-MM-DD')}
+                />
               </div>
             </div>
             <br />

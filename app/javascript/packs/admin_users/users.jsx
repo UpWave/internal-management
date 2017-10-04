@@ -38,6 +38,7 @@ class Users extends React.Component {
         handleUpdate={this.onUpdate}
         handleUpdateSalary={this.handleUpdateSalary}
         setNewSalary={this.setNewSalary}
+        salaryTypes={this.props.salaryTypes}
       />
     ));
     return (
@@ -61,6 +62,7 @@ Users.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   handleUpdateSalary: PropTypes.func.isRequired,
   setNewSalary: PropTypes.func.isRequired,
+  salaryTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Users;
