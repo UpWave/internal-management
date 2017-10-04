@@ -29,9 +29,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "vacation counters" do
-
-    describe "sick_leave_approved" do
+  describe "vacation counters" do
+    context "sick_leave_approved" do
       it "should return correct number of days" do
         vacation.type = 1
         vacation.status = 1
@@ -40,7 +39,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "sick_leave_pending" do
+    context "sick_leave_pending" do
       it "should return correct number of days" do
         vacation.type = 1
         vacation.status = 0
@@ -49,7 +48,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "day_offs_approved" do
+    context "day_offs_approved" do
       it "should return correct number of days" do
         vacation.type = 2
         vacation.status = 1
@@ -58,7 +57,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "day_offs_pending" do
+    context "day_offs_pending" do
       it "should return correct number of days" do
         vacation.type = 2
         vacation.status = 0
@@ -67,7 +66,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "planned_vac_approved" do
+    context "planned_vac_approved" do
       it "should return correct number of days" do
         vacation.type = 0
         vacation.status = 1
@@ -76,7 +75,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "planned_vac_pending" do
+    context "planned_vac_pending" do
       it "should return correct number of days" do
         vacation.type = 0
         vacation.status = 0
