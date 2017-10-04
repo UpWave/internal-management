@@ -1,8 +1,6 @@
 class Api::V1::VacationsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_vacation, only: [:update, :destroy]
-  # skip_before_action :verify_authenticity_token
-
 
   def index
     @vacations = current_user.vacations

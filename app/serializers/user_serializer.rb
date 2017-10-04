@@ -25,5 +25,5 @@ class UserSerializer < ActiveModel::Serializer
       approved += (v.end_date - v.start_date).to_i
     end
     approved
-  end # TODO: remake for counter_cache
+  end
 end
