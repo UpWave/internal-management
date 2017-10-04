@@ -4,7 +4,7 @@ class Api::V1::Admin::User::InvoicesController < Api::V1::BaseController
   def index
     authorize :invoice, :index?
     @invoice = @user.timelogs.start_time.date_invoice_range(formatted_date)
-    render json: { "invoice": @invoice, "user": @user, "salary_type": @user.salary_type, "salary_amount": @user.salary, "day_offs_this_month": @user.count_day_offs_of_month(formatted_date) }
+    render json: { "invoice": @invoice, "user": @user, "salary_type": @user.salary_type, "salary_amount": @user.salary, "day_offs_this_month": @user.count_approved_day_offs_by_month(formatted_date) }
   end
 
 
