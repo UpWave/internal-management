@@ -4,8 +4,7 @@ class Timelog < ApplicationRecord
   belongs_to  :user
   validates :user_id, presence: true
   validates :start_time, presence: true
-  validates :duration, presence: true
-  validates_exclusion_of :duration, :in => %w[00:00], message: "must be bigger than 0"
+  validates :duration, presence: true, numericality: { greater_than: 0 }
   validates :trello_card, presence: true
 
   before_save :set_end_time
