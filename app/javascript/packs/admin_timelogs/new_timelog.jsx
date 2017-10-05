@@ -13,13 +13,14 @@ class NewTimelog extends React.Component {
       startTime: 0,
     };
     this.handleClick = this.handleClick.bind(this);
-    this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
+    this.handleHoursChange = this.handleHoursChange.bind(this);
+    this.handleMinutesChange = this.handleMinutesChange.bind(this);
   }
 
   handleClick() {
     const startTime = this.state.startTime;
-    const duration = this.state.duration;
+    const duration = this.state.hours * 60 + parseInt(this.state.minutes);
     const trelloCard = this.state.card || this.props.trelloCards[0];
     Fetch.postJSON(`/api/v1/admin/user/users/${this.props.userId}/timelogs`, {
       timelog: {
@@ -40,8 +41,12 @@ class NewTimelog extends React.Component {
     this.setState({ startTime: event.target.value });
   }
 
-  handleDurationChange(event) {
-    this.setState({ duration: event.target.value });
+  handleHoursChange(event){
+    this.setState({ hours: event.target.value });
+  }
+
+  handleMinutesChange(event){
+    this.setState({ minutes: event.target.value });
   }
 
   render() {
@@ -50,7 +55,8 @@ class NewTimelog extends React.Component {
         <div className="col-md-4">
           <h3>Create a new timelog!</h3>
           <input className="form-control" type="datetime-local" onChange={this.handleStartDateChange} /><br />
-          <input className="form-control" type="number" onChange={this.handleDurationChange} placeholder="Enter duration in minutes" /><br />
+          <input className="form-control" type="number" onChange={this.handleHoursChange} placeholder="Enter duration in hours" /><br />
+          <input className="form-control" type="number" onChange={this.handleMinutesChange} placeholder="Enter duration in minutes" /><br />
           <Select className="form-control" onChange={e => this.setState({ card: e.target.value })}>
             {this.props.trelloCards.map(option =>
               <option key={option} value={option}>{option}</option>)}
