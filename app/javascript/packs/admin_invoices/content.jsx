@@ -21,27 +21,37 @@ class Content extends React.Component {
     const businessDays = (moment().monthBusinessDays()).length;
     const salaryPerDay = Math.round(this.props.salary / businessDays);
     const missedIncome = dayOffs * salaryPerDay;
+    const tableHead =
+    (<thead>
+      <tr>
+        <th>Issue</th>
+        <th>Duration</th>
+        <th>Start time</th>
+        <th>End time</th>
+      </tr>
+    </thead>);
     const content = timelogs.map(timelog => (
-      <div className="col-sm-4" key={timelog.id}>
-        <div className="well">
-          <p>Issue: {timelog.trello_card}</p>
-          <p>Duration: {timelog.duration}</p>
-          <p>
-            Start time: {moment(timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
-          </p>
-          <p>
-            End time: {moment(timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
-          </p>
-        </div>
-      </div>
+      <tr key={timelog.id}>
+        <td>{timelog.trello_card}</td>
+        <td>{timelog.duration}</td>
+        <td>
+          {moment(timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+        </td>
+        <td>
+          {moment(timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+        </td>
+      </tr>
     ));
     if (this.props.invoices.length !== 0) {
       if (this.props.salaryType === 'monthly') {
         return (
-          <div className="well">
-            <div className="row">
-              {content}
-            </div>
+          <div>
+            <table id="table">
+              {tableHead}
+              <tbody>
+                {content}
+              </tbody>
+            </table>
             <h3>Total duration: {hoursMins}</h3>
             <h3>Day offs: {dayOffs}</h3>
             <h3>Income: {income - missedIncome} $</h3>
@@ -49,10 +59,13 @@ class Content extends React.Component {
         );
       }
       return (
-        <div className="well">
-          <div className="row">
-            {content}
-          </div>
+        <div>
+          <table id="table">
+            {tableHead}
+            <tbody>
+              {content}
+            </tbody>
+          </table>
           <h3>Total duration: {hoursMins}</h3>
           <h3>Day offs: {dayOffs}</h3>
           <h3>Income: {income} $</h3>
@@ -60,9 +73,7 @@ class Content extends React.Component {
       );
     }
     return (
-      <div className="well">
-        <h1>No info</h1>
-      </div>
+      <h1>No info</h1>
     );
   }
 }

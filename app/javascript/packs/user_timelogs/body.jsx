@@ -13,7 +13,7 @@ class UserTimelogs extends React.Component {
       trelloCards: [],
       page: 0,
       pageCount: 1,
-      perPage: 2,
+      perPage: 4,
       startTime: 0,
       endTime: 0,
       filter: '',
@@ -181,50 +181,95 @@ class UserTimelogs extends React.Component {
       );
     }
     return (
-      <div className="well">
-        <div className="row">
-          <div className="col-md-4">
-            <h3>Filter by</h3>
-            <button className="btn btn-info" onClick={this.filterByDuration}>Duration</button>
-            <button className="btn btn-info" onClick={this.filterByStartTime}>Start time</button>
-            <button className="btn btn-info" onClick={this.filterByEndTime}>End time</button>
-            <ReactPaginate
-              previousLabel={'previous'}
-              nextLabel={'next'}
-              breakLabel={<a href="">...</a>}
-              breakClassName={'break-me'}
-              pageCount={this.state.pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={'pagination'}
-              subContainerClassName={'pages pagination'}
-              activeClassName={'active'}
+      <div>
+        <div className="agile-grids">
+          <div className="agile-tables">
+            <div className="w3l-table-info">
+              <Timelogs
+                key={this.state.timelogs.length.toString()}
+                trelloCards={this.state.trelloCards}
+                timelogs={this.state.timelogs}
+                handleDelete={this.handleDelete}
+                onUpdate={this.handleUpdate}
+              />
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <h3>Filter by</h3>
+                <button
+                  className="btn btn-info"
+                  onClick={this.filterByDuration}
+                >
+                Duration
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={this.filterByStartTime}
+                >
+                Start time
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={this.filterByEndTime}
+                >
+                  End time
+                </button>
+              </div>
+              <div className="col-md-3">
+                <h3>Select time range</h3>
+                <input
+                  className="form-control"
+                  type="datetime-local"
+                  id="start_date"
+                  onChange={this.handleStartDateChange}
+                />
+                <input
+                  className="form-control"
+                  type="datetime-local"
+                  id="end_date"
+                  onChange={this.handleEndDateChange}
+                />
+                <button
+                  className="btn btn-info"
+                  id="date_discard"
+                  onClick={this.discardFilter}
+                >
+                  X
+                </button>
+                <span style={{ paddingLeft: '20px' }} />
+                <button
+                  className="btn btn-info"
+                  id="date_submit"
+                  style={{ visibility: 'hidden' }}
+                  onClick={this.filterByTimeRange}
+                >
+                  Submit
+                </button>
+              </div>
+              <div className="col-md-4">
+                <ReactPaginate
+                  previousLabel={'previous'}
+                  nextLabel={'next'}
+                  breakLabel={<a href="">...</a>}
+                  breakClassName={'break-me'}
+                  pageCount={this.state.pageCount}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={this.handlePageClick}
+                  containerClassName={'pagination'}
+                  subContainerClassName={'pages pagination'}
+                  activeClassName={'active'}
+                />
+              </div>
+            </div>
+            <NewTimelog
+              key="new_timelog"
+              trelloCards={this.state.trelloCards}
+              handleSubmit={this.handleSubmit}
             />
-          </div>
-          <div className="col-md-3">
-            <h3>Select time range</h3>
-            <input className="form-control" type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
-            <input className="form-control" type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
-            <button className="btn btn-info" id="date_discard" onClick={this.discardFilter}>X</button>
-            {'  '}
-            <button className="btn btn-info" id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
+            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
           </div>
         </div>
-        <h3>Timelogs</h3>
-        <Timelogs
-          key={this.state.timelogs.length.toString()}
-          trelloCards={this.state.trelloCards}
-          timelogs={this.state.timelogs}
-          handleDelete={this.handleDelete}
-          onUpdate={this.handleUpdate}
-        />
-        <NewTimelog
-          key="new_timelog"
-          trelloCards={this.state.trelloCards}
-          handleSubmit={this.handleSubmit}
-        />
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

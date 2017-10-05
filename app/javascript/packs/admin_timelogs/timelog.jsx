@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
+import moment from 'moment';
+import 'moment-timezone';
 
 class Timelog extends React.Component {
   constructor(props, context) {
@@ -49,43 +51,68 @@ class Timelog extends React.Component {
 
   render() {
     const startTime = this.state.editable ?
-      <input type="datetime-local" className="form-control" onChange={this.handleStartDateChange} defaultValue={this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)} />
+      (<input
+        type="datetime-local"
+        className="form-control"
+        onChange={this.handleStartDateChange}
+        defaultValue={moment(this.props.timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY-MM-DDTHH:mm')}
+      />)
       :
-      <p className="lead">Start time: {this.props.timelog.start_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+      moment(this.props.timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm');
     const duration = this.state.editable ?
-      <input type="number" className="form-control" onChange={this.handleDurationChange} defaultValue={this.props.timelog.duration} />
+      (<input
+        type="number"
+        className="form-control"
+        onChange={this.handleDurationChange}
+        defaultValue={this.props.timelog.duration}
+      />)
       :
-      <p className="lead">Duration: {this.props.timelog.duration}</p>;
+      this.props.timelog.duration;
     const trelloCard = this.state.editable ?
-      (<Select className="form-control" value={this.state.value} onChange={e => this.setState({ card: e.target.value })}>
+      (<Select
+        className="form-control"
+        value={this.state.value}
+        onChange={e => this.setState({ card: e.target.value })}
+      >
         <option value="0" disabled hidden>Select trello card</option>
         {this.props.trelloCards.map(option =>
           <option key={option} value={option}>{option}</option>)}
       </Select>)
       :
-      <p className="lead">Trello card: {this.props.timelog.trello_card}</p>;
-    const endTime = this.state.editable ?
-      null
-      :
-      <p className="lead">End time: {this.props.timelog.end_time.substring(0, this.props.timelog.start_time.length - 5)}</p>;
+      this.props.timelog.trello_card;
+    const endTime =
+      moment(this.props.timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm');
 
     return (
-      <div key={this.props.timelog.id}>
-        {startTime}
-        {duration}
-        {trelloCard}
-        {endTime}
-        <button className="btn btn-danger" onClick={this.handleDelete}> Delete</button>
-        <button className="btn btn-primary" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
-        <button
-          id="back-button"
-          className="btn btn-info"
-          style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
-          onClick={this.handleBack}
-        >
-          Back
-        </button>
-      </div>
+      <tr>
+        <td>{startTime}</td>
+        <td>{duration}</td>
+        <td>{trelloCard}</td>
+        <td>{endTime}</td>
+        <td>
+          <button
+            className="btn btn-danger"
+            onClick={this.handleDelete}
+            style={this.state.editable ? { display: 'none' } : { display: 'block' }}
+          >
+          Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={this.handleEdit}
+          >
+            {this.state.editable ? 'Submit' : 'Edit' }
+          </button>
+          <button
+            id="back-button"
+            className="btn btn-info"
+            style={this.state.editable ? { display: 'block' } : { display: 'none' }}
+            onClick={this.handleBack}
+          >
+            Back
+          </button>
+        </td>
+      </tr>
     );
   }
 }

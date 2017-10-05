@@ -18,26 +18,31 @@ class Vacations extends React.Component {
       :
       'There are no vacations yet';
     const vacations =
-      this.props.vacations.map(vacation => (
-        <div key={vacation.id} className="col-sm-4">
-          <div className="well">
-            <Vacation
-              id={vacation.id}
-              key={vacation.id.toString()}
-              vacation={vacation}
-              handleDelete={this.handleDelete}
-            />
-          </div>
-        </div>
-      ));
+  this.props.vacations.map(vacation => (
+    <Vacation
+      id={vacation.id}
+      key={vacation.id.toString()}
+      vacation={vacation}
+      handleDelete={this.handleDelete}
+    />
+  ));
     return (
       <div>
-        <div>
-          <h2 className="display-3">{title}</h2>
-        </div>
-        <div className="row">
-          {vacations}
-        </div>
+        <h2>{title}</h2>
+        <table id="table">
+          <thead>
+            <tr>
+              <th>Start date</th>
+              <th>End date</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vacations}
+          </tbody>
+        </table>
       </div>
     );
   }

@@ -18,27 +18,32 @@ class Vacations extends React.Component {
       :
       'There are no pending vacations';
     const vacations = this.props.vacations.map(vacation => (
-      <div key={vacation.id} className="col-sm-4">
-        <div className="well">
-          <Vacation
-            key={vacation.id}
-            vacation={vacation}
-            approved={this.props.approved}
-            rejected={this.props.rejected}
-            handleDelete={this.handleDelete}
-            handleUpdate={this.onUpdate}
-          />
-        </div>
-      </div>
+      <Vacation
+        key={vacation.id}
+        vacation={vacation}
+        approved={this.props.approved}
+        rejected={this.props.rejected}
+        handleDelete={this.handleDelete}
+        handleUpdate={this.onUpdate}
+      />
     ));
     return (
       <div>
-        <div>
-          <h2 className="display-3">{title}</h2>
-        </div>
-        <div className="row">
-          {vacations}
-        </div>
+        <h2>{title}</h2>
+        <table id="table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Start date</th>
+              <th>End date</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vacations}
+          </tbody>
+        </table>
       </div>
     );
   }

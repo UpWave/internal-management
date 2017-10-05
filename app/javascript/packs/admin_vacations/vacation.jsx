@@ -23,14 +23,17 @@ class Vacation extends React.Component {
     const endDate = this.props.vacation.end_date;
     const type = this.props.vacation.type;
     return (
-      <div key={this.props.vacation.id}>
-        <p className="lead">Email: {email}</p>
-        <p className="lead">Start date: {startDate}</p>
-        <p className="lead">End date: {endDate}</p>
-        <p className="lead">Type: {type}</p>
-        <button className="btn btn-success" onClick={this.handleApprove}> Approve</button>
-        <button className="btn btn-danger" onClick={this.handleReject}> Reject</button>
-      </div>
+      <tr>
+        <td>{email}</td>
+        <td>{startDate}</td>
+        <td>{endDate}</td>
+        <td>{type}</td>
+        <td>
+          <button className="btn btn-success" onClick={this.handleApprove}> Approve</button>
+          <span style={{ paddingLeft: '20px' }} />
+          <button className="btn btn-danger" onClick={this.handleReject}> Reject</button>
+        </td>
+      </tr>
     );
   }
 }

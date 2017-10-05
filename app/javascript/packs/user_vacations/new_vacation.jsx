@@ -70,42 +70,40 @@ class NewVacation extends React.Component {
     return (
       <div className="row" id="new_vacation">
         <div className="col-sm-5">
-          <div className="well">
-            <h3 className="display-3">Request a new vacation!</h3>
-            <div className="form-group">
-              <Select
-                className="form-control"
-                defaultValue={this.state.value}
-                onChange={this.handleTypeChange}
-              >
-                <option value="0" disabled hidden>Select type of vacation</option>
-                {this.props.types.map(option =>
-                  <option key={option} value={option}>{option}</option>)}
-              </Select>
-            </div>
-            <div className="row">
-              <div className="col-sm-5">
-                <h4>Start Date</h4>
-                <input
-                  type="date"
-                  className="form-control"
-                  onChange={this.handleStartDateChange}
-                  min={moment().format('YYYY-MM-DD')}
-                />
-              </div>
-              <div className="col-sm-5">
-                <h4>End Date</h4>
-                <input
-                  type="date"
-                  className="form-control"
-                  onChange={this.handleEndDateChange}
-                  min={moment().format('YYYY-MM-DD')}
-                />
-              </div>
-            </div>
-            <br />
-            <button className="btn btn-success center-block" id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
+          <h3 className="display-3">Request a new vacation!</h3>
+          <div className="form-group">
+            <Select
+              className="form-control"
+              defaultValue={this.state.value}
+              onChange={this.handleTypeChange}
+            >
+              <option value="0" disabled hidden>Select type of vacation</option>
+              {this.props.types.map(option =>
+                <option key={option} value={option}>{option}</option>)}
+            </Select>
           </div>
+          <div className="row">
+            <div className="col-sm-5">
+              <h4>Start Date</h4>
+              <input
+                type="date"
+                className="form-control"
+                onChange={this.handleStartDateChange}
+                min={moment().format('YYYY-MM-DD')}
+              />
+            </div>
+            <div className="col-sm-5">
+              <h4>End Date</h4>
+              <input
+                type="date"
+                className="form-control"
+                onChange={this.handleEndDateChange}
+                min={moment().format('YYYY-MM-DD')}
+              />
+            </div>
+          </div>
+          <br />
+          <button className="btn btn-success center-block" id="submit" style={{ visibility: 'hidden' }} onClick={this.handleClick}>Submit</button><br />
         </div>
       </div>
     );
