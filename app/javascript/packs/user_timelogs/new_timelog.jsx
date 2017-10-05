@@ -50,7 +50,7 @@ class NewTimelog extends React.Component {
         <div className="col-md-4">
           <h3>Create a new timelog!</h3>
           <input className="form-control" type="datetime-local" onChange={this.handleStartDateChange} /><br />
-          <input className="form-control" type="number" onChange={this.handleDurationChange} placeholder="Enter duration in minutes" /><br />
+          <input className="form-control" type="time" onChange={this.handleDurationChange} /><br />
           <Select className="form-control" onChange={e => this.setState({ card: e.target.value })}>
             {this.props.trelloCards.map(option =>
               <option key={option} value={option}>{option}</option>)}
