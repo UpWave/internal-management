@@ -19,7 +19,7 @@ class NewTimelog extends React.Component {
 
   handleClick() {
     const startTime = this.state.startTime;
-    const duration = this.state.hours + parseInt(this.state.minutes);
+    const duration = this.state.hours * 60 + parseInt(this.state.minutes);
     const trelloCard = this.state.card || this.props.trelloCards[0];
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
@@ -41,7 +41,7 @@ class NewTimelog extends React.Component {
   }
 
   handleHoursChange(event){
-    this.setState({ hours: event.target.value * 60 });
+    this.setState({ hours: event.target.value });
   }
 
   handleMinutesChange(event){
