@@ -161,14 +161,61 @@ class UserTimelogs extends React.Component {
   }
 
   render() {
-    if (this.state.trelloCards.length === 0) {
+    if (this.state.timelogs.length > 0) {
       return (
-        <div>
-          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
-          and add cards to your boards</h3>
+        <div className="well">
+          <div className="row">
+            <div className="col-md-4">
+              <h3>Filter by</h3>
+              <button className="btn btn-info" onClick={this.filterByDuration}>Duration</button>
+              <button className="btn btn-info" onClick={this.filterByStartTime}>Start time</button>
+              <button className="btn btn-info" onClick={this.filterByEndTime}>End time</button>
+              <ReactPaginate
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                breakLabel={<a href="">...</a>}
+                breakClassName={'break-me'}
+                pageCount={this.state.pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageClick}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+            </div>
+            <div className="col-md-3">
+              <h3>Select time range</h3>
+              <input className="form-control" type="datetime-local" id="start_date"
+                     onChange={this.handleStartDateChange}/>
+              <input className="form-control" type="datetime-local" id="end_date" onChange={this.handleEndDateChange}/>
+              <button className="btn btn-info" id="date_discard" onClick={this.discardFilter}>X</button>
+              {'  '}
+              <button className="btn btn-info" id="date_submit" style={{visibility: 'hidden'}}
+                      onClick={this.filterByTimeRange}>Submit
+              </button>
+              <br /><br />
+            </div>
+          </div>
+          <h3>Timelogs</h3>
+          <Timelogs
+            key={this.state.timelogs.length.toString()}
+            trelloCards={this.state.trelloCards}
+            timelogs={this.state.timelogs}
+            handleDelete={this.handleDelete}
+            onUpdate={this.handleUpdate}
+          />
+          <NewTimelog
+            key="new_timelog"
+            trelloCards={this.state.trelloCards}
+            handleSubmit={this.handleSubmit}
+          />
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         </div>
       );
-    } else if (this.state.timelogs.length === 0) {
+    }
+
+    if (this.state.timelogs.length === 0) {
       return (
         <div className="well">
           <h3>There are no timelogs</h3>
@@ -180,53 +227,15 @@ class UserTimelogs extends React.Component {
         </div>
       );
     }
-    return (
-      <div className="well">
-        <div className="row">
-          <div className="col-md-4">
-            <h3>Filter by</h3>
-            <button className="btn btn-info" onClick={this.filterByDuration}>Duration</button>
-            <button className="btn btn-info" onClick={this.filterByStartTime}>Start time</button>
-            <button className="btn btn-info" onClick={this.filterByEndTime}>End time</button>
-            <ReactPaginate
-              previousLabel={'previous'}
-              nextLabel={'next'}
-              breakLabel={<a href="">...</a>}
-              breakClassName={'break-me'}
-              pageCount={this.state.pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={'pagination'}
-              subContainerClassName={'pages pagination'}
-              activeClassName={'active'}
-            />
-          </div>
-          <div className="col-md-3">
-            <h3>Select time range</h3>
-            <input className="form-control" type="datetime-local" id="start_date" onChange={this.handleStartDateChange} />
-            <input className="form-control" type="datetime-local" id="end_date" onChange={this.handleEndDateChange} />
-            <button className="btn btn-info" id="date_discard" onClick={this.discardFilter}>X</button>
-            {'  '}
-            <button className="btn btn-info" id="date_submit" style={{ visibility: 'hidden' }} onClick={this.filterByTimeRange}>Submit</button><br /><br />
-          </div>
+
+    if (this.state.trelloCards.length === 0) {
+      return (
+        <div>
+          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
+            and add cards to your boards</h3>
         </div>
-        <h3>Timelogs</h3>
-        <Timelogs
-          key={this.state.timelogs.length.toString()}
-          trelloCards={this.state.trelloCards}
-          timelogs={this.state.timelogs}
-          handleDelete={this.handleDelete}
-          onUpdate={this.handleUpdate}
-        />
-        <NewTimelog
-          key="new_timelog"
-          trelloCards={this.state.trelloCards}
-          handleSubmit={this.handleSubmit}
-        />
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-      </div>
-    );
+      );
+    }
   }
 }
 
