@@ -149,7 +149,9 @@ class User extends React.Component {
   }
 
   loadComments() {
-    Fetch.json('/api/v1/admin/comments', )
+    Fetch.json('/api/v1/admin/comments', {
+     receiver_id: this.props.user.id
+    })
       .then((data) => {
         this.setState({
           comments: data
@@ -523,7 +525,10 @@ class User extends React.Component {
         <div>
           <p>Comments:</p>
           {this.state.comments.map((comment) =>
-            <p key={comment.id}>{comment.body}</p>)}
+          <div>
+            <p key={comment.id}>{comment.body}</p>
+          </div>
+          )}
 
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         </div>

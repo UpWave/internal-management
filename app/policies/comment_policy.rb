@@ -18,7 +18,7 @@ class CommentPolicy
     @current_user.admin?
   end
 
-  def destroy?ro
+  def destroy?
     @current_user.admin?
   end
 

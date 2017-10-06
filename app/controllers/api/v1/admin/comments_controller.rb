@@ -2,7 +2,7 @@ class Api::V1::Admin::CommentsController < Api::V1::BaseController
   before_action :authenticate_user!
 
   def index
-    @comments = Comment.all
+    @comments = Comment.receiver_comments(params[:receiver_id])
     authorize @comments
     respond_with :api, :v1, :admin, @comments
   end
