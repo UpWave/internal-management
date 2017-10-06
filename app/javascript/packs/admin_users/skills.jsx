@@ -172,7 +172,10 @@ class Skills extends React.Component {
     const skill = this.state.allSkills.find((element) => {
       return element.id === id;
     });
-    return skill.name;
+    return skill ?
+      skill.name
+      :
+      '';
   }
 
   checkCustomSkillButton() {

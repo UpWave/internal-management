@@ -125,8 +125,8 @@ class User extends React.Component {
             setNewSalary={this.props.setNewSalary}
             salaryTypes={this.props.salaryTypes}
           />
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         </td>
-      <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </tr>
     );
   }
