@@ -57,11 +57,12 @@ class Body extends React.Component {
           <div className="container">
             <div className="sin-w3-agile">
               <div className="footer">
-                <div style={{ left: '50%' }}>
+                <div style={{ width: '50%', margin: '0 auto' }}>
+                  <span style={{ paddingLeft: '30%' }} />
                   <a href="/users/auth/google_oauth2">
                     <i className="fa fa-google fa-3x" />
                   </a>
-                  <span style={{ paddingLeft: '20px' }} />
+                  <span style={{ paddingLeft: '5%' }} />
                   <a href="/users/auth/trello">
                     <i className="fa fa-trello fa-3x" />
                   </a>

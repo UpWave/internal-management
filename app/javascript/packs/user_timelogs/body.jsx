@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
-import { ProgressBar, progressBarFetch, setOriginalFetch } from 'react-fetch-progressbar';
+import { ProgressBar } from 'react-fetch-progressbar';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 import Fetch from '../Fetch';
-
-setOriginalFetch(window.fetch);
-window.fetch = progressBarFetch;
 
 class UserTimelogs extends React.Component {
   constructor(props, context) {

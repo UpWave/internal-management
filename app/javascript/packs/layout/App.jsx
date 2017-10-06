@@ -3,10 +3,16 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import { progressBarFetch, setOriginalFetch } from 'react-fetch-progressbar';
 import Fetch from '../Fetch';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import SignIn from '../sign_in/body';
+
+
+setOriginalFetch(window.fetch);
+window.fetch = progressBarFetch;
+
 
 class App extends React.Component {
   constructor(props, context) {

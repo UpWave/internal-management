@@ -17,6 +17,18 @@ class Vacations extends React.Component {
       'Pending vacations'
       :
       'There are no pending vacations';
+    const tableHead = this.props.vacations.length > 0 ?
+      (<thead>
+        <tr>
+          <th>Email</th>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Type</th>
+          <th>Action</th>
+        </tr>
+      </thead>)
+      :
+      null;
     const vacations = this.props.vacations.map(vacation => (
       <Vacation
         key={vacation.id}
@@ -31,15 +43,7 @@ class Vacations extends React.Component {
       <div>
         <h2>{title}</h2>
         <table id="table">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Start date</th>
-              <th>End date</th>
-              <th>Type</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+          {tableHead}
           <tbody>
             {vacations}
           </tbody>

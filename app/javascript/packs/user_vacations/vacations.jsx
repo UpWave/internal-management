@@ -17,6 +17,18 @@ class Vacations extends React.Component {
       'Vacations'
       :
       'There are no vacations yet';
+    const tableHead = this.props.vacations.length > 0 ?
+      (<thead>
+        <tr>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>)
+      :
+      null;
     const vacations =
   this.props.vacations.map(vacation => (
     <Vacation
@@ -30,15 +42,7 @@ class Vacations extends React.Component {
       <div>
         <h2>{title}</h2>
         <table id="table">
-          <thead>
-            <tr>
-              <th>Start date</th>
-              <th>End date</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+          {tableHead}
           <tbody>
             {vacations}
           </tbody>
