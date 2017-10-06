@@ -21,7 +21,7 @@ class Api::V1::Admin::CommentsController < Api::V1::BaseController
   def update
     @comment = Comment.find(params[:id])
     authorize @comment
-    if @comment.update_attributes(skill_params)
+    if @comment.update_attributes(comment_params)
       respond_with @comment, json: @comment
     else
       render json: { errors: @comment.errors.full_messages }, status: 422

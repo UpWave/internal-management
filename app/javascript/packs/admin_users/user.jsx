@@ -308,6 +308,7 @@ class User extends React.Component {
         receiver_id: this.props.user.id,
     })
       .then(() => {
+        $("input[type=text], textarea").val("");
         this.msg.success(`Successfully added comment`);
         this.loadComments();
       }).catch((errorResponse) => {
