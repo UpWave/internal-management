@@ -304,10 +304,8 @@ class User extends React.Component {
 
   addNewComment() {
     Fetch.postJSON('/api/v1/admin/comments', {
-      comment: {
         body: this.state.body,
-        receiver_id: this.props.receiver_id,
-      },
+        receiver_id: this.props.user.id,
     })
       .then(() => {
         this.msg.success(`Successfully added comment`);
