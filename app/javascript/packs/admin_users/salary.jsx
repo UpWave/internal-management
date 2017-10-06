@@ -220,15 +220,25 @@ class Salary extends React.Component {
         </Select>
         <button id="edit_submit" className="btn btn-default" style={{ visibility: 'hidden' }} onClick={this.setNewSalary}>Submit</button>
       </Collapsible>);
+    const spanIcon = ((new Date(this.state.reviewDate) - new Date()) < 1.21e+9) ?
+      (<span
+        role="button"
+        tabIndex={0}
+        onClick={this.openModal}
+      >
+        <i className="fa fa-exclamation fa-3x" />
+      </span>)
+      :
+      (<span
+        role="button"
+        tabIndex={0}
+        onClick={this.openModal}
+      >
+        <i className="fa fa-money fa-3x" />
+      </span>);
     return (
       <div id="salary">
-        <span
-          role="button"
-          tabIndex={0}
-          onClick={this.openModal}
-        >
-          <i className="fa fa-money fa-3x" />
-        </span>
+        {spanIcon}
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
