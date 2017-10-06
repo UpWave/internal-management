@@ -41,6 +41,7 @@ Rails.application.routes.draw do
             get :count_users
           end
         end
+        resources :comments
         resources :roles, only: [:index]
         resources :statuses, only: [:index]
         namespace :user do
