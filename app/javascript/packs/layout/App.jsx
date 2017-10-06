@@ -12,6 +12,7 @@ class App extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      loadingFinished: false,
       admin: false,
       logged: false,
       hasGoogle: false,
@@ -29,11 +30,10 @@ class App extends React.Component {
     Fetch.json('/auth/is_signed_in')
       .then((data) => {
         this.setState({ logged: data.signed_in });
+        this.setState({ loadingFinished: true });
         if (data.signed_in) {
           this.setState({ admin: data.user.role === 'admin' });
           this.checkIdentities();
-        } else {
-          this.setState({ admin: false });
         }
       });
   }
@@ -60,27 +60,38 @@ class App extends React.Component {
   }
 
   render() {
-    const signIn = this.state.logged ?
-      null
-      :
+    const loadingFinished = this.state.loadingFinished;
+    const logged = this.state.logged;
+    const signIn = (loadingFinished && (logged === false)) ?
       (<SignIn
         isSignedIn={this.isSignedIn}
-      />);
+      />)
+      :
+      null;
+    const mainComponent =
+    (<div>
+      <Sidebar
+        logged={this.state.logged}
+        admin={this.state.admin}
+        hasGoogle={this.state.hasGoogle}
+        signOutClick={this.signOutClick}
+        hasTrello={this.state.hasTrello}
+      />
+      <Content
+        logged={this.state.logged}
+        admin={this.state.admin}
+      />
+    </div>);
+    function renderAll() {
+      if (loadingFinished && logged) {
+        return mainComponent;
+      }
+      return signIn;
+    }
     return (
       <Router>
         <div>
-          {signIn}
-          <Sidebar
-            logged={this.state.logged}
-            admin={this.state.admin}
-            hasGoogle={this.state.hasGoogle}
-            signOutClick={this.signOutClick}
-            hasTrello={this.state.hasTrello}
-          />
-          <Content
-            logged={this.state.logged}
-            admin={this.state.admin}
-          />
+          {renderAll()}
         </div>
       </Router>
     );

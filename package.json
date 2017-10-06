@@ -39,6 +39,7 @@
     "react-components-form": "^2.11.2",
     "react-datepicker": "^0.54.0",
     "react-dom": "^15.6.1",
+    "react-fetch-progressbar": "0.0.3",
     "react-helmet": "^5.2.0",
     "react-images-uploader": "^1.1.0",
     "react-input-calendar": "^0.4.1",

@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
+import { ProgressBar, progressBarFetch, setOriginalFetch } from 'react-fetch-progressbar';
 import Timelogs from './timelogs';
 import NewTimelog from './new_timelog';
 import Fetch from '../Fetch';
+
+setOriginalFetch(window.fetch);
+window.fetch = progressBarFetch;
 
 class UserTimelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
       timelogs: [],
-      trelloCards: [],
+      loadingFinished: false,
       page: 0,
       pageCount: 1,
       perPage: 4,
@@ -22,6 +26,7 @@ class UserTimelogs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.removeTimelog = this.removeTimelog.bind(this);
+    this.loadTrello = this.loadTrello.bind(this);
     this.loadTimelogs = this.loadTimelogs.bind(this);
     this.filterByDuration = this.filterByDuration.bind(this);
     this.filterByStartTime = this.filterByStartTime.bind(this);
@@ -35,11 +40,19 @@ class UserTimelogs extends React.Component {
   }
 
   componentDidMount() {
+    this.loadTimelogs();
+    this.loadTrello();
+  }
+
+  loadTrello() {
     Fetch.json('/api/v1/timelogs/trello_cards')
       .then((data) => {
         this.setState({ trelloCards: data });
+        this.setState({ loadingFinished: true });
+      }).catch(() => {
+        this.setState({ trelloCards: false });
+        this.setState({ loadingFinished: true });
       });
-    this.loadTimelogs();
   }
 
   loadTimelogs() {
@@ -161,115 +174,125 @@ class UserTimelogs extends React.Component {
   }
 
   render() {
-    if (this.state.trelloCards.length === 0) {
-      return (
-        <div>
-          <h3>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
-          and add cards to your boards</h3>
+    const filterCols = this.state.timelogs.length > 0 ?
+      (<div>
+        <div className="col-md-4">
+          <h3>Filter by</h3>
+          <button
+            className="btn btn-info"
+            onClick={this.filterByDuration}
+          >
+          Duration
+          </button>
+          <button
+            className="btn btn-info"
+            onClick={this.filterByStartTime}
+          >
+          Start time
+          </button>
+          <button
+            className="btn btn-info"
+            onClick={this.filterByEndTime}
+          >
+            End time
+          </button>
         </div>
-      );
-    } else if (this.state.timelogs.length === 0) {
-      return (
-        <div className="well">
-          <h3>There are no timelogs</h3>
-          <NewTimelog
-            key="new_timelog"
-            trelloCards={this.state.trelloCards}
-            handleSubmit={this.handleSubmit}
+        <div className="col-md-3">
+          <h3>Select time range</h3>
+          <input
+            className="form-control"
+            type="datetime-local"
+            id="start_date"
+            onChange={this.handleStartDateChange}
+          />
+          <input
+            className="form-control"
+            type="datetime-local"
+            id="end_date"
+            onChange={this.handleEndDateChange}
+          />
+          <button
+            className="btn btn-info"
+            id="date_discard"
+            onClick={this.discardFilter}
+          >
+            X
+          </button>
+          <span style={{ paddingLeft: '20px' }} />
+          <button
+            className="btn btn-info"
+            id="date_submit"
+            style={{ visibility: 'hidden' }}
+            onClick={this.filterByTimeRange}
+          >
+            Submit
+          </button>
+        </div>
+        <div className="col-md-4">
+          <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={<a href="">...</a>}
+            breakClassName={'break-me'}
+            pageCount={this.state.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
           />
         </div>
-      );
+      </div>)
+      :
+      null;
+    const newTimelog =
+      (<NewTimelog
+        key="new_timelog"
+        trelloCards={this.state.trelloCards || []}
+        handleSubmit={this.handleSubmit}
+      />);
+    const timelogsTable = this.state.timelogs.length > 0 ?
+      (<div className="w3l-table-info">
+        <Timelogs
+          key="timelogs"
+          trelloCards={this.state.trelloCards || []}
+          timelogs={this.state.timelogs || []}
+          handleSubmit={this.handleSubmit}
+          handleDelete={this.handleDelete}
+          onUpdate={this.handleUpdate}
+        />
+      </div>)
+      :
+      null;
+    const trelloCards = (this.state.trelloCards);
+    const loadingFinished = (this.state.loadingFinished);
+    const mainComponent = (loadingFinished) ?
+      (<div className="agile-grids">
+        <div className="agile-tables">
+          {timelogsTable}
+          <div className="row">
+            {filterCols}
+          </div>
+          {newTimelog}
+        </div>
+      </div>)
+      :
+      null;
+    function renderAll() {
+      if (loadingFinished && (trelloCards === false)) {
+        return (<div>
+          <h1>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
+          and add cards to your boards</h1>
+        </div>);
+      }
+      return mainComponent;
     }
     return (
       <div>
-        <div className="agile-grids">
-          <div className="agile-tables">
-            <div className="w3l-table-info">
-              <Timelogs
-                key={this.state.timelogs.length.toString()}
-                trelloCards={this.state.trelloCards}
-                timelogs={this.state.timelogs}
-                handleDelete={this.handleDelete}
-                onUpdate={this.handleUpdate}
-              />
-            </div>
-            <div className="row">
-              <div className="col-md-4">
-                <h3>Filter by</h3>
-                <button
-                  className="btn btn-info"
-                  onClick={this.filterByDuration}
-                >
-                Duration
-                </button>
-                <button
-                  className="btn btn-info"
-                  onClick={this.filterByStartTime}
-                >
-                Start time
-                </button>
-                <button
-                  className="btn btn-info"
-                  onClick={this.filterByEndTime}
-                >
-                  End time
-                </button>
-              </div>
-              <div className="col-md-3">
-                <h3>Select time range</h3>
-                <input
-                  className="form-control"
-                  type="datetime-local"
-                  id="start_date"
-                  onChange={this.handleStartDateChange}
-                />
-                <input
-                  className="form-control"
-                  type="datetime-local"
-                  id="end_date"
-                  onChange={this.handleEndDateChange}
-                />
-                <button
-                  className="btn btn-info"
-                  id="date_discard"
-                  onClick={this.discardFilter}
-                >
-                  X
-                </button>
-                <span style={{ paddingLeft: '20px' }} />
-                <button
-                  className="btn btn-info"
-                  id="date_submit"
-                  style={{ visibility: 'hidden' }}
-                  onClick={this.filterByTimeRange}
-                >
-                  Submit
-                </button>
-              </div>
-              <div className="col-md-4">
-                <ReactPaginate
-                  previousLabel={'previous'}
-                  nextLabel={'next'}
-                  breakLabel={<a href="">...</a>}
-                  breakClassName={'break-me'}
-                  pageCount={this.state.pageCount}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={this.handlePageClick}
-                  containerClassName={'pagination'}
-                  subContainerClassName={'pages pagination'}
-                  activeClassName={'active'}
-                />
-              </div>
-            </div>
-            <NewTimelog
-              key="new_timelog"
-              trelloCards={this.state.trelloCards}
-              handleSubmit={this.handleSubmit}
-            />
-            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          </div>
-        </div>
+        <ProgressBar />
+        {renderAll()}
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }
