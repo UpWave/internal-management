@@ -31,6 +31,7 @@ class User extends React.Component {
       missingSkills: [],
       allSkills: [],
       comments: [],
+      body: "",
     };
     this.handleBack = this.handleBack.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -149,9 +150,7 @@ class User extends React.Component {
   }
 
   loadComments() {
-    Fetch.json('/api/v1/admin/comments', {
-     receiver_id: this.props.user.id
-    })
+    Fetch.json(`/api/v1/admin/user/users/${this.props.user.id}/comments`)
       .then((data) => {
         this.setState({
           comments: data
@@ -305,13 +304,14 @@ class User extends React.Component {
   }
 
   addNewComment() {
-    Fetch.postJSON('/api/v1/admin/comments', {
-        body: this.state.body,
-        receiver_id: this.props.user.id,
+    Fetch.postJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments`, {
+      body: this.state.body,
+      user_id: this.props.user.id,
     })
       .then(() => {
-        $("input[type=text], textarea").val("");
+        // $("input[type=text], textarea").val("");
         this.msg.success(`Successfully added comment`);
+        this.setState({ body: ""});
         this.loadComments();
       }).catch((errorResponse) => {
       this.msg.error(errorResponse.errors);
@@ -525,8 +525,9 @@ class User extends React.Component {
         <div>
           <p>Comments:</p>
           {this.state.comments.map((comment) =>
-          <div>
-            <p key={comment.id}>{comment.body}</p>
+          <div key={comment.id}>
+            <p>{comment.body}</p>
+            <button>Delete</button>
           </div>
           )}
 
@@ -603,7 +604,7 @@ class User extends React.Component {
           <div id="new_comment" className="comment">
             <div className="col-md-4">
               <h3>Add new comment</h3>
-              <input className="form-control" type="text" onChange={this.handleCommentChange} /><br />
+              <input className="form-control" type="text" value={this.state.body} onChange={this.handleCommentChange} /><br />
               <button className="btn btn-success" onClick={this.addNewComment}>Add comment</button><br />
             </div>
             <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
