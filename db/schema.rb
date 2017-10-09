@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171005080735) do
+ActiveRecord::Schema.define(version: 20171005192813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.text "body"
+    t.bigint "user_id", null: false
+    t.integer "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
 
   create_table "identities", force: :cascade do |t|
     t.bigint "user_id"
@@ -48,12 +57,12 @@ ActiveRecord::Schema.define(version: 20171005080735) do
 
   create_table "timelogs", force: :cascade do |t|
     t.datetime "start_time"
+    t.integer "duration", null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "trello_card", null: false
     t.datetime "end_time"
-    t.integer "duration"
     t.index ["user_id"], name: "index_timelogs_on_user_id"
   end
 
@@ -104,6 +113,7 @@ ActiveRecord::Schema.define(version: 20171005080735) do
     t.index ["user_id"], name: "index_vacations_on_user_id"
   end
 
+  add_foreign_key "comments", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "salaries", "users"
   add_foreign_key "timelogs", "users"

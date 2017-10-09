@@ -30,6 +30,8 @@ class User extends React.Component {
       selectedRate: 0,
       missingSkills: [],
       allSkills: [],
+      comments: [],
+      body: "",
     };
     this.handleBack = this.handleBack.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -58,6 +60,9 @@ class User extends React.Component {
     this.addCustomSkill = this.addCustomSkill.bind(this);
     this.findSkillTitleById = this.findSkillTitleById.bind(this);
     this.skillTypeChange = this.skillTypeChange.bind(this);
+    this.loadComments = this.loadComments.bind(this);
+    this.handleCommentChange = this.handleCommentChange.bind(this);
+    this.addNewComment = this.addNewComment.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +88,7 @@ class User extends React.Component {
     this.loadUserSkills();
     this.loadMissingSkills();
     this.loadSkillTypes();
+    this.loadComments();
   }
 
   setNewSalary() {
@@ -141,6 +147,17 @@ class User extends React.Component {
           });
         }
       });
+  }
+
+  loadComments() {
+    Fetch.json(`/api/v1/admin/user/users/${this.props.user.id}/comments`)
+      .then((data) => {
+        this.setState({
+          comments: data
+        });
+      }).catch((errorResponse) => {
+      this.msg.error(errorResponse.errors);
+    });
   }
 
   checkValues() {
@@ -280,6 +297,25 @@ class User extends React.Component {
     } else {
       $('#edit_submit').css('visibility', 'hidden');
     }
+  }
+
+  handleCommentChange(event) {
+    this.setState({ body: event.target.value });
+  }
+
+  addNewComment() {
+    Fetch.postJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments`, {
+      body: this.state.body,
+      user_id: this.props.user.id,
+    })
+      .then(() => {
+        // $("input[type=text], textarea").val("");
+        this.msg.success(`Successfully added comment`);
+        this.setState({ body: ""});
+        this.loadComments();
+      }).catch((errorResponse) => {
+      this.msg.error(errorResponse.errors);
+    });
   }
 
   mouseOverRed() {
@@ -482,6 +518,23 @@ class User extends React.Component {
         </Select>
         <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
       </Collapsible>);
+    const comments = this.state.comments.length === 0 ?
+      null
+      :
+      (
+        <div>
+          <p>Comments:</p>
+          {this.state.comments.map((comment) =>
+          <div key={comment.id}>
+            <p>{comment.body}</p>
+            <button>Delete</button>
+          </div>
+          )}
+
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+        </div>
+      );
+
     return (
       <div key={this.props.user.id}>
         <div className="row">
@@ -545,6 +598,18 @@ class User extends React.Component {
               {addCustomSkill}
             </div>
           </div>
+
+          {comments}
+
+          <div id="new_comment" className="comment">
+            <div className="col-md-4">
+              <h3>Add new comment</h3>
+              <input className="form-control" type="text" value={this.state.body} onChange={this.handleCommentChange} /><br />
+              <button className="btn btn-success" onClick={this.addNewComment}>Add comment</button><br />
+            </div>
+            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+          </div>
+
         </div>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
