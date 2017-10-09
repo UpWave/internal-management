@@ -23,7 +23,6 @@
     <!-- tables -->
     <link rel="stylesheet" type="text/css" href="css/table-style.css" />
     <link rel="stylesheet" type="text/css" href="css/basictable.css" />
-    <script type="text/javascript" src="js/jquery.basictable.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         $('#table').basictable();
@@ -59,28 +58,26 @@
       <%= javascript_pack_tag 'layout/App' %>
     </div>
     <%= yield %>
-        <script>
-        var toggle = true;
+      <script>
+      var toggle = true;
 
-        $(".sidebar-icon").click(function() {
-          if (toggle)
-          {
-          $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
-          $("#menu span").css({"position":"absolute"});
-          }
-          else
-          {
-          $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
-          setTimeout(function() {
-            $("#menu span").css({"position":"relative"});
-          }, 400);
-          }
+      $(".sidebar-icon").click(function() {
+        if (toggle)
+        {
+        $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+        $("#menu span").css({"position":"absolute"});
+        }
+        else
+        {
+        $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+        setTimeout(function() {
+          $("#menu span").css({"position":"relative"});
+        }, 400);
+        }
 
-                toggle = !toggle;
-              });
-        </script>
+              toggle = !toggle;
+            });
+      </script>
 <!--js -->
-<script src="js/jquery.nicescroll.js"></script>
-<script src="js/scripts.js"></script>
   </body>
 </html>

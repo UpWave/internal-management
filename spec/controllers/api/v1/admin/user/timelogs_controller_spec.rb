@@ -98,4 +98,11 @@ RSpec.describe Api::V1::Admin::User::TimelogsController, type: :controller do
     end
   end
 
+  describe "GET #trello_cards" do
+    it "will return error when user doesn't have trello" do
+      get :trello_cards, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["errors"]).to eq('Trello connection error')
+    end
+  end
 end

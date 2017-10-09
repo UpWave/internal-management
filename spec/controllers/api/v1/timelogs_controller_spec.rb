@@ -105,4 +105,12 @@ RSpec.describe Api::V1::TimelogsController, type: :controller do
           }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe "GET #trello_cards" do
+    it "will return error when user doesn't have trello" do
+      get :trello_cards, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["errors"]).to eq('Trello connection error')
+    end
+  end
 end

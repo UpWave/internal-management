@@ -1,0 +1,10 @@
+.modal-style {
+  top: '50%';
+  left: '50%';
+  right: 'auto';
+  bottom: 'auto';
+  marginRight: '-50%';
+  transform: 'translate(-50%, -50%)';
+  backgroundColor: 'rgba(235, 235, 235, 0.5)';
+}
+  
