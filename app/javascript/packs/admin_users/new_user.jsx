@@ -5,19 +5,6 @@ import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
 import Fetch from '../Fetch';
 
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: 'rgba(235, 235, 235, 0.5)',
-  },
-};
-
 class NewUser extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -100,7 +87,7 @@ class NewUser extends React.Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={customStyles}
+          className="modal-style"
           contentLabel="New user"
         >
           <h2>Create new user!</h2>
