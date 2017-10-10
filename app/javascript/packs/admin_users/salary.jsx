@@ -231,7 +231,7 @@ class Salary extends React.Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          className="Modal"
+          className="modal"
           contentLabel="Salary"
         >
           <h2 className="display-3">Salary</h2>

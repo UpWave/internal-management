@@ -295,7 +295,7 @@ class Skills extends React.Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          className="Modal"
+          className="modal"
           contentLabel="Skills"
         >
           <h2 className="display-3">Skill rates</h2>
