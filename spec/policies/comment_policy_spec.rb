@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe InvoicePolicy do
+describe CommentPolicy do
   subject { CommentPolicy }
 
   let(:member) { FactoryGirl.build_stubbed :user }

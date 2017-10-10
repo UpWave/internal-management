@@ -22,24 +22,16 @@ class Api::V1::Admin::User::CommentsController < Api::V1::BaseController
 
   def update
     authorize @comment
-    if current_user.id == @comment.author_id
-      if @comment.update_attributes(comment_params)
-        respond_with @comment, json: @comment
-      else
-        render json: { errors: @comment.errors.full_messages }, status: 422
-      end
+    if @comment.update_attributes(comment_params)
+      respond_with @comment, json: @comment
     else
-      render json: { message: "You can update only your comments" }, status: 422
+      render json: { errors: @comment.errors.full_messages }, status: 422
     end
   end
 
   def destroy
-    if current_user.id == @comment.author_id
-      authorize @comment
-      @comment.destroy
-    else
-      render json: { message: "You can update only your comments" }, status: 422
-    end
+    authorize @comment
+    @comment.destroy
   end
 
   private

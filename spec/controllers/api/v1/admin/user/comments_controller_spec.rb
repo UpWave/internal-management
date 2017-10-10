@@ -44,6 +44,13 @@ RSpec.describe Api::V1::Admin::User::CommentsController, type: :controller do
       comment.reload
       expect(comment.body).to eql("new body")
     end
+
+    it "won't update another admin's comment" do
+      other_admin = create(:admin)
+      comment = create(:comment, user_id: member.id, author_id: other_admin.id)
+      patch :update, format: :json, params: { user_id: member.id, id: comment.id, comment: { body: "new body" } }
+      expect(response.body).to eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+    end
   end
 
   describe "DELETE #destroy" do
@@ -52,6 +59,13 @@ RSpec.describe Api::V1::Admin::User::CommentsController, type: :controller do
       expect{
         get :destroy, params: { user_id: member.id, id: comment.id }, format: :json
       }.to change(Comment, :count).by(-1)
+    end
+
+    it "won't delete other admin's comment" do
+      other_admin = create(:admin)
+      comment = create(:comment, user_id: member.id, author_id: other_admin.id)
+      get :destroy, params: { user_id: member.id, id: comment.id }, format: :json
+      expect(response.body).to eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
     end
   end
 end
