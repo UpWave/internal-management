@@ -52,15 +52,19 @@ class AdminVacations extends React.Component {
 
   render() {
     return (
-      <div className="well">
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        <Vacations
-          key={this.state.vacations.length.toString()}
-          vacations={this.state.vacations}
-          approved={this.state.approved}
-          rejected={this.state.rejected}
-          onUpdate={this.handleUpdate}
-        />
+      <div className="agile-grids">
+        <div className="agile-tables">
+          <div className="w3l-table-info">
+            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+            <Vacations
+              key={this.state.vacations.length.toString()}
+              vacations={this.state.vacations}
+              approved={this.state.approved}
+              rejected={this.state.rejected}
+              onUpdate={this.handleUpdate}
+            />
+          </div>
+        </div>
       </div>
     );
   }

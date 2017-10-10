@@ -3,16 +3,22 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import { progressBarFetch, setOriginalFetch } from 'react-fetch-progressbar';
 import Fetch from '../Fetch';
-import Header from './Header';
+import Sidebar from './Sidebar';
 import Content from './Content';
-import Footer from './Footer';
 import SignIn from '../sign_in/body';
+
+
+setOriginalFetch(window.fetch);
+window.fetch = progressBarFetch;
+
 
 class App extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      loadingFinished: false,
       admin: false,
       logged: false,
       hasGoogle: false,
@@ -30,11 +36,10 @@ class App extends React.Component {
     Fetch.json('/auth/is_signed_in')
       .then((data) => {
         this.setState({ logged: data.signed_in });
+        this.setState({ loadingFinished: true });
         if (data.signed_in) {
           this.setState({ admin: data.user.role === 'admin' });
           this.checkIdentities();
-        } else {
-          this.setState({ admin: false });
         }
       });
   }
@@ -61,29 +66,38 @@ class App extends React.Component {
   }
 
   render() {
-    const signIn = this.state.logged ?
-      null
-      :
+    const loadingFinished = this.state.loadingFinished;
+    const logged = this.state.logged;
+    const signIn = (loadingFinished && (logged === false)) ?
       (<SignIn
         isSignedIn={this.isSignedIn}
-      />);
+      />)
+      :
+      null;
+    const mainComponent =
+    (<div>
+      <Sidebar
+        logged={this.state.logged}
+        admin={this.state.admin}
+        hasGoogle={this.state.hasGoogle}
+        signOutClick={this.signOutClick}
+        hasTrello={this.state.hasTrello}
+      />
+      <Content
+        logged={this.state.logged}
+        admin={this.state.admin}
+      />
+    </div>);
+    function renderAll() {
+      if (loadingFinished && logged) {
+        return mainComponent;
+      }
+      return signIn;
+    }
     return (
       <Router>
         <div>
-          <Header
-            logged={this.state.logged}
-            admin={this.state.admin}
-            hasGoogle={this.state.hasGoogle}
-            signOutClick={this.signOutClick}
-            hasTrello={this.state.hasTrello}
-          />
-          <br /><br /><br /><br />
-          {signIn}
-          <Content
-            logged={this.state.logged}
-            admin={this.state.admin}
-          />
-          <Footer />
+          {renderAll()}
         </div>
       </Router>
     );

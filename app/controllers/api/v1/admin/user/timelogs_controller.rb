@@ -27,7 +27,11 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
   end
 
   def trello_cards
-    respond_with @trello_service.cards
+    if @trello_service
+      respond_with @trello_service.cards
+    else
+      render json: { errors: 'Trello connection error' }, status: 422
+    end
   end
 
   def create
@@ -67,7 +71,11 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
     end
 
     def load_trello_service
-      @trello_service = TrelloService.new(@user)
+      if @user.has_trello?
+        @trello_service = TrelloService.new(@user)
+      else
+        @trello_service = nil
+      end
     end
 
     def load_timelog

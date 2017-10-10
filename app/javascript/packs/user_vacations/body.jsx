@@ -58,17 +58,21 @@ class UserVacations extends React.Component {
       );
     }
     return (
-      <div className="well">
-        <Vacations
-          key={this.state.vacations.length.toString()}
-          vacations={this.state.vacations}
-          handleDelete={this.handleDelete}
-        />
-        <NewVacation
-          key="new_vacation"
-          handleSubmit={this.handleSubmit}
-          types={this.state.types}
-        />
+      <div className="agile-grids">
+        <div className="agile-tables">
+          <div className="w3l-table-info">
+            <Vacations
+              key={this.state.vacations.length.toString()}
+              vacations={this.state.vacations}
+              handleDelete={this.handleDelete}
+            />
+          </div>
+          <NewVacation
+            key="new_vacation"
+            handleSubmit={this.handleSubmit}
+            types={this.state.types}
+          />
+        </div>
       </div>
     );
   }

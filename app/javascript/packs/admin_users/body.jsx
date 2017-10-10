@@ -10,11 +10,12 @@ class AdminUsers extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      loadingFinished: false,
       users: [],
       roles: [],
       statuses: [],
       currentPage: 0,
-      perPage: 1,
+      perPage: 5,
       pageCount: 1,
       salaryTypes: [],
     };
@@ -65,7 +66,10 @@ class AdminUsers extends React.Component {
       per_page: this.state.perPage,
     })
       .then((data) => {
-        this.setState({ users: data });
+        this.setState({
+          users: data,
+          loadingFinished: true,
+        });
       });
   }
 
@@ -109,39 +113,55 @@ class AdminUsers extends React.Component {
   }
 
   render() {
+    const loadingFinished = this.state.loadingFinished;
+    const mainComponent =
+    (<div className="agile-grids">
+      <div className="agile-tables">
+        <div className="w3l-table-info">
+          <h1>Users</h1>
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+          <Users
+            key={this.state.users.length.toString()}
+            users={this.state.users}
+            roles={this.state.roles}
+            statuses={this.state.statuses}
+            handleDelete={this.handleDelete}
+            onUpdate={this.handleUpdate}
+            handleUpdateSalary={this.handleUpdateSalary}
+            setNewSalary={this.setNewSalary}
+            salaryTypes={this.state.salaryTypes}
+          />
+          <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={<a href="">...</a>}
+            breakClassName={'break-me'}
+            pageCount={this.state.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+          />
+          <NewUser
+            key="new_user"
+            roles={this.state.roles}
+            statuses={this.state.statuses}
+            loadUsers={this.loadUsers}
+          />
+        </div>
+      </div>
+    </div>);
+    function renderAll() {
+      if (loadingFinished) {
+        return mainComponent;
+      }
+      return null;
+    }
     return (
-      <div className="well">
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        <Users
-          key={this.state.users.length.toString()}
-          users={this.state.users}
-          roles={this.state.roles}
-          statuses={this.state.statuses}
-          handleDelete={this.handleDelete}
-          onUpdate={this.handleUpdate}
-          handleUpdateSalary={this.handleUpdateSalary}
-          setNewSalary={this.setNewSalary}
-          salaryTypes={this.state.salaryTypes}
-        />
-        <ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
-          breakLabel={<a href="">...</a>}
-          breakClassName={'break-me'}
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
-        />
-        <NewUser
-          key="new_user"
-          roles={this.state.roles}
-          statuses={this.state.statuses}
-          loadUsers={this.loadUsers}
-        />
+      <div>
+        {renderAll()}
       </div>
     );
   }

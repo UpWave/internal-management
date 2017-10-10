@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Link,
-} from 'react-router-dom';
 import AlertContainer from 'react-alert';
 import Fetch from '../Fetch';
 
@@ -29,7 +26,8 @@ class Body extends React.Component {
     this.setState({ password: event.target.value });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     Fetch.postJSON('/users/sign_in', {
       user: {
         email: this.state.email,
@@ -60,43 +58,57 @@ class Body extends React.Component {
 
   render() {
     return (
-      <div id="sign-in-container" className="container" style={{ visibility: 'hidden' }} key="sign-in">
-        <div className="row">
-          <div className="col-md-4 col-md-offset-3">
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-xs-10">
-                  <input
-                    className="form-control"
-                    id="emailInput"
-                    type="email"
-                    placeholder="Email"
-                    onKeyPress={this.handleKeyPressed}
-                    onChange={this.changeEmail}
-                  />
-                </div>
-                <br />
-                <br />
-                <div className="col-xs-10">
-                  <input
-                    className="form-control"
-                    id="paswwordInput"
-                    type="password"
-                    placeholder="Password"
-                    onKeyPress={this.handleKeyPressed}
-                    onChange={this.changePassword}
-                  />
-                  <br />
-                  <Link
-                    to="/"
-                    className="btn btn-info"
-                    type="submit"
-                    onClick={this.handleSubmit}
-                  >
-                    Sign in
-                  </Link>
+      <div id="sign-in-container" key="sign-in">
+        <div className="main-wthree">
+          <div className="container">
+            <div className="sin-w3-agile">
+              <div className="footer">
+                <div style={{ width: '50%', margin: '0 auto' }}>
+                  <span style={{ paddingLeft: '30%' }} />
+                  <a href="/users/auth/google_oauth2">
+                    <i className="fa fa-google fa-3x" />
+                  </a>
+                  <span style={{ paddingLeft: '5%' }} />
+                  <a href="/users/auth/trello">
+                    <i className="fa fa-trello fa-3x" />
+                  </a>
                 </div>
               </div>
+              <h2>Sign In</h2>
+              <form action="#" method="post">
+                <div className="username">
+                  <span className="username">Email:</span>
+                  <input
+                    type="email"
+                    name="name"
+                    className="name"
+                    placeholder=""
+                    required=""
+                    onChange={this.changeEmail}
+                  />
+                  <div className="clearfix" />
+                </div>
+                <div className="password-agileits">
+                  <span className="username">Password:</span>
+                  <input
+                    type="password"
+                    name="password"
+                    className="password"
+                    placeholder=""
+                    required=""
+                    onChange={this.changePassword}
+                  />
+                  <div className="clearfix" />
+                </div>
+                <div className="login-w3">
+                  <input
+                    type="submit"
+                    className="login"
+                    value="Sign In"
+                    onClick={this.handleSubmit}
+                  />
+                </div>
+              </form>
             </div>
           </div>
         </div>

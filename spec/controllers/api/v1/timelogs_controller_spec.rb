@@ -4,7 +4,6 @@ RSpec.describe Api::V1::TimelogsController, type: :controller do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
-    allow(controller).to receive(:load_trello_service).and_return(true)
   end
 
   let(:user) { FactoryGirl.create(:user) }
@@ -103,6 +102,28 @@ RSpec.describe Api::V1::TimelogsController, type: :controller do
       expect{
             get :destroy, format: :json, params: { user_id: user.id, id: timelog.id }
           }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "GET #trello_cards" do
+    it "will return error when user doesn't have trello" do
+      get :trello_cards, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response["errors"]).to eq('Trello connection error')
+    end
+
+    it "will return correct cards" do
+      # dummy account for test purposes
+      user.identities.create(
+        provider: 'trello',
+        access_token: '5c7abab8dd49ab4d9f244669820ae5120cee59d78d08f54ebf914373a3e7547a',
+        secret_token: '8238e025956453eb02120c7b962e3893',
+        uid: '59dc95fb9b71e96a24045308'
+      )
+      cards = ['Card for a test', 'Another test card']
+      get :trello_cards, format: :json, params: { user_id: user.id }
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response).to eq(cards)
     end
   end
 end

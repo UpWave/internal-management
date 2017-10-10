@@ -12,18 +12,18 @@ class Vacation extends React.Component {
   }
 
   render() {
-    const startDate = <p className="lead">Start time: {this.props.vacation.start_date}</p>;
-    const endDate = <p className="lead">End time: {this.props.vacation.end_date}</p>;
-    const type = <p className="lead">Type: {this.props.vacation.type}</p>;
-    const status = <p className="lead">Status: {this.props.vacation.status}</p>;
+    const startDate = this.props.vacation.start_date;
+    const endDate = this.props.vacation.end_date;
+    const type = this.props.vacation.type;
+    const status = this.props.vacation.status;
     return (
-      <div key={this.props.vacation.id}>
-        {startDate}
-        {endDate}
-        {type}
-        {status}
-        <button className="btn btn-danger" onClick={this.handleDelete}> Delete</button>
-      </div>
+      <tr>
+        <td>{startDate}</td>
+        <td>{endDate}</td>
+        <td>{type}</td>
+        <td>{status}</td>
+        <td><button className="btn btn-danger" onClick={this.handleDelete}> Delete</button></td>
+      </tr>
     );
   }
 }

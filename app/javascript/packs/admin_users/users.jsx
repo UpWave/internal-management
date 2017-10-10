@@ -43,7 +43,23 @@ class Users extends React.Component {
     ));
     return (
       <div>
-        {users}
+        <table id="table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+              <th>Timelogs</th>
+              <th>Invoice</th>
+              <th>Skills</th>
+              <th>Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users}
+          </tbody>
+        </table>
       </div>
     );
   }
