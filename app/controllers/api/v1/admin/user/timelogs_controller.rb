@@ -72,7 +72,7 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
 
     def load_trello_service
       if @user.has_trello?
-        @trello_service = TrelloService.new(current_user)
+        @trello_service = TrelloService.new(@user)
       else
         @trello_service = nil
       end
