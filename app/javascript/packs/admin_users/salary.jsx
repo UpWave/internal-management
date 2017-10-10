@@ -8,18 +8,6 @@ import GreyWarnIcon from '../images/grey-warn-icon.png';
 import RedWarnIcon from '../images/red-warn-icon.png';
 import Fetch from '../Fetch';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: 'rgba(235, 235, 235, 0.5)',
-  },
-};
-
 class Salary extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -243,7 +231,7 @@ class Salary extends React.Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={customStyles}
+          className="Modal"
           contentLabel="Salary"
         >
           <h2 className="display-3">Salary</h2>

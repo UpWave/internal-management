@@ -11,18 +11,17 @@
     <meta name="keywords" content="Pooled Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
     Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <!-- Custom CSS -->
-    <link href="css/style.css" rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" href="css/morris.css" type="text/css"/>
-    <!-- Graph CSS -->
     <link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'/>
     <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <!-- lined-icons -->
-    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
-    <!-- //lined-icons -->
-    <!-- tables -->
-    <link rel="stylesheet" type="text/css" href="css/table-style.css" />
-    <link rel="stylesheet" type="text/css" href="css/basictable.css" />
+    <%= stylesheet_link_tag 'icon-font.min' %>
+    <%= javascript_include_tag 'jquery.basictable.min' %>
+    <%= javascript_include_tag 'jquery.nicescroll' %>
+    <%= javascript_include_tag 'scripts' %>
+    <%= stylesheet_link_tag 'morris' %>
+    <%= stylesheet_link_tag 'style' %>
+    <%= stylesheet_link_tag 'basictable' %>
+    <%= stylesheet_link_tag 'table-style' %>
+    <%= stylesheet_link_tag 'modal' %>
     <script type="text/javascript">
       $(document).ready(function() {
         $('#table').basictable();

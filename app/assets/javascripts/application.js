@@ -14,6 +14,4 @@
 //= require turbolinks
 //= require jquery
 //= require bootstrap-sprockets
-//= require jquery.basictable.min
-//= require scripts
 //= require_tree .

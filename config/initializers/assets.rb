@@ -12,3 +12,12 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
+Rails.application.config.assets.precompile += %w( basictable.css )
+Rails.application.config.assets.precompile += %w( table-style.css )
+Rails.application.config.assets.precompile += %w( modal.css )
+Rails.application.config.assets.precompile += %w( icon-font.min.css )
+Rails.application.config.assets.precompile += %w( morris.css )
+Rails.application.config.assets.precompile += %w( style.css )
+Rails.application.config.assets.precompile += %w( scripts.js )
+Rails.application.config.assets.precompile += %w( jquery.basictable.min.js )
+Rails.application.config.assets.precompile += %w( jquery.nicescroll.js )
