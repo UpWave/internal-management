@@ -177,28 +177,22 @@ class Body extends React.Component {
                 </button>
               </form>
             </div>
+          </div>
+          <div className="row">
             <div className="col-md-4">
-              <div className="well">
-                <p className="lead"><strong>Sick leave</strong></p>
-                <p className="lead">pending: {sickLeavePending}</p>
-                <p className="lead">approved: {sickLeaveApproved}</p>
-              </div>
+              <p className="lead"><strong>Sick leave</strong></p>
+              <p className="lead">pending: {sickLeavePending}</p>
+              <p className="lead">approved: {sickLeaveApproved}</p>
             </div>
-
             <div className="col-md-4">
-              <div className="well">
-                <p className="lead"><strong>Planned vacation</strong></p>
-                <p className="lead">pending: {plannedVacPending}</p>
-                <p className="lead">approved: {plannedVacApproved}</p>
-              </div>
+              <p className="lead"><strong>Planned vacation</strong></p>
+              <p className="lead">pending: {plannedVacPending}</p>
+              <p className="lead">approved: {plannedVacApproved}</p>
             </div>
-
             <div className="col-md-4">
-              <div className="well">
-                <p className="lead"><strong>Unpaid day offs</strong></p>
-                <p className="lead">pending: {dayOffsPending}</p>
-                <p className="lead">approved: {dayOffsApproved}</p>
-              </div>
+              <p className="lead"><strong>Unpaid day offs</strong></p>
+              <p className="lead">pending: {dayOffsPending}</p>
+              <p className="lead">approved: {dayOffsApproved}</p>
             </div>
           </div>
         </div>
