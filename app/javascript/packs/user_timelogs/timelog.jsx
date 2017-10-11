@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
-import moment from 'moment-timezone';
+import moment from 'moment';
+import 'moment-timezone';
 
 class Timelog extends React.Component {
   constructor(props, context) {

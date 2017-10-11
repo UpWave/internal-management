@@ -1,6 +1,7 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
-import moment from 'moment-timezone';
+import moment from 'moment';
+import 'moment-timezone';
 import Fetch from '../Fetch';
 import Content from './content';
 
