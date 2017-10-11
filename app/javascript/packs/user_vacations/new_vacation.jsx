@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Fetch from '../Fetch';
 
 class NewVacation extends React.Component {
