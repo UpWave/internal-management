@@ -23,6 +23,23 @@ class TrelloService
     trello_boards
   end
 
+  def boards_with_cards
+    response = []
+    @trello_member.boards.each do |board|
+      current_board = []
+      current_board << board.name
+      board_cards = []
+      board.cards.each do |card|
+        if card.member_ids.include?(@trello_member.id)
+          board_cards << card.name
+        end
+      end
+      current_board << board_cards
+      response << current_board
+    end
+    response
+  end
+
   def member
     trello_member = @trello_member
   end

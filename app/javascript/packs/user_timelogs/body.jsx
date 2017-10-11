@@ -42,10 +42,11 @@ class UserTimelogs extends React.Component {
   }
 
   loadTrello() {
-    Fetch.json('/api/v1/timelogs/trello_cards')
+    Fetch.json('/api/v1/timelogs/boards_with_cards')
       .then((data) => {
         this.setState({ trelloCards: data });
         this.setState({ loadingFinished: true });
+        debugger
       }).catch(() => {
         this.setState({ trelloCards: false });
         this.setState({ loadingFinished: true });
@@ -253,7 +254,7 @@ class UserTimelogs extends React.Component {
       (<div className="w3l-table-info">
         <Timelogs
           key="timelogs"
-          trelloCards={this.state.trelloCards || []}
+          trelloData={this.state.trelloCards || [[]]}
           timelogs={this.state.timelogs || []}
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
@@ -262,7 +263,7 @@ class UserTimelogs extends React.Component {
       </div>)
       :
       null;
-    const trelloCards = (this.state.trelloCards);
+    const trelloCards = (this.state.trelloData);
     const loadingFinished = (this.state.loadingFinished);
     const mainComponent = (loadingFinished) ?
       (<div className="agile-grids">
@@ -271,7 +272,6 @@ class UserTimelogs extends React.Component {
           <div className="row">
             {filterCols}
           </div>
-          {newTimelog}
         </div>
       </div>)
       :

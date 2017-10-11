@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :timelogs do
         collection do
           get :trello_cards
+          get :boards_with_cards
           get :count_timelogs
         end
       end

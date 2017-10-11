@@ -2,7 +2,7 @@ require 'trello'
 class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_trello_service, only: [:trello_cards]
+  before_action :load_trello_service, only: [:trello_cards, :boards_with_cards]
 
   def index
     @timelogs = filtered_timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
@@ -20,6 +20,17 @@ class Api::V1::TimelogsController < Api::V1::BaseController
     else
       render json: { errors: 'Trello connection error' }, status: 422
     end
+  end
+
+  def boards_with_cards
+    all_data = @trello_service.boards_with_cards
+    test_arr = []
+    all_data.each do |board|
+      board_info = Hash.new
+      board_info[board[0]] = board[1]
+      test_arr << board_info
+    end
+    render json: test_arr
   end
 
   def create
