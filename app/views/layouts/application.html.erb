@@ -47,6 +47,14 @@
         $('#table-max-height').basictable({
           tableWrapper: true
         });
+        $(function() {
+          $("body").niceScroll({
+            cursorwidth: "8px",
+            cursorcolor: "rgb(27,147,225)",
+            zindex: 1000,
+            background: "rgb(255,255,255)",
+          });
+        });
       });
     </script>
 <!-- //tables -->
@@ -57,26 +65,6 @@
       <%= javascript_pack_tag 'layout/App' %>
     </div>
     <%= yield %>
-      <script>
-      var toggle = true;
-
-      $(".sidebar-icon").click(function() {
-        if (toggle)
-        {
-        $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
-        $("#menu span").css({"position":"absolute"});
-        }
-        else
-        {
-        $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
-        setTimeout(function() {
-          $("#menu span").css({"position":"relative"});
-        }, 400);
-        }
-
-              toggle = !toggle;
-            });
-      </script>
 <!--js -->
   </body>
 </html>

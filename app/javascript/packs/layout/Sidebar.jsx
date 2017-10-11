@@ -5,27 +5,6 @@ import {
 import PropTypes from 'prop-types';
 
 class Sidebar extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      toggle: true,
-    };
-    this.sideBarCollapse = this.sideBarCollapse.bind(this);
-  }
-
-  sideBarCollapse() {
-    if (this.state.toggle) {
-      $('.page-container').addClass('sidebar-collapsed').removeClass('sidebar-collapsed-back');
-      $('#menu span').css({ position: 'absolute' });
-    } else {
-      $('.page-container').removeClass('sidebar-collapsed').addClass('sidebar-collapsed-back');
-      setTimeout(() => {
-        $('#menu span').css({ position: 'relative' });
-      }, 400);
-    }
-    this.setState({ toggle: !this.state.toggle });
-  }
-
   render() {
     const signOutLink =
       (<li>
@@ -103,10 +82,10 @@ class Sidebar extends React.Component {
     if (this.props.logged) {
       if (this.props.admin) {
         return (
-          <div className="page-container">
+          <div>
             <div className="sidebar-menu">
               <header className="logo1">
-                <button className="fa fa-bars" onClick={this.sideBarCollapse} />
+                <button onClick={this.props.sideBarCollapse} className="sidebar-icon"><span className="fa fa-bars" /></button>
               </header>
               <div style={{ borderTop: '1px ridge rgba(255, 255, 255, 0.15)' }} />
               <div className="menu">
@@ -121,10 +100,10 @@ class Sidebar extends React.Component {
         );
       }
       return (
-        <div className="page-container">
+        <div>
           <div className="sidebar-menu">
             <header className="logo1">
-              <button className="fa fa-bars" onClick={this.sideBarCollapse} />
+              <button onClick={this.props.sideBarCollapse} className="sidebar-icon"><span className="fa fa-bars" /></button>
             </header>
             <div style={{ borderTop: '1px ridge rgba(255, 255, 255, 0.15)' }} />
             <div className="menu">
@@ -145,6 +124,7 @@ class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   signOutClick: PropTypes.func.isRequired,
+  sideBarCollapse: PropTypes.func.isRequired,
   hasGoogle: PropTypes.bool.isRequired,
   hasTrello: PropTypes.bool.isRequired,
   logged: PropTypes.bool.isRequired,

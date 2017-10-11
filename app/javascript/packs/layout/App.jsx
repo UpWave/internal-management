@@ -18,6 +18,7 @@ class App extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      toggle: true,
       loadingFinished: false,
       admin: false,
       logged: false,
@@ -26,6 +27,7 @@ class App extends React.Component {
     };
     this.isSignedIn = this.isSignedIn.bind(this);
     this.signOutClick = this.signOutClick.bind(this);
+    this.sideBarCollapse = this.sideBarCollapse.bind(this);
   }
 
   componentWillMount() {
@@ -65,6 +67,19 @@ class App extends React.Component {
       });
   }
 
+  sideBarCollapse() {
+    if (this.state.toggle) {
+      $('.page-container').addClass('sidebar-collapsed').removeClass('sidebar-collapsed-back');
+      $('#menu span').css({ position: 'absolute' });
+    } else {
+      $('.page-container').removeClass('sidebar-collapsed').addClass('sidebar-collapsed-back');
+      setTimeout(() => {
+        $('#menu span').css({ position: 'relative' });
+      }, 400);
+    }
+    this.setState({ toggle: !this.state.toggle });
+  }
+
   render() {
     const loadingFinished = this.state.loadingFinished;
     const logged = this.state.logged;
@@ -82,6 +97,7 @@ class App extends React.Component {
         hasGoogle={this.state.hasGoogle}
         signOutClick={this.signOutClick}
         hasTrello={this.state.hasTrello}
+        sideBarCollapse={this.sideBarCollapse}
       />
       <Content
         logged={this.state.logged}
@@ -96,7 +112,7 @@ class App extends React.Component {
     }
     return (
       <Router>
-        <div>
+        <div className="page-container" >
           {renderAll()}
         </div>
       </Router>
