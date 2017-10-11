@@ -15,11 +15,11 @@ class CommentPolicy
   end
 
   def update?
-    true if @current_user.admin? && @current_user.id == @comment.author_id
+    @current_user.admin? && @current_user.id == @comment.author_id
   end
 
   def destroy?
-    true if @current_user.admin? && @current_user.id == @comment.author_id
+    @current_user.admin? && @current_user.id == @comment.author_id
   end
 
 end

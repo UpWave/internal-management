@@ -113,7 +113,6 @@ ActiveRecord::Schema.define(version: 20171005192813) do
     t.index ["user_id"], name: "index_vacations_on_user_id"
   end
 
-  add_foreign_key "comments", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "salaries", "users"
   add_foreign_key "timelogs", "users"

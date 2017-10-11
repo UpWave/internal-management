@@ -318,7 +318,6 @@ class User extends React.Component {
   }
 
   handleUpdate(comment){
-    console.log(this.props.user);
     Fetch.putJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments/${comment.id}`, {
       body: comment.body,
     })

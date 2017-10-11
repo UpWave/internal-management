@@ -3,15 +3,13 @@ class Api::V1::Admin::User::CommentsController < Api::V1::BaseController
   before_action :load_comment, only: [:update, :destroy]
 
   def index
-    @user = User.find(params[:user_id])
-    @comments = @user.comments
+    @comments = Comment.for_user(params[:user_id])
     authorize @comments
     respond_with :api, :v1, :admin, @comments
   end
 
   def create
-    @comment = Comment.new(comment_params)
-    @comment.author_id = current_user.id
+    @comment = current_user.comments.new(comment_params)
     authorize @comment
     if @comment.save
       respond_with  @comment, json: @comment
