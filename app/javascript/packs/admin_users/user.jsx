@@ -9,6 +9,7 @@ import AlertContainer from 'react-alert';
 import Fetch from '../Fetch';
 import GreyWarnIcon from '../images/grey-warn-icon.png';
 import RedWarnIcon from '../images/red-warn-icon.png';
+import Comments from '../admin_comments/comments'
 
 class User extends React.Component {
   constructor(props, context) {
@@ -32,6 +33,7 @@ class User extends React.Component {
       allSkills: [],
       comments: [],
       body: "",
+      editableComment: false,
     };
     this.handleBack = this.handleBack.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -63,6 +65,8 @@ class User extends React.Component {
     this.loadComments = this.loadComments.bind(this);
     this.handleCommentChange = this.handleCommentChange.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
+    this.handleCommentDelete = this.handleCommentDelete.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -299,23 +303,44 @@ class User extends React.Component {
     }
   }
 
-  handleCommentChange(event) {
-    this.setState({ body: event.target.value });
-  }
-
   addNewComment() {
     Fetch.postJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments`, {
       body: this.state.body,
       user_id: this.props.user.id,
     })
       .then(() => {
-        // $("input[type=text], textarea").val("");
         this.msg.success(`Successfully added comment`);
         this.setState({ body: ""});
         this.loadComments();
       }).catch((errorResponse) => {
       this.msg.error(errorResponse.errors);
-    });
+    })
+  }
+
+  handleUpdate(comment){
+    console.log(this.props.user);
+    Fetch.putJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments/${comment.id}`, {
+      body: comment.body,
+    })
+      .then(() => {
+        this.msg.success(`Successfully updated comment`);
+        this.setState({ body: this.state.body});
+        this.loadComments();
+      }).catch((errorResponse) => {
+      this.msg.error(errorResponse.errors);
+    })
+  }
+
+  handleCommentDelete(id) {
+    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.props.user.id}/comments/${id}`)
+      .then(() => {
+        this.msg.success(`Successfully deleted comment`);
+      });
+    this.loadComments();
+  }
+
+  handleCommentChange(event) {
+    this.setState({ body: event.target.value });
   }
 
   mouseOverRed() {
@@ -518,22 +543,6 @@ class User extends React.Component {
         </Select>
         <button id="destroy-skill-rate" className="btn btn-default" onClick={this.destroySkillRate}>Delete</button>
       </Collapsible>);
-    const comments = this.state.comments.length === 0 ?
-      null
-      :
-      (
-        <div>
-          <p>Comments:</p>
-          {this.state.comments.map((comment) =>
-          <div key={comment.id}>
-            <p>{comment.body}</p>
-            <button>Delete</button>
-          </div>
-          )}
-
-        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-        </div>
-      );
 
     return (
       <div key={this.props.user.id}>
@@ -598,19 +607,27 @@ class User extends React.Component {
               {addCustomSkill}
             </div>
           </div>
+        </div>
 
-          {comments}
+        <div className="row">
+          <div className="well col-md-6">
+            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+            <Comments
+              key={this.state.comments.length.toString()}
+              comments={this.state.comments}
+              handleDelete={this.handleCommentDelete}
+              onUpdate={this.handleUpdate}
+            />
+          </div>
 
-          <div id="new_comment" className="comment">
-            <div className="col-md-4">
+            <div className="well col-md-6">
               <h3>Add new comment</h3>
               <input className="form-control" type="text" value={this.state.body} onChange={this.handleCommentChange} /><br />
               <button className="btn btn-success" onClick={this.addNewComment}>Add comment</button><br />
             </div>
             <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          </div>
-
         </div>
+
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
