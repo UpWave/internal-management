@@ -5,7 +5,7 @@ import Routes from './Routes';
 class Content extends React.Component {
   render() {
     return (
-      <div className="container">
+      <div className="left-content">
         <Routes
           logged={this.props.logged}
           admin={this.props.admin}
