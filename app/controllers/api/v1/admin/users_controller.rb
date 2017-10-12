@@ -38,6 +38,14 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
     end
   end
 
+  def reset_password
+    if @user.update_attributes(password: "very_secure_password")
+      respond_with @user, json: @user
+    else
+      render json: { errors: @user.errors.full_messages }, status: 422
+    end
+  end
+
   private
     def user_params
       params.require(:user).permit(:email, :role, :status)

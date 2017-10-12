@@ -7,6 +7,7 @@ import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
 import Skills from './skills';
 import Salary from './salary';
+import Fetch from '../Fetch';
 
 class User extends React.Component {
   constructor(props, context) {
@@ -20,6 +21,7 @@ class User extends React.Component {
     this.handleBack = this.handleBack.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleResetPassword = this.handleResetPassword.bind(this);
   }
 
   handleDelete() {
@@ -42,6 +44,16 @@ class User extends React.Component {
   handleBack() {
     this.setState({ editable: !this.state.editable });
   }
+
+  handleResetPassword() {
+    Fetch.putJSON(`/api/v1/admin/users/${this.props.user.id}/reset_password`)
+      .then(() => {
+        this.msg.success('Password reseted');
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
+      });
+  }
+
   render() {
     const email = this.props.user.email;
     const role = this.state.editable ?
@@ -74,6 +86,13 @@ class User extends React.Component {
         <td>{role}</td>
         <td>{status}</td>
         <td>
+          <button
+            id="reset-button"
+            className="btn btn-danger btn-sm"
+            onClick={this.handleResetPassword}
+          >
+            Reset
+          </button>
           <button
             className="btn btn-default btn-sm"
             onClick={this.handleDelete}
