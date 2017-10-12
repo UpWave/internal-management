@@ -39,10 +39,10 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
   end
 
   def reset_password
-    if @user.update_attributes(password: "very_secure_password")
-      respond_with @user, json: @user
+    if @user.send_reset_password_instructions
+      render json: { success: 'Reset link sent to user!'}, status: 200
     else
-      render json: { errors: @user.errors.full_messages }, status: 422
+      render json: { errors: 'Error during sending reset link' }, status: 422
     end
   end
 

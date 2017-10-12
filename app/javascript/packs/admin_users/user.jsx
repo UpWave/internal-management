@@ -47,8 +47,8 @@ class User extends React.Component {
 
   handleResetPassword() {
     Fetch.putJSON(`/api/v1/admin/users/${this.props.user.id}/reset_password`)
-      .then(() => {
-        this.msg.success('Password reseted');
+      .then((data) => {
+        this.msg.success(data.success);
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);
       });
