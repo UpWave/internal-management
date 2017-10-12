@@ -8,25 +8,30 @@ class NewTimelog extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      card: false,
+      card: this.props.trelloData[Object.keys(this.props.trelloData)[0]][0],
       duration: 0,
       startTime: 0,
+      board: Object.keys(this.props.trelloData)[0],
+      boardCards: this.props.trelloData[Object.keys(this.props.trelloData)[0]],
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleHoursChange = this.handleHoursChange.bind(this);
     this.handleMinutesChange = this.handleMinutesChange.bind(this);
+    this.boardChange = this.boardChange.bind(this);
   }
 
   handleClick() {
     const startTime = this.state.startTime;
     const duration = (this.state.hours * 60) + parseInt(this.state.minutes, 10);
-    const trelloCard = this.state.card || this.props.trelloCards[0];
+    const trelloCard = this.state.card;
+    const trelloBoard = this.state.board;
     Fetch.postJSON(`/api/v1/admin/user/users/${this.props.userId}/timelogs`, {
       timelog: {
         start_time: startTime,
         duration,
         trello_card: trelloCard,
+        trello_board: trelloBoard,
       },
     })
       .then(() => {
@@ -49,6 +54,14 @@ class NewTimelog extends React.Component {
     this.setState({ minutes: event.target.value });
   }
 
+  boardChange(event) {
+    this.setState({
+      board: event.target.value,
+      boardCards: this.props.trelloData[event.target.value],
+      card: this.props.trelloData[event.target.value][0] || null,
+    });
+  }
+
   render() {
     return (
       <div id="new_timelog" className="row">
@@ -59,36 +72,38 @@ class NewTimelog extends React.Component {
             type="datetime-local"
             onChange={this.handleStartDateChange}
           />
-          <br />
           <input
             className="form-control"
             type="number"
             onChange={this.handleHoursChange}
             placeholder="Enter duration in hours"
           />
-          <br />
           <input
             className="form-control"
             type="number"
             onChange={this.handleMinutesChange}
             placeholder="Enter duration in minutes"
           />
-          <br />
+          <Select
+            className="form-control"
+            onChange={this.boardChange}
+          >
+            {Object.keys(this.props.trelloData).map(option =>
+              <option key={option} value={option}>{option}</option>)}
+          </Select>
           <Select
             className="form-control"
             onChange={e => this.setState({ card: e.target.value })}
           >
-            {this.props.trelloCards.map(option =>
+            {this.state.boardCards.map(option =>
               <option key={option} value={option}>{option}</option>)}
           </Select>
-          <br />
           <button
             className="btn btn-success"
             onClick={this.handleClick}
           >
           Create
           </button>
-          <br />
         </div>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
@@ -98,7 +113,7 @@ class NewTimelog extends React.Component {
 
 NewTimelog.propTypes = {
   userId: PropTypes.string.isRequired,
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
+    trelloData: PropTypes.shape().isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

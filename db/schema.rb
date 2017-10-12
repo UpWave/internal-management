@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171002165034) do
+ActiveRecord::Schema.define(version: 20171012145644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20171002165034) do
     t.datetime "updated_at", null: false
     t.string "trello_card", null: false
     t.datetime "end_time"
+    t.string "trello_board", null: false
     t.index ["user_id"], name: "index_timelogs_on_user_id"
   end
 

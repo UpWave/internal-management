@@ -8,8 +8,10 @@ class NewTimelog extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      card: false,
+      card: this.props.trelloData[Object.keys(this.props.trelloData)[0]][0],
       startTime: 0,
+      board: Object.keys(this.props.trelloData)[0],
+      boardCards: this.props.trelloData[Object.keys(this.props.trelloData)[0]],
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -21,12 +23,14 @@ class NewTimelog extends React.Component {
   handleClick() {
     const startTime = this.state.startTime;
     const duration = (this.state.hours * 60) + parseInt(this.state.minutes, 10);
-    const trelloCard = this.state.card || this.props.trelloData[0][1][0];
+    const trelloCard = this.state.card;
+    const trelloBoard = this.state.board;
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
         start_time: startTime,
         duration,
         trello_card: trelloCard,
+        trello_board: trelloBoard,
       },
     })
       .then(() => {
@@ -50,7 +54,11 @@ class NewTimelog extends React.Component {
   }
 
   boardChange(event) {
-    this.setState({ board: event.target.value });
+    this.setState({
+      board: event.target.value,
+      boardCards: this.props.trelloData[event.target.value],
+      card: this.props.trelloData[event.target.value][0] || null,
+    });
   }
 
   render() {
@@ -79,14 +87,14 @@ class NewTimelog extends React.Component {
             className="form-control"
             onChange={this.boardChange}
           >
-            {this.props.trelloData.map(option =>
+            {Object.keys(this.props.trelloData).map(option =>
               <option key={option} value={option}>{option}</option>)}
           </Select>
           <Select
             className="form-control"
             onChange={e => this.setState({ card: e.target.value })}
           >
-            {this.props.trelloData.map(option =>
+            {this.state.boardCards.map(option =>
               <option key={option} value={option}>{option}</option>)}
           </Select>
           <br />
@@ -105,7 +113,7 @@ class NewTimelog extends React.Component {
 }
 
 NewTimelog.propTypes = {
-  trelloData: PropTypes.arrayOf(PropTypes.string).isRequired,
+  trelloData: PropTypes.shape().isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

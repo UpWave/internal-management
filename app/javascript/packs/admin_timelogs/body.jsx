@@ -48,12 +48,12 @@ class AdminTimelogs extends React.Component {
   }
 
   loadTrello() {
-    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs/trello_cards`)
+    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs/trello_boards_with_cards`)
       .then((data) => {
-        this.setState({ trelloCards: data });
+        this.setState({ trelloData: data });
         this.setState({ loadingFinished: true });
       }).catch(() => {
-        this.setState({ trelloCards: false });
+        this.setState({ trelloData: false });
         this.setState({ loadingFinished: true });
       });
   }
@@ -257,7 +257,7 @@ class AdminTimelogs extends React.Component {
     const newTimelog =
       (<NewTimelog
         key="new_timelog"
-        trelloCards={this.state.trelloCards || []}
+        trelloData={this.state.trelloData || []}
         handleSubmit={this.handleSubmit}
         userId={this.userId}
       />);
@@ -266,7 +266,7 @@ class AdminTimelogs extends React.Component {
         <Timelogs
           key="timelogs"
           userId={this.userId}
-          trelloCards={this.state.trelloCards || []}
+          trelloData={this.state.trelloData || []}
           timelogs={this.state.timelogs || []}
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
@@ -275,7 +275,7 @@ class AdminTimelogs extends React.Component {
       </div>)
       :
       null;
-    const trelloCards = (this.state.trelloCards);
+    const trelloData = (this.state.trelloData);
     const loadingFinished = (this.state.loadingFinished);
     const mainComponent = (loadingFinished) ?
       (<div className="agile-grids">
@@ -311,7 +311,7 @@ class AdminTimelogs extends React.Component {
       :
       null;
     function renderAll() {
-      if (loadingFinished && (trelloCards === false)) {
+      if (loadingFinished && (trelloData === false)) {
         return (<div>
           <h1>Current user has not connected Trello account or his boards are empty</h1>
         </div>);

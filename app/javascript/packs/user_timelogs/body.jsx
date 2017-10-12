@@ -42,13 +42,12 @@ class UserTimelogs extends React.Component {
   }
 
   loadTrello() {
-    Fetch.json('/api/v1/timelogs/boards_with_cards')
+    Fetch.json('/api/v1/timelogs/trello_boards_with_cards')
       .then((data) => {
-        this.setState({ trelloCards: data });
+        this.setState({ trelloData: data });
         this.setState({ loadingFinished: true });
-        debugger
       }).catch(() => {
-        this.setState({ trelloCards: false });
+        this.setState({ trelloData: false });
         this.setState({ loadingFinished: true });
       });
   }
@@ -130,6 +129,8 @@ class UserTimelogs extends React.Component {
       .then(() => {
         this.msg.success('Successfully updated timelog');
         this.loadTimelogs();
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
       });
   }
 
@@ -247,14 +248,14 @@ class UserTimelogs extends React.Component {
     const newTimelog =
       (<NewTimelog
         key="new_timelog"
-        trelloCards={this.state.trelloCards || []}
+        trelloData={this.state.trelloData || {}}
         handleSubmit={this.handleSubmit}
       />);
     const timelogsTable = this.state.timelogs.length > 0 ?
       (<div className="w3l-table-info">
         <Timelogs
           key="timelogs"
-          trelloData={this.state.trelloCards || [[]]}
+          trelloData={this.state.trelloData || {}}
           timelogs={this.state.timelogs || []}
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
@@ -263,7 +264,7 @@ class UserTimelogs extends React.Component {
       </div>)
       :
       null;
-    const trelloCards = (this.state.trelloData);
+    const trelloData = (this.state.trelloData);
     const loadingFinished = (this.state.loadingFinished);
     const mainComponent = (loadingFinished) ?
       (<div className="agile-grids">
@@ -272,12 +273,13 @@ class UserTimelogs extends React.Component {
           <div className="row">
             {filterCols}
           </div>
+          {newTimelog}
         </div>
       </div>)
       :
       null;
     function renderAll() {
-      if (loadingFinished && (trelloCards === false)) {
+      if (loadingFinished && (trelloData === false)) {
         return (<div>
           <h1>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
           and add cards to your boards</h1>

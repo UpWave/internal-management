@@ -3,7 +3,7 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_user
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_trello_service, only: [:trello_cards]
+  before_action :load_trello_service, only: [:trello_cards, :trello_boards_with_cards]
 
   def index
     respond_to do |format|
@@ -29,6 +29,18 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
   def trello_cards
     if @trello_service
       respond_with @trello_service.cards
+    else
+      render json: { errors: 'Trello connection error' }, status: 422
+    end
+  end
+
+  def trello_boards_with_cards
+    if @trello_service
+      board_info = Hash.new
+      @trello_service.boards_with_cards.each do |board|
+        board_info[board[0]] = board[1]
+      end
+      render json: board_info
     else
       render json: { errors: 'Trello connection error' }, status: 422
     end
@@ -67,7 +79,7 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card)
+      params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card, :trello_board)
     end
 
     def load_trello_service

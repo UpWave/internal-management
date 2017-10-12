@@ -2,7 +2,7 @@ require 'trello'
 class Api::V1::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_trello_service, only: [:trello_cards, :boards_with_cards]
+  before_action :load_trello_service, only: [:trello_cards, :trello_boards_with_cards]
 
   def index
     @timelogs = filtered_timelogs.paginate(:page => (params[:page].to_i+1).to_s, :per_page => params[:limit])
@@ -22,15 +22,16 @@ class Api::V1::TimelogsController < Api::V1::BaseController
     end
   end
 
-  def boards_with_cards
-    all_data = @trello_service.boards_with_cards
-    test_arr = []
-    all_data.each do |board|
+  def trello_boards_with_cards
+    if @trello_service
       board_info = Hash.new
-      board_info[board[0]] = board[1]
-      test_arr << board_info
+      @trello_service.boards_with_cards.each do |board|
+        board_info[board[0]] = board[1]
+      end
+      render json: board_info
+    else
+      render json: { errors: 'Trello connection error' }, status: 422
     end
-    render json: test_arr
   end
 
   def create
@@ -46,6 +47,8 @@ class Api::V1::TimelogsController < Api::V1::BaseController
   def update
     if @timelog.update_attributes(timelogs_params)
       respond_with @timelog, json: @timelog
+    else
+      render json: { errors: @timelog.errors.full_messages }, status: 422
     end
   end
 
@@ -65,7 +68,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :trello_card)
+      params.require(:timelog).permit(:start_time, :duration, :trello_card, :trello_board)
     end
 
     def load_trello_service
