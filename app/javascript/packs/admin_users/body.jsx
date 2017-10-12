@@ -3,8 +3,7 @@ import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
 import Fetch from '../Fetch';
 import Users from './users';
-import NewUser from './new_user';
-
+import { Link } from 'react-router-dom';
 
 class AdminUsers extends React.Component {
   constructor(props, context) {
@@ -130,7 +129,10 @@ class AdminUsers extends React.Component {
             handleUpdateSalary={this.handleUpdateSalary}
             setNewSalary={this.setNewSalary}
             salaryTypes={this.state.salaryTypes}
-          />
+          /> <br/>
+          <div>
+            <Link to="/admin/new_user" className="btn btn-success">Add New User</Link>
+          </div>
           <ReactPaginate
             previousLabel={'previous'}
             nextLabel={'next'}
@@ -143,12 +145,6 @@ class AdminUsers extends React.Component {
             containerClassName={'pagination'}
             subContainerClassName={'pages pagination'}
             activeClassName={'active'}
-          />
-          <NewUser
-            key="new_user"
-            roles={this.state.roles}
-            statuses={this.state.statuses}
-            loadUsers={this.loadUsers}
           />
         </div>
       </div>
