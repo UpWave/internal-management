@@ -66,4 +66,13 @@ RSpec.describe Api::V1::Admin::UsersController, :type => :controller do
     end
   end
 
+  describe "PUT #reset_password" do
+    it "resets a password for an user" do
+      old_password = other_user.encrypted_password
+      put :reset_password, format: :json, params: { id: other_user.id }
+      other_user.reload
+      expect(other_user.encrypted_password).to_not eql(old_password)
+    end
+  end
+
 end

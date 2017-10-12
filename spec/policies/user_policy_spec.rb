@@ -95,4 +95,18 @@ describe UserPolicy do
     end
   end
 
+  permissions :reset_password? do
+    it 'prevents other users from resetting' do
+      expect(subject).not_to permit(current_user, other_user)
+    end
+
+    it 'prevents owner from resetting' do
+      expect(subject).not_to permit(current_user, current_user)
+    end
+
+    it 'allows an admin to reset' do
+      expect(subject).to permit(admin, other_user)
+    end
+  end
+
 end
