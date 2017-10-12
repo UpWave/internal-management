@@ -9,6 +9,7 @@ import UserTimelogs from '../user_timelogs/body';
 import AdminVacations from '../admin_vacations/body';
 import UserProfile from '../user_profile/body';
 import AdminInvoices from '../admin_invoices/body';
+import NewUser from '../admin_users/new_user';
 
 class Routes extends React.Component {
   render() {
@@ -19,6 +20,7 @@ class Routes extends React.Component {
       <Route exact path="/admin/users" component={AdminUsers} />
       <Route exact path="/admin/skills" component={AdminSkills} />
       <Route exact path="/admin/vacations" component={AdminVacations} />
+      <Route exact path="/admin/new_user" component={NewUser} />
     </div>);
     const memberRoutes =
     (<div>
