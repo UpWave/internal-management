@@ -127,6 +127,13 @@ class User extends React.Component {
           />
           <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
         </td>
+        <td>
+          <Link
+            to={'/admin/users/'.concat(this.props.user.id).concat('/notes')}
+          >
+            <i className="fa fa fa-comment-o fa-3x" />
+          </Link>
+        </td>
       </tr>
     );
   }

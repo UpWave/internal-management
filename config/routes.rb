@@ -53,6 +53,7 @@ Rails.application.routes.draw do
             end
             resources :salaries
             resources :invoices
+            resources :comments
             resources :skills do
               collection do
                 get :missing
