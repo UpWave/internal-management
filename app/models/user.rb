@@ -96,7 +96,6 @@ class User < ApplicationRecord
     vacation_count("pending", "planned vacation")
   end
 
-
   def vacation_count(status, type)
     vacations = self.vacations.where(["status = ? and type = ?", Vacation.statuses["#{status}"],  Vacation.types["#{type}"]])
     days = 0
