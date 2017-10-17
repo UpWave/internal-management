@@ -42,4 +42,7 @@ class UserPolicy
     @current_user.admin?
   end
 
+  def reset_password?
+    @current_user.admin?
+  end
 end

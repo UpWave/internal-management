@@ -38,6 +38,14 @@ class Api::V1::Admin::UsersController < Api::V1::BaseController
     end
   end
 
+  def reset_password
+    if @user.send_reset_password_instructions
+      render json: { success: 'Reset link sent to user!'}, status: 200
+    else
+      render json: { errors: 'Error during sending reset link' }, status: 422
+    end
+  end
+
   private
     def user_params
       params.require(:user).permit(:email, :role, :status)

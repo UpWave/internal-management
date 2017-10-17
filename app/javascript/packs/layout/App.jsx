@@ -83,12 +83,15 @@ class App extends React.Component {
   render() {
     const loadingFinished = this.state.loadingFinished;
     const logged = this.state.logged;
-    const signIn = (loadingFinished && (logged === false)) ?
+    let signIn = (loadingFinished && (logged === false)) ?
       (<SignIn
         isSignedIn={this.isSignedIn}
       />)
       :
       null;
+    if (window.location.href.match(/users\/password/)) {
+      signIn = null;
+    }
     const mainComponent =
     (<div>
       <Sidebar

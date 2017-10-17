@@ -75,8 +75,10 @@ class AdminUsers extends React.Component {
   handleDelete(id) {
     Fetch.deleteJSON(`/api/v1/admin/users/${id}`)
       .then(() => {
-        if (this.state.currentPage === this.state.pageCount - 1) {
-          this.setState({ currentPage: this.state.currentPage - 1 });
+        if (this.state.users.length === 1) {
+          if (this.state.currentPage !== 0) {
+            this.setState({ currentPage: this.state.currentPage - 1 });
+          }
         }
         this.loadUsers();
         this.msg.success('User deleted');
