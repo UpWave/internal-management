@@ -34,10 +34,10 @@ class Content extends React.Component {
         <td>{timelog.trello_card}</td>
         <td>{timelog.duration}</td>
         <td>
-          {moment(timelog.start_time).format('YYYY/MM/DD, HH:mm')}
+          {moment(timelog.start_time.slice(0, -5)).format('YYYY/MM/DD, HH:mm')}
         </td>
         <td>
-          {moment(timelog.end_time).format('YYYY/MM/DD, HH:mm')}
+          {moment(timelog.end_time.slice(0, -5)).format('YYYY/MM/DD, HH:mm')}
         </td>
       </tr>
     ));
