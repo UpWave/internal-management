@@ -1,12 +1,12 @@
-require 'trello'
 class Api::V1::TrelloBoardsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_trello_service
 
   def index
-    authorize(:trello_boards, :index?)
     if @trello_service
-      render json: @trello_service.boards_with_cards
+      if (authorize @trello_service)
+        render json: @trello_service.boards_with_cards
+      end
     else
       render json: { errors: 'Trello connection error' }, status: 422
     end

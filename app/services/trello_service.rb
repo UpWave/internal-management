@@ -32,8 +32,8 @@ class TrelloService
     board_info
   end
 
-  def member
-    trello_member = @trello_member
+  def member_id
+    @trello_member.id
   end
 
 end
