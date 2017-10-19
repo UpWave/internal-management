@@ -6,11 +6,7 @@ class Api::V1::TrelloBoardsController < Api::V1::BaseController
   def index
     authorize(:trello_boards, :index?)
     if @trello_service
-      board_info = Hash.new
-      @trello_service.boards_with_cards.each do |board|
-        board_info[board[0]] = board[1]
-      end
-      render json: board_info
+      render json: @trello_service.boards_with_cards
     else
       render json: { errors: 'Trello connection error' }, status: 422
     end
