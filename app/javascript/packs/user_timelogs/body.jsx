@@ -18,6 +18,10 @@ class UserTimelogs extends React.Component {
       startTime: 0,
       endTime: 0,
       filter: '',
+      durationOrderBool: true,
+      startTimeOrderBool: true,
+      endTimeOrderBool: true,
+      trelloCardOrderBool: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -28,8 +32,10 @@ class UserTimelogs extends React.Component {
     this.filterByDuration = this.filterByDuration.bind(this);
     this.filterByStartTime = this.filterByStartTime.bind(this);
     this.filterByEndTime = this.filterByEndTime.bind(this);
+    this.filterByTrelloCard = this.filterByTrelloCard.bind(this);
     this.filterByTimeRange = this.filterByTimeRange.bind(this);
     this.discardFilter = this.discardFilter.bind(this);
+    this.clearFilterBools = this.clearFilterBools.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
@@ -89,21 +95,78 @@ class UserTimelogs extends React.Component {
       });
   }
 
+  clearFilterBools(filter) {
+    switch (filter) {
+      case 'duration':
+        this.setState({
+          durationOrderBool: !this.state.durationOrderBool,
+          startTimeOrderBool: true,
+          endTimeOrderBool: true,
+          trelloCardOrderBool: true,
+        });
+        break;
+      case 'start_time':
+        this.setState({
+          startTimeOrderBool: !this.state.startTimeOrderBool,
+          durationOrderBool: true,
+          endTimeOrderBool: true,
+          trelloCardOrderBool: true,
+        });
+        break;
+      case 'end_time':
+        this.setState({
+          endTimeOrderBool: !this.state.endTimeOrderBool,
+          startTimeOrderBool: true,
+          durationOrderBool: true,
+          trelloCardOrderBool: true,
+        });
+        break;
+      case 'trello_card':
+        this.setState({
+          trelloCardOrderBool: !this.state.trelloCardOrderBool,
+          startTimeOrderBool: true,
+          endTimeOrderBool: true,
+          durationOrderBool: true,
+        });
+        break;
+      default:
+    }
+  }
+
   filterByDuration() {
-    this.setState({ filter: 'duration' }, () => {
-      this.loadTimelogs();
+    this.setState({ durationOrder: this.state.durationOrderBool ? 'asc_' : 'desc_' }, () => {
+      this.setState({ filter: this.state.durationOrder.concat('duration') }, () => {
+        this.loadTimelogs();
+        this.clearFilterBools('duration');
+      });
     });
   }
 
+
   filterByStartTime() {
-    this.setState({ filter: 'start_time' }, () => {
-      this.loadTimelogs();
+    this.setState({ startTimeOrder: this.state.startTimeOrderBool ? 'asc_' : 'desc_' }, () => {
+      this.setState({ filter: this.state.startTimeOrder.concat('start_time') }, () => {
+        this.loadTimelogs();
+        this.clearFilterBools('start_time');
+      });
     });
   }
 
   filterByEndTime() {
-    this.setState({ filter: 'end_time' }, () => {
-      this.loadTimelogs();
+    this.setState({ endTimeOrder: this.state.endTimeOrderBool ? 'asc_' : 'desc_' }, () => {
+      this.setState({ filter: this.state.endTimeOrder.concat('end_time') }, () => {
+        this.loadTimelogs();
+        this.clearFilterBools('end_time');
+      });
+    });
+  }
+
+  filterByTrelloCard() {
+    this.setState({ trelloCardOrder: this.state.trelloCardOrderBool ? 'asc_' : 'desc_' }, () => {
+      this.setState({ filter: this.state.trelloCardOrder.concat('trello_card') }, () => {
+        this.loadTimelogs();
+        this.clearFilterBools('trello_card');
+      });
     });
   }
 
@@ -112,6 +175,7 @@ class UserTimelogs extends React.Component {
       this.loadTimelogs();
     });
   }
+
 
   removeTimelog() {
     if (this.state.timelogs.length === 1) {
@@ -124,7 +188,7 @@ class UserTimelogs extends React.Component {
 
   handleUpdate(timelog) {
     Fetch.putJSON(`/api/v1/timelogs/${timelog.id}`, {
-      timelog: timelog,
+      timelog,
     })
       .then(() => {
         this.msg.success('Successfully updated timelog');
@@ -173,27 +237,6 @@ class UserTimelogs extends React.Component {
   render() {
     const filterCols = this.state.timelogs.length > 0 ?
       (<div>
-        <div className="col-md-4">
-          <h3>Filter by</h3>
-          <button
-            className="btn btn-info"
-            onClick={this.filterByDuration}
-          >
-          Duration
-          </button>
-          <button
-            className="btn btn-info"
-            onClick={this.filterByStartTime}
-          >
-          Start time
-          </button>
-          <button
-            className="btn btn-info"
-            onClick={this.filterByEndTime}
-          >
-            End time
-          </button>
-        </div>
         <div className="col-md-3">
           <h3>Select time range</h3>
           <input
@@ -225,20 +268,22 @@ class UserTimelogs extends React.Component {
             Submit
           </button>
         </div>
-        <div className="col-md-4">
-          <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
-            breakLabel={<a href="">...</a>}
-            breakClassName={'break-me'}
-            pageCount={this.state.pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={this.handlePageClick}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'}
-          />
+        <div className="col-md-9">
+          <span className="float-right">
+            <ReactPaginate
+              previousLabel={'previous'}
+              nextLabel={'next'}
+              breakLabel={<a href="">...</a>}
+              breakClassName={'break-me'}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
+          </span>
         </div>
       </div>)
       :
@@ -258,6 +303,14 @@ class UserTimelogs extends React.Component {
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
           onUpdate={this.handleUpdate}
+          filterByDuration={this.filterByDuration}
+          filterByStartTime={this.filterByStartTime}
+          filterByEndTime={this.filterByEndTime}
+          filterByTrelloCard={this.filterByTrelloCard}
+          durationOrderBool={this.state.durationOrderBool}
+          startTimeOrderBool={this.state.startTimeOrderBool}
+          endTimeOrderBool={this.state.endTimeOrderBool}
+          trelloCardOrderBool={this.state.trelloCardOrderBool}
         />
       </div>)
       :

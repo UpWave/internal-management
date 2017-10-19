@@ -2,6 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Timelog from './timelog';
 
+function makeSpanVisible(event) {
+  $('#'.concat(event.target.id.concat('-span'))).css('visibility', 'visible')
+}
+
+function makeSpanHidden(event) {
+  $('#'.concat(event.target.id.concat('-span'))).css('visibility', 'hidden')
+}
+
 class Timelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -31,10 +39,74 @@ class Timelogs extends React.Component {
       <table id="table">
         <thead>
           <tr>
-            <th>Start time</th>
-            <th>Duration</th>
-            <th>Trello card</th>
-            <th>End time</th>
+            <th>
+              <span
+                role="button"
+                tabIndex={0}
+                id="start-time"
+                onMouseOver={makeSpanVisible}
+                onMouseLeave={makeSpanHidden}
+                onClick={this.props.filterByStartTime}
+              >
+              Start time
+              </span>
+              <i
+                id="start-time-span"
+                style={{ visibility: 'hidden' }}
+                className={this.props.startTimeOrderBool ? 'fa fa-caret-down' : 'fa fa-caret-up'}
+              />
+            </th>
+            <th>
+              <span
+                role="button"
+                tabIndex={0}
+                id="duration"
+                onMouseOver={makeSpanVisible}
+                onMouseLeave={makeSpanHidden}
+                onClick={this.props.filterByDuration}
+              >
+              Duration
+              </span>
+              <i
+                id="duration-span"
+                style={{ visibility: 'hidden' }}
+                className={this.props.durationOrderBool ? 'fa fa-caret-down' : 'fa fa-caret-up'}
+              />
+            </th>
+            <th>
+              <span
+                role="button"
+                tabIndex={0}
+                id="trello-card"
+                onMouseOver={makeSpanVisible}
+                onMouseLeave={makeSpanHidden}
+                onClick={this.props.filterByTrelloCard}
+              >
+              Trello Card
+              </span>
+              <i
+                id="trello-card-span"
+                style={{ visibility: 'hidden' }}
+                className={this.props.trelloCardOrderBool ? 'fa fa-caret-down' : 'fa fa-caret-up'}
+              />
+            </th>
+            <th>
+              <span
+                role="button"
+                tabIndex={0}
+                id="end-time"
+                onMouseOver={makeSpanVisible}
+                onMouseLeave={makeSpanHidden}
+                onClick={this.props.filterByEndTime}
+              >
+              End Time
+              </span>
+              <i
+                id="end-time-span"
+                style={{ visibility: 'hidden' }}
+                className={this.props.endTimeOrderBool ? 'fa fa-caret-down' : 'fa fa-caret-up'}
+              />
+            </th>
             <th>Action</th>
           </tr>
         </thead>
@@ -57,6 +129,14 @@ Timelogs.propTypes = {
   trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  filterByDuration: PropTypes.func.isRequired,
+  filterByStartTime: PropTypes.func.isRequired,
+  filterByEndTime: PropTypes.func.isRequired,
+  filterByTrelloCard: PropTypes.func.isRequired,
+  durationOrderBool: PropTypes.bool.isRequired,
+  startTimeOrderBool: PropTypes.bool.isRequired,
+  endTimeOrderBool: PropTypes.bool.isRequired,
+  trelloCardOrderBool: PropTypes.bool.isRequired,
 };
 
 export default Timelogs;
