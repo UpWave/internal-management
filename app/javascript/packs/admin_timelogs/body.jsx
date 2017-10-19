@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
-import { ProgressBar } from 'react-fetch-progressbar';
 import Timelogs from './timelogs';
-import NewTimelog from './new_timelog';
 import Fetch from '../Fetch';
 
 
@@ -16,7 +14,6 @@ class AdminTimelogs extends React.Component {
     this.userId = window.location.href.match(this.userIdPattern)[0].replace('users/', '');
     this.state = {
       timelogs: [],
-      loadingFinished: false,
       page: 0,
       pageCount: 1,
       perPage: 4,
@@ -29,7 +26,6 @@ class AdminTimelogs extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.removeTimelog = this.removeTimelog.bind(this);
     this.updateTimelogs = this.updateTimelogs.bind(this);
-    this.loadTrello = this.loadTrello.bind(this);
     this.loadTimelogs = this.loadTimelogs.bind(this);
     this.filterByDuration = this.filterByDuration.bind(this);
     this.filterByStartTime = this.filterByStartTime.bind(this);
@@ -43,19 +39,7 @@ class AdminTimelogs extends React.Component {
   }
 
   componentDidMount() {
-    this.loadTrello();
     this.loadTimelogs();
-  }
-
-  loadTrello() {
-    Fetch.json(`/api/v1/admin/user/users/${this.userId}/timelogs/trello_boards_with_cards`)
-      .then((data) => {
-        this.setState({ trelloData: data });
-        this.setState({ loadingFinished: true });
-      }).catch(() => {
-        this.setState({ trelloData: false });
-        this.setState({ loadingFinished: true });
-      });
   }
 
   loadTimelogs() {
@@ -254,19 +238,11 @@ class AdminTimelogs extends React.Component {
       </div>)
       :
       null;
-    const newTimelog =
-      (<NewTimelog
-        key="new_timelog"
-        trelloData={this.state.trelloData || []}
-        handleSubmit={this.handleSubmit}
-        userId={this.userId}
-      />);
     const timelogsTable = this.state.timelogs.length > 0 ?
       (<div className="w3l-table-info">
         <Timelogs
           key="timelogs"
           userId={this.userId}
-          trelloData={this.state.trelloData || []}
           timelogs={this.state.timelogs || []}
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
@@ -275,9 +251,7 @@ class AdminTimelogs extends React.Component {
       </div>)
       :
       null;
-    const trelloData = (this.state.trelloData);
-    const loadingFinished = (this.state.loadingFinished);
-    const mainComponent = (loadingFinished) ?
+    const mainComponent =
       (<div className="agile-grids">
         <div className="agile-tables">
           {timelogsTable}
@@ -305,23 +279,11 @@ class AdminTimelogs extends React.Component {
               ><button className="btn btn-primary">Download CSV</button></a>
             </div>
           </div>
-          {newTimelog}
         </div>
-      </div>)
-      :
-      null;
-    function renderAll() {
-      if (loadingFinished && (trelloData === false)) {
-        return (<div>
-          <h1>Current user has not connected Trello account or his boards are empty</h1>
-        </div>);
-      }
-      return mainComponent;
-    }
+      </div>);
     return (
       <div>
-        <ProgressBar />
-        {renderAll()}
+        {mainComponent}
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );

@@ -21,7 +21,6 @@ class Timelogs extends React.Component {
       <Timelog
         id={timelog.id}
         key={timelog.id.toString()}
-        trelloData={this.props.trelloData}
         timelog={timelog}
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
@@ -56,7 +55,6 @@ Timelogs.propTypes = {
     start_time: PropTypes.string,
     end_time: PropTypes.string,
   })).isRequired,
-  trelloData: PropTypes.shape().isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
