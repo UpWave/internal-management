@@ -4,6 +4,7 @@ class Api::V1::TrelloBoardsController < Api::V1::BaseController
   before_action :load_trello_service
 
   def index
+    authorize(:trello_boards, :index?)
     if @trello_service
       board_info = Hash.new
       @trello_service.boards_with_cards.each do |board|
