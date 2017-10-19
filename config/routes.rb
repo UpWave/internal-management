@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
-      resource :profile
+      resource :profile do
+        resources :trello_boards, only: [:index]
+      end
       resources :vacations
       namespace :vacation_types do
         resources :types, only: [:index]
@@ -16,8 +18,6 @@ Rails.application.routes.draw do
       end
       resources :timelogs do
         collection do
-          get :trello_cards
-          get :trello_boards_with_cards
           get :count_timelogs
         end
       end
@@ -48,8 +48,6 @@ Rails.application.routes.draw do
           resources :users, only: [] do
             resources :timelogs do
               collection do
-                get :trello_cards
-                get :trello_boards_with_cards
                 get :count_timelogs
               end
             end

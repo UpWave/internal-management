@@ -42,7 +42,7 @@ class UserTimelogs extends React.Component {
   }
 
   loadTrello() {
-    Fetch.json('/api/v1/timelogs/trello_boards_with_cards')
+    Fetch.json('/api/v1/profile/trello_boards')
       .then((data) => {
         this.setState({ trelloData: data });
         this.setState({ loadingFinished: true });
