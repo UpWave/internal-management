@@ -3,7 +3,7 @@ class Api::V1::ProfilesController < Api::V1::BaseController
 
   def show
     authorize(:profile, :show?)
-    render json: current_user
+    render json: current_user, serializer: ProfileSerializer
   end
 
   def update

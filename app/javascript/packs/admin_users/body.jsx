@@ -1,9 +1,9 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom';
 import Fetch from '../Fetch';
 import Users from './users';
-import { Link } from 'react-router-dom';
 
 class AdminUsers extends React.Component {
   constructor(props, context) {
@@ -44,7 +44,7 @@ class AdminUsers extends React.Component {
 
   setNewSalary(salary, id) {
     Fetch.postJSON(`/api/v1/admin/user/users/${id}/salaries`, {
-      salary: salary,
+      salary,
     })
       .then(() => {
         this.msg.success('Successfully set new salary');
@@ -87,7 +87,7 @@ class AdminUsers extends React.Component {
 
   handleUpdateSalary(salary, id) {
     Fetch.putJSON(`/api/v1/admin/user/users/${id}/salaries/${id}`, {
-      salary: salary,
+      salary,
     })
       .then(() => {
         this.msg.success('Salary updated');
@@ -97,7 +97,7 @@ class AdminUsers extends React.Component {
   }
   handleUpdate(user) {
     Fetch.putJSON(`/api/v1/admin/users/${user.id}`, {
-      user: user,
+      user,
     })
       .then(() => {
         this.msg.success('User updated');
@@ -131,7 +131,7 @@ class AdminUsers extends React.Component {
             handleUpdateSalary={this.handleUpdateSalary}
             setNewSalary={this.setNewSalary}
             salaryTypes={this.state.salaryTypes}
-          /> <br/>
+          /> <br />
           <div>
             <Link to="/admin/new_user" className="btn btn-success">Add New User</Link>
           </div>
