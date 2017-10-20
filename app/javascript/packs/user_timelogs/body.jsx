@@ -47,8 +47,8 @@ class UserTimelogs extends React.Component {
         this.setState({ trelloCards: data });
         this.setState({ loadingFinished: true });
       }).catch(() => {
-      this.setState({ trelloCards: false });
-      this.setState({ loadingFinished: true });
+        this.setState({ trelloCards: false });
+        this.setState({ loadingFinished: true });
     });
   }
 

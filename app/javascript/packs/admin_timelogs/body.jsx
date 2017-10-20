@@ -52,8 +52,8 @@ class AdminTimelogs extends React.Component {
         this.setState({ trelloCards: data });
         this.setState({ loadingFinished: true });
       }).catch(() => {
-      this.setState({ trelloCards: false });
-      this.setState({ loadingFinished: true });
+        this.setState({ trelloCards: false });
+        this.setState({ loadingFinished: true });
     });
   }
 
@@ -136,7 +136,7 @@ class AdminTimelogs extends React.Component {
         this.msg.success('Timelog updated');
         this.updateTimelogs();
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
+        this.msg.error(errorResponse.errors);
     });
   }
 

@@ -28,7 +28,7 @@ class NewUserTimelog extends React.Component {
       .then((data) => {
         this.setState({ trelloCards: data });
       }).catch(() => {
-      this.setState({ trelloCards: false });
+        this.setState({ trelloCards: false });
     });
   }
 
@@ -47,7 +47,7 @@ class NewUserTimelog extends React.Component {
         this.msg.success('Successfully created timelog!');
         this.setState({ redirect: true })
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
+        this.msg.error(errorResponse.errors);
     });
   }
 

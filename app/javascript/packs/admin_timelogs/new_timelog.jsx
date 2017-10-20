@@ -30,7 +30,7 @@ class NewAdminTimelog extends React.Component {
       .then((data) => {
         this.setState({ trelloCards: data });
       }).catch(() => {
-      this.setState({ trelloCards: false });
+        this.setState({ trelloCards: false });
     });
   }
 
@@ -49,7 +49,7 @@ class NewAdminTimelog extends React.Component {
         this.msg.success('Successfully created timelog!');
         this.setState({ redirect: true });
       }).catch((e) => {
-      this.msg.error(e.errors);
+        this.msg.error(e.errors);
     });
   }
 
