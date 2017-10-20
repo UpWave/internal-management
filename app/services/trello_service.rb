@@ -12,24 +12,17 @@ class TrelloService
   end
 
   def boards_with_cards
-    response = []
+    response = Hash.new
     @trello_member.boards.each do |board|
-      current_board = []
-      current_board << board.name
-      board_cards = []
+      cards = []
       board.cards.each do |card|
         if card.member_ids.include?(@trello_member.id)
-          board_cards << card.name
+          cards << card.name
         end
       end
-      current_board << board_cards
-      response << current_board
+      response[board.name] = cards
     end
-    board_info = Hash.new
-    response.each do |board|
-      board_info[board[0]] = board[1]
-    end
-    board_info
+    response
   end
 
   def member_id
