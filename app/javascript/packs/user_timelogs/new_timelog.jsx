@@ -18,12 +18,12 @@ class NewTimelog extends React.Component {
   }
 
   handleClick() {
-    const startTime = this.state.startTime;
+    const startTime = new Date(this.state.startTime);
     const duration = (this.state.hours * 60) + parseInt(this.state.minutes, 10);
     const trelloCard = this.state.card || this.props.trelloCards[0];
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
-        start_time: startTime,
+        start_time: startTime.toISOString(),
         duration,
         trello_card: trelloCard,
       },
@@ -37,8 +37,7 @@ class NewTimelog extends React.Component {
   }
 
   handleStartDateChange(event) {
-    const utcStartTime = new Date(event.target.value);
-    this.setState({ startTime: utcStartTime.toISOString() });
+    this.setState({ startTime: event.target.value });
   }
 
   handleHoursChange(event) {
