@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
-import { ProgressBar } from 'react-fetch-progressbar';
 import Timelogs from './timelogs';
-import NewTimelog from './new_timelog';
 import Fetch from '../Fetch';
+import { Link } from 'react-router-dom';
 
 
 class AdminTimelogs extends React.Component {
@@ -53,9 +52,9 @@ class AdminTimelogs extends React.Component {
         this.setState({ trelloCards: data });
         this.setState({ loadingFinished: true });
       }).catch(() => {
-        this.setState({ trelloCards: false });
-        this.setState({ loadingFinished: true });
-      });
+      this.setState({ trelloCards: false });
+      this.setState({ loadingFinished: true });
+    });
   }
 
   loadTimelogs() {
@@ -137,8 +136,8 @@ class AdminTimelogs extends React.Component {
         this.msg.success('Timelog updated');
         this.updateTimelogs();
       }).catch((errorResponse) => {
-        this.msg.error(errorResponse.errors);
-      });
+      this.msg.error(errorResponse.errors);
+    });
   }
 
   updateTimelogs() {
@@ -192,13 +191,13 @@ class AdminTimelogs extends React.Component {
             className="btn btn-info"
             onClick={this.filterByDuration}
           >
-          Duration
+            Duration
           </button>
           <button
             className="btn btn-info"
             onClick={this.filterByStartTime}
           >
-          Start time
+            Start time
           </button>
           <button
             className="btn btn-info"
@@ -254,13 +253,6 @@ class AdminTimelogs extends React.Component {
       </div>)
       :
       null;
-    const newTimelog =
-      (<NewTimelog
-        key="new_timelog"
-        trelloCards={this.state.trelloCards || []}
-        handleSubmit={this.handleSubmit}
-        userId={this.userId}
-      />);
     const timelogsTable = this.state.timelogs.length > 0 ?
       (<div className="w3l-table-info">
         <Timelogs
@@ -305,7 +297,9 @@ class AdminTimelogs extends React.Component {
               ><button className="btn btn-primary">Download CSV</button></a>
             </div>
           </div>
-          {newTimelog}
+          <div>
+            <Link to={'/admin/'+ this.userId + '/new_timelog'} className="btn btn-success">Add New Timelog</Link>
+          </div>
         </div>
       </div>)
       :
@@ -320,7 +314,6 @@ class AdminTimelogs extends React.Component {
     }
     return (
       <div>
-        <ProgressBar />
         {renderAll()}
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>

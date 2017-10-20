@@ -1,26 +1,41 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
 import Fetch from '../Fetch';
+import { Redirect } from 'react-router';
 
-class NewTimelog extends React.Component {
+class NewUserTimelog extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      card: false,
+      redirect: false,
       startTime: 0,
+      trelloCards:[],
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleHoursChange = this.handleHoursChange.bind(this);
     this.handleMinutesChange = this.handleMinutesChange.bind(this);
+    this.loadTrello = this.loadTrello.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadTrello();
+  }
+
+  loadTrello() {
+    Fetch.json('/api/v1/timelogs/trello_cards')
+      .then((data) => {
+        this.setState({ trelloCards: data });
+      }).catch(() => {
+      this.setState({ trelloCards: false });
+    });
   }
 
   handleClick() {
     const startTime = this.state.startTime;
     const duration = (parseInt(this.state.hours || 0, 10) * 60) + parseInt(this.state.minutes || 0, 10);
-    const trelloCard = this.state.card || this.props.trelloCards[0];
+    const trelloCard = this.state.card || this.state.trelloCards[0];
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
         start_time: startTime,
@@ -30,10 +45,10 @@ class NewTimelog extends React.Component {
     })
       .then(() => {
         this.msg.success('Successfully created timelog!');
-        this.props.handleSubmit();
-      }).catch((e) => {
-        this.msg.error(e.errors);
-      });
+        this.setState({ redirect: true })
+      }).catch((errorResponse) => {
+      this.msg.error(errorResponse.errors);
+    });
   }
 
   handleStartDateChange(event) {
@@ -49,6 +64,12 @@ class NewTimelog extends React.Component {
   }
 
   render() {
+    if (this.state.redirect){
+      return (
+        <Redirect to="/user/timelogs" />
+      )
+    }
+
     return (
       <div id="new_timelog" className="row">
         <div className="col-md-4">
@@ -77,7 +98,7 @@ class NewTimelog extends React.Component {
             className="form-control"
             onChange={e => this.setState({ card: e.target.value })}
           >
-            {this.props.trelloCards.map(option =>
+            {this.state.trelloCards.map(option =>
               <option key={option} value={option}>{option}</option>)}
           </Select>
           <br />
@@ -85,7 +106,7 @@ class NewTimelog extends React.Component {
             className="btn btn-success"
             onClick={this.handleClick}
           >
-          Create
+            Create
           </button>
           <br />
         </div>
@@ -95,9 +116,4 @@ class NewTimelog extends React.Component {
   }
 }
 
-NewTimelog.propTypes = {
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-};
-
-export default NewTimelog;
+export default NewUserTimelog;
