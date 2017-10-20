@@ -54,10 +54,10 @@ class Timelog extends React.Component {
         type="datetime-local"
         className="form-control"
         onChange={this.handleStartDateChange}
-        defaultValue={moment(this.props.timelog.start_time.slice(0, -5)).format('YYYY-MM-DDTHH:mm')}
+        defaultValue={moment(this.props.timelog.start_time).format('YYYY-MM-DDTHH:mm')}
       />)
       :
-      moment(this.props.timelog.start_time.slice(0, -5)).format('YYYY/MM/DD, HH:mm');
+      moment(this.props.timelog.start_time).format('YYYY/MM/DD, HH:mm');
     const duration = this.state.editable ?
       (<input
         type="number"
@@ -80,7 +80,7 @@ class Timelog extends React.Component {
       :
       this.props.timelog.trello_card;
     const endTime =
-      moment(this.props.timelog.end_time.slice(0, -5)).format('YYYY/MM/DD, HH:mm');
+      moment(this.props.timelog.end_time).format('YYYY/MM/DD, HH:mm');
 
     return (
       <tr>

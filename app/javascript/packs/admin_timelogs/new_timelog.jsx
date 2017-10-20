@@ -38,7 +38,8 @@ class NewTimelog extends React.Component {
   }
 
   handleStartDateChange(event) {
-    this.setState({ startTime: event.target.value });
+    const utcStartTime = new Date(event.target.value);
+    this.setState({ startTime: utcStartTime.toISOString() });
   }
 
   handleHoursChange(event) {
