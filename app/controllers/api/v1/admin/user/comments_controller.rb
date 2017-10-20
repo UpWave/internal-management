@@ -29,7 +29,11 @@ class Api::V1::Admin::User::CommentsController < Api::V1::BaseController
 
   def destroy
     authorize @comment
-    @comment.destroy
+    if @comment.destroy
+      render json: { }, status: 200
+    else
+      render json: { message: "Error occurred when deleting"}
+    end
   end
 
   private
