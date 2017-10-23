@@ -4,9 +4,8 @@ class Api::V1::TrelloBoardsController < Api::V1::BaseController
 
   def index
     if @trello_service
-      if (authorize @trello_service)
-        render json: @trello_service.boards_with_cards
-      end
+      authorize @trello_service
+      render json: @trello_service.boards_with_cards
     else
       render json: { errors: 'Trello connection error' }, status: 422
     end
