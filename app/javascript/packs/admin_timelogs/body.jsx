@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
+import { Link } from 'react-router-dom';
 import Timelogs from './timelogs';
 import Fetch from '../Fetch';
-
 
 class AdminTimelogs extends React.Component {
   constructor(props, context) {
@@ -115,7 +115,7 @@ class AdminTimelogs extends React.Component {
 
   handleUpdate(timelog) {
     Fetch.putJSON(`/api/v1/admin/user/users/${this.userId}/timelogs/${timelog.id}`, {
-      timelog: timelog,
+      timelog,
     })
       .then(() => {
         this.msg.success('Timelog updated');
@@ -176,13 +176,13 @@ class AdminTimelogs extends React.Component {
             className="btn btn-info"
             onClick={this.filterByDuration}
           >
-          Duration
+            Duration
           </button>
           <button
             className="btn btn-info"
             onClick={this.filterByStartTime}
           >
-          Start time
+            Start time
           </button>
           <button
             className="btn btn-info"
@@ -278,6 +278,9 @@ class AdminTimelogs extends React.Component {
                   .concat(this.state.endTime)}
               ><button className="btn btn-primary">Download CSV</button></a>
             </div>
+          </div>
+          <div>
+            <Link to={'/admin/'+ this.userId + '/new_timelog'} className="btn btn-success">Add New Timelog</Link>
           </div>
         </div>
       </div>);

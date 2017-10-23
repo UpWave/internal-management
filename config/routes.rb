@@ -38,6 +38,9 @@ Rails.application.routes.draw do
           end
         end
         resources :users do
+          member do
+            put :reset_password
+          end
           collection do
             get :count_users
           end
@@ -53,6 +56,7 @@ Rails.application.routes.draw do
             end
             resources :salaries
             resources :invoices
+            resources :comments
             resources :skills do
               collection do
                 get :missing

@@ -3,7 +3,8 @@ class User < ApplicationRecord
   enum status: { inactive: 0, active: 1 }
   devise :database_authenticatable,
          :rememberable, :trackable,
-         :validatable, :omniauthable
+         :validatable, :omniauthable,
+         :recoverable
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ":style/default.png"
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
 
@@ -13,6 +14,7 @@ class User < ApplicationRecord
   has_many :salaries, dependent: :destroy
   has_many :user_skills, dependent: :destroy
   has_many :skills, through: :user_skills, dependent: :destroy
+  has_many :comments, dependent: :destroy, foreign_key: :author_id
 
   def has_trello?
     identities.pluck("provider").include?("trello")
@@ -94,7 +96,6 @@ class User < ApplicationRecord
   def planned_vac_pending
     vacation_count("pending", "planned vacation")
   end
-
 
   def vacation_count(status, type)
     vacations = self.vacations.where(["status = ? and type = ?", Vacation.statuses["#{status}"],  Vacation.types["#{type}"]])

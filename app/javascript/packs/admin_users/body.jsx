@@ -1,10 +1,9 @@
 import React from 'react';
 import AlertContainer from 'react-alert';
 import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom';
 import Fetch from '../Fetch';
 import Users from './users';
-import NewUser from './new_user';
-
 
 class AdminUsers extends React.Component {
   constructor(props, context) {
@@ -45,7 +44,7 @@ class AdminUsers extends React.Component {
 
   setNewSalary(salary, id) {
     Fetch.postJSON(`/api/v1/admin/user/users/${id}/salaries`, {
-      salary: salary,
+      salary,
     })
       .then(() => {
         this.msg.success('Successfully set new salary');
@@ -76,8 +75,10 @@ class AdminUsers extends React.Component {
   handleDelete(id) {
     Fetch.deleteJSON(`/api/v1/admin/users/${id}`)
       .then(() => {
-        if (this.state.currentPage === this.state.pageCount - 1) {
-          this.setState({ currentPage: this.state.currentPage - 1 });
+        if (this.state.users.length === 1) {
+          if (this.state.currentPage !== 0) {
+            this.setState({ currentPage: this.state.currentPage - 1 });
+          }
         }
         this.loadUsers();
         this.msg.success('User deleted');
@@ -86,7 +87,7 @@ class AdminUsers extends React.Component {
 
   handleUpdateSalary(salary, id) {
     Fetch.putJSON(`/api/v1/admin/user/users/${id}/salaries/${id}`, {
-      salary: salary,
+      salary,
     })
       .then(() => {
         this.msg.success('Salary updated');
@@ -96,7 +97,7 @@ class AdminUsers extends React.Component {
   }
   handleUpdate(user) {
     Fetch.putJSON(`/api/v1/admin/users/${user.id}`, {
-      user: user,
+      user,
     })
       .then(() => {
         this.msg.success('User updated');
@@ -130,7 +131,10 @@ class AdminUsers extends React.Component {
             handleUpdateSalary={this.handleUpdateSalary}
             setNewSalary={this.setNewSalary}
             salaryTypes={this.state.salaryTypes}
-          />
+          /> <br />
+          <div>
+            <Link to="/admin/new_user" className="btn btn-success">Add New User</Link>
+          </div>
           <ReactPaginate
             previousLabel={'previous'}
             nextLabel={'next'}
@@ -143,12 +147,6 @@ class AdminUsers extends React.Component {
             containerClassName={'pagination'}
             subContainerClassName={'pages pagination'}
             activeClassName={'active'}
-          />
-          <NewUser
-            key="new_user"
-            roles={this.state.roles}
-            statuses={this.state.statuses}
-            loadUsers={this.loadUsers}
           />
         </div>
       </div>
