@@ -10,16 +10,19 @@ class NewUserTimelog extends React.Component {
     this.state = {
       redirect: false,
       startTime: 0,
-      trelloCards:[],
+      trelloCards: [],
+      card: null,
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleHoursChange = this.handleHoursChange.bind(this);
     this.handleMinutesChange = this.handleMinutesChange.bind(this);
     this.loadTrello = this.loadTrello.bind(this);
+    this.handleTaskChange = this.handleTaskChange.bind(this);
+    this.handleCardChange = this.handleCardChange.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.loadTrello();
   }
 
@@ -27,6 +30,7 @@ class NewUserTimelog extends React.Component {
     Fetch.json('/api/v1/timelogs/trello_cards')
       .then((data) => {
         this.setState({ trelloCards: data });
+        $("#cards_dropdown").prepend("<option value='' selected='selected'></option>");
       }).catch(() => {
         this.setState({ trelloCards: false });
     });
@@ -34,12 +38,14 @@ class NewUserTimelog extends React.Component {
 
   handleClick() {
     const startTime = this.state.startTime;
+    const task = this.state.task;
     const duration = (parseInt(this.state.hours || 0, 10) * 60) + parseInt(this.state.minutes || 0, 10);
-    const trelloCard = this.state.card || this.state.trelloCards[0];
+    const trelloCard = this.state.card;
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
         start_time: startTime,
         duration,
+        task,
         trello_card: trelloCard,
       },
     })
@@ -63,12 +69,44 @@ class NewUserTimelog extends React.Component {
     this.setState({ minutes: event.target.value });
   }
 
+  handleTaskChange(event) {
+    this.setState({ task: event.target.value });
+    if (event.target.value.length > 0){
+      $("#cards_dropdown").css("display", "none");
+    } else {
+      $("#cards_dropdown").css("display", "block");
+    }
+  }
+
+  handleCardChange(event){
+    this.setState({ card: event.target.value })
+    if (event.target.value != null) {
+      $("#task").css("display", "none");
+    } else {
+      $("#task").css("display", "none");
+    }
+  }
+
   render() {
     if (this.state.redirect){
       return (
         <Redirect to="/user/timelogs" />
       )
     }
+
+    const trelloCards = this.state.trelloCards.length > 0 ?
+       (
+        <Select
+          className="form-control"
+          id="cards_dropdown"
+          onChange={this.handleCardChange}
+        >
+          {this.state.trelloCards.map(option =>
+          <option key={option} value={option}>{option}</option>)}
+        </Select>
+      )
+      :
+      null;
 
     return (
       <div id="new_timelog" className="row">
@@ -94,17 +132,20 @@ class NewUserTimelog extends React.Component {
             placeholder="Enter duration in minutes"
           />
           <br />
-          <Select
+          <textarea
             className="form-control"
-            onChange={e => this.setState({ card: e.target.value })}
-          >
-            {this.state.trelloCards.map(option =>
-              <option key={option} value={option}>{option}</option>)}
-          </Select>
+            id="task"
+            height="20"
+            onChange={this.handleTaskChange}
+            placeholder="Describe the task you've been working on"
+          />
+          <br />
+          {trelloCards}
           <br />
           <button
             className="btn btn-success"
             onClick={this.handleClick}
+
           >
             Create
           </button>
