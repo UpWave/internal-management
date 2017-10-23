@@ -51,7 +51,6 @@ class NewUser extends React.Component {
       .then(() => {
         this.msg.success('Successfully created new user');
         this.clearFields();
-        this.props.loadUsers();
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);
       });
@@ -83,65 +82,65 @@ class NewUser extends React.Component {
   render() {
     return (
       <div className="form-group well col-md-4 col-md-offset-4" id="new_user">
-          <h2>Create new user!</h2>
-          <Select
-            className="form-control"
-            onChange={e => this.setState({ role: e.target.value })}
-            defaultValue={this.state.value}
-          >
-            <option value="0" disabled hidden>Select role</option>
-            {this.state.roles.map(option =>
-              <option key={option} value={option}>{option}</option>)}
-          </Select>
-          <br />
-          <Select
-            className="form-control"
-            onChange={e => this.setState({ status: e.target.value })}
-            defaultValue={this.state.value}
-          >
-            <option value="0" disabled hidden>Select status</option>
-            {this.state.statuses.map(option =>
-              <option key={option} value={option}>{option}</option>)}
-          </Select>
-          <br />
-          <label htmlFor="input-mail">Email:</label><br />
-          <input
-            name="email"
-            value={this.state.email}
-            className="form-control"
-            id="input-mail"
-            type="email"
-            onKeyPress={this.handleKeyPressed}
-            onChange={this.handleInputChange}
-          />
-          <br />
-          <label htmlFor="input-pass">Password:</label><br />
-          <input
-            name="password"
-            value={this.state.password}
-            className="form-control"
-            id="input-pass"
-            type="password"
-            minLength="6"
-            onKeyPress={this.handleKeyPressed}
-            onChange={this.handleInputChange}
-          />
-          <br />
-          <button
-            id="new-user-button"
-            className="btn btn-success"
-            style={
-              (this.state.password.length > 6) && (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(this.state.email))
-                ?
-                { visibility: 'visible' }
-                :
-                { visibility: 'hidden' }
-            }
-            onClick={this.handleClick}
-          >
-            Create
-          </button>
-          <br />
+        <h2>Create new user!</h2>
+        <Select
+          className="form-control"
+          onChange={e => this.setState({ role: e.target.value })}
+          defaultValue={this.state.value}
+        >
+          <option value="0" disabled hidden>Select role</option>
+          {this.state.roles.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+        <br />
+        <Select
+          className="form-control"
+          onChange={e => this.setState({ status: e.target.value })}
+          defaultValue={this.state.value}
+        >
+          <option value="0" disabled hidden>Select status</option>
+          {this.state.statuses.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+        <br />
+        <label htmlFor="input-mail">Email:</label><br />
+        <input
+          name="email"
+          value={this.state.email}
+          className="form-control"
+          id="input-mail"
+          type="email"
+          onKeyPress={this.handleKeyPressed}
+          onChange={this.handleInputChange}
+        />
+        <br />
+        <label htmlFor="input-pass">Password:</label><br />
+        <input
+          name="password"
+          value={this.state.password}
+          className="form-control"
+          id="input-pass"
+          type="password"
+          minLength="6"
+          onKeyPress={this.handleKeyPressed}
+          onChange={this.handleInputChange}
+        />
+        <br />
+        <button
+          id="new-user-button"
+          className="btn btn-success"
+          style={
+            (this.state.password.length > 6) && (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(this.state.email))
+              ?
+              { visibility: 'visible' }
+              :
+              { visibility: 'hidden' }
+          }
+          onClick={this.handleClick}
+        >
+          Create
+        </button>
+        <br />
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );

@@ -3,8 +3,8 @@ import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
 import { ProgressBar } from 'react-fetch-progressbar';
 import Timelogs from './timelogs';
-import NewTimelog from './new_timelog';
 import Fetch from '../Fetch';
+import { Link } from 'react-router-dom';
 
 class UserTimelogs extends React.Component {
   constructor(props, context) {
@@ -49,7 +49,7 @@ class UserTimelogs extends React.Component {
       }).catch(() => {
         this.setState({ trelloCards: false });
         this.setState({ loadingFinished: true });
-      });
+    });
   }
 
   loadTimelogs() {
@@ -179,13 +179,13 @@ class UserTimelogs extends React.Component {
             className="btn btn-info"
             onClick={this.filterByDuration}
           >
-          Duration
+            Duration
           </button>
           <button
             className="btn btn-info"
             onClick={this.filterByStartTime}
           >
-          Start time
+            Start time
           </button>
           <button
             className="btn btn-info"
@@ -243,12 +243,6 @@ class UserTimelogs extends React.Component {
       </div>)
       :
       null;
-    const newTimelog =
-      (<NewTimelog
-        key="new_timelog"
-        trelloCards={this.state.trelloCards || []}
-        handleSubmit={this.handleSubmit}
-      />);
     const timelogsTable = this.state.timelogs.length > 0 ?
       (<div className="w3l-table-info">
         <Timelogs
@@ -271,7 +265,9 @@ class UserTimelogs extends React.Component {
           <div className="row">
             {filterCols}
           </div>
-          {newTimelog}
+          <div>
+            <Link to="/user/new_timelog" className="btn btn-success">Add New Timelog</Link>
+          </div>
         </div>
       </div>)
       :
@@ -280,7 +276,7 @@ class UserTimelogs extends React.Component {
       if (loadingFinished && (trelloCards === false)) {
         return (<div>
           <h1>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
-          and add cards to your boards</h1>
+            and add cards to your boards</h1>
         </div>);
       }
       return mainComponent;

@@ -39,6 +39,7 @@ class Users extends React.Component {
         handleUpdateSalary={this.handleUpdateSalary}
         setNewSalary={this.setNewSalary}
         salaryTypes={this.props.salaryTypes}
+        userId={user.id}
       />
     ));
     return (
@@ -54,6 +55,7 @@ class Users extends React.Component {
               <th>Invoice</th>
               <th>Skills</th>
               <th>Salary</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody>
