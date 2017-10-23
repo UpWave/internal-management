@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import 'moment-timezone';
 import 'moment-duration-format';
 import 'moment-business-days';
 
@@ -35,10 +34,10 @@ class Content extends React.Component {
         <td>{timelog.trello_card}</td>
         <td>{timelog.duration}</td>
         <td>
-          {moment(timelog.start_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+          {moment(timelog.start_time).format('YYYY/MM/DD, HH:mm')}
         </td>
         <td>
-          {moment(timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm')}
+          {moment(timelog.end_time).format('YYYY/MM/DD, HH:mm')}
         </td>
       </tr>
     ));

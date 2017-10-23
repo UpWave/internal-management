@@ -35,12 +35,14 @@ class NewAdminTimelog extends React.Component {
   }
 
   handleClick() {
-    const startTime = this.state.startTime;
+
+    const startTime = new Date(this.state.startTime);
     const duration = (parseInt(this.state.hours || 0, 10) * 60) + parseInt(this.state.minutes || 0, 10);
     const trelloCard = this.state.card || this.state.trelloCards[0];
     Fetch.postJSON(`/api/v1/admin/user/users/${this.state.userId}/timelogs`, {
+
       timelog: {
-        start_time: startTime,
+        start_time: startTime.toISOString(),
         duration,
         trello_card: trelloCard,
       },
@@ -54,7 +56,8 @@ class NewAdminTimelog extends React.Component {
   }
 
   handleStartDateChange(event) {
-    this.setState({ startTime: event.target.value });
+    const utcStartTime = new Date(event.target.value);
+    this.setState({ startTime: utcStartTime.toISOString() });
   }
 
   handleHoursChange(event) {
