@@ -10,6 +10,7 @@ class Timelog extends React.Component {
     this.state = {
       editable: false,
       value: '0',
+      task: this.props.timelog.task,
       card: this.props.timelog.trello_card,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
@@ -19,6 +20,7 @@ class Timelog extends React.Component {
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleBack = this.handleBack.bind(this);
+    this.handleTaskChange = this.handleTaskChange.bind(this);
   }
 
   handleDelete() {
@@ -30,8 +32,9 @@ class Timelog extends React.Component {
       const id = this.props.timelog.id;
       const startTime = this.state.startTime;
       const duration = this.state.duration;
+      const task = this.state.task;
       const trelloCard = this.state.card;
-      const timelog = { id, start_time: startTime, duration, trello_card: trelloCard };
+      const timelog = { id, start_time: startTime, duration, task: task, trello_card: trelloCard };
       this.props.handleUpdate(timelog);
     }
     this.setState({ editable: !this.state.editable });
@@ -47,6 +50,10 @@ class Timelog extends React.Component {
 
   handleBack() {
     this.setState({ editable: !this.state.editable });
+  }
+
+  handleTaskChange(event) {
+    this.setState({ task: event.target.value });
   }
 
   render() {
@@ -68,26 +75,41 @@ class Timelog extends React.Component {
       />)
       :
       this.props.timelog.duration;
-    const trelloCard = this.state.editable ?
-      (<Select
-        className="form-control"
-        value={this.state.value}
-        onChange={e => this.setState({ card: e.target.value })}
-      >
-        <option value="0" disabled hidden>Select trello card</option>
-        {this.props.trelloCards.map(option =>
-          <option key={option} value={option}>{option}</option>)}
-      </Select>)
-      :
-      this.props.timelog.trello_card;
+
     const endTime =
       moment(this.props.timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm');
+
+    let card_or_task = null;
+    if (this.state.task != null) {
+      card_or_task = this.state.editable ?
+        (<input
+          type="text"
+          className="form-control"
+          onChange={this.handleTaskChange}
+          defaultValue={this.props.timelog.task}
+        />)
+        :
+        this.props.timelog.task;
+    } else {
+      card_or_task = this.state.editable ?
+        (<Select
+          value={this.state.value}
+          className="form-control"
+          onChange={e => this.setState({ card: e.target.value })}
+        >
+          <option value="0" disabled hidden>Select trello card</option>
+          {this.props.trelloCards.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>)
+        :
+        this.props.timelog.trello_card;
+    }
 
     return (
       <tr>
         <td>{startTime}</td>
         <td>{duration}</td>
-        <td>{trelloCard}</td>
+        <td>{card_or_task}</td>
         <td>{endTime}</td>
         <td>
           <button

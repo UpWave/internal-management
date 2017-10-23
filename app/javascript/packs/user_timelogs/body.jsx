@@ -34,11 +34,28 @@ class UserTimelogs extends React.Component {
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.checkDateSubmitVisibility = this.checkDateSubmitVisibility.bind(this);
+    this.checkIdentities = this.checkIdentities.bind(this);
+    this.loadTimelogs = this.loadTimelogs.bind(this);
   }
 
-  componentDidMount() {
-    this.loadTimelogs();
-    this.loadTrello();
+  componentWillMount() {
+    this.checkIdentities();
+  }
+
+  checkIdentities() {
+    Fetch.json('/auth/check_identities')
+      .then((data) => {
+        this.setState({
+          hasGoogle: data.has_google,
+          hasTrello: data.has_trello,
+        });
+        if (this.state.hasTrello == "false"){
+          this.loadTimelogs();
+        } else {
+          this.loadTrello();
+          this.loadTimelogs();
+        }
+      });
   }
 
   loadTrello() {
@@ -63,6 +80,7 @@ class UserTimelogs extends React.Component {
     })
       .then((data) => {
         this.setState({ pageCount: Math.ceil(data / this.state.perPage) });
+        this.setState({ loadingFinished: true });
       });
     // Get only few timelogs for current page
     Fetch.json('/api/v1/timelogs', {
@@ -275,9 +293,10 @@ class UserTimelogs extends React.Component {
     function renderAll() {
       if (loadingFinished && (trelloCards === false)) {
         return (<div>
-          <h1>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
-            and add cards to your boards</h1>
-        </div>);
+          <h1>Connect your <a href="/users/auth/trello">Trello</a> to create timelogs with cards</h1>
+            {mainComponent}
+          </div>
+        );
       }
       return mainComponent;
     }

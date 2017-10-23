@@ -54,7 +54,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :trello_card)
+      params.require(:timelog).permit(:start_time, :duration, :trello_card, :task)
     end
 
     def load_trello_service

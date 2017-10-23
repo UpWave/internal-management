@@ -33,7 +33,7 @@ class Timelogs extends React.Component {
           <tr>
             <th>Start time</th>
             <th>Duration</th>
-            <th>Trello card</th>
+            <th>Trello card/Task</th>
             <th>End time</th>
             <th>Action</th>
           </tr>

@@ -33,7 +33,7 @@ class Timelogs extends React.Component {
           <tr>
             <th>Start time</th>
             <th>Duration</th>
-            <th>Trello card</th>
+            <th>Trello card/Task</th>
             <th>End time</th>
             <th>Action</th>
           </tr>
@@ -54,7 +54,6 @@ Timelogs.propTypes = {
     start_time: PropTypes.string,
     end_time: PropTypes.string,
   })).isRequired,
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

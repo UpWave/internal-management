@@ -39,6 +39,7 @@ class AdminTimelogs extends React.Component {
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.checkDateSubmitVisibility = this.checkDateSubmitVisibility.bind(this);
+    this.loadTimelogs = this.loadTimelogs.bind(this);
   }
 
   componentDidMount() {
@@ -307,7 +308,8 @@ class AdminTimelogs extends React.Component {
     function renderAll() {
       if (loadingFinished && (trelloCards === false)) {
         return (<div>
-          <h1>Current user has not connected Trello account or his boards are empty</h1>
+          <h1>Current user has not connected Trello account</h1>
+          {mainComponent}
         </div>);
       }
       return mainComponent;
