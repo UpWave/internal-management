@@ -12,7 +12,7 @@ class NewAdminTimelog extends React.Component {
       duration: 0,
       startTime: 0,
       trelloCards: [],
-      card: null,
+      card: "",
       userId: this.props.match.params.user_id,
     };
     this.handleClick = this.handleClick.bind(this);
@@ -32,7 +32,6 @@ class NewAdminTimelog extends React.Component {
     Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/timelogs/trello_cards`)
       .then((data) => {
         this.setState({ trelloCards: data });
-        $("#cards_dropdown").prepend("<option value='' selected='selected'></option>");
       }).catch(() => {
         this.setState({ trelloCards: false });
     });
@@ -74,18 +73,18 @@ class NewAdminTimelog extends React.Component {
   handleTaskChange(event) {
     this.setState({ task: event.target.value });
     if (event.target.value.length > 0){
-      $("#cards_dropdown").css("display", "none");
+      $("#cards_dropdown").hide();
     } else {
-      $("#cards_dropdown").css("display", "block");
+      $("#cards_dropdown").show();
     }
   }
 
   handleCardChange(event){
     this.setState({ card: event.target.value })
-    if (event.target.value != null) {
-      $("#task").css("display", "none");
+    if (event.target.value != "") {
+      $("#task").hide();
     } else {
-      $("#task").css("display", "none");
+      $("#task").show();
     }
   }
   render() {
@@ -100,8 +99,10 @@ class NewAdminTimelog extends React.Component {
         <Select
           className="form-control"
           id="cards_dropdown"
+          defaultValue={this.state.card}
           onChange={this.handleCardChange}
         >
+          <option value="">Select Trello card</option>
           {this.state.trelloCards.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select>

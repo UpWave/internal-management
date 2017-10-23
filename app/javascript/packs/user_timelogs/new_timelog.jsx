@@ -11,7 +11,7 @@ class NewUserTimelog extends React.Component {
       redirect: false,
       startTime: 0,
       trelloCards: [],
-      card: null,
+      card: "",
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -30,7 +30,6 @@ class NewUserTimelog extends React.Component {
     Fetch.json('/api/v1/timelogs/trello_cards')
       .then((data) => {
         this.setState({ trelloCards: data });
-        $("#cards_dropdown").prepend("<option value='' selected='selected'></option>");
       }).catch(() => {
         this.setState({ trelloCards: false });
     });
@@ -72,18 +71,18 @@ class NewUserTimelog extends React.Component {
   handleTaskChange(event) {
     this.setState({ task: event.target.value });
     if (event.target.value.length > 0){
-      $("#cards_dropdown").css("display", "none");
+      $("#cards_dropdown").hide();
     } else {
-      $("#cards_dropdown").css("display", "block");
+      $("#cards_dropdown").show();
     }
   }
 
   handleCardChange(event){
     this.setState({ card: event.target.value })
-    if (event.target.value != null) {
-      $("#task").css("display", "none");
+    if (event.target.value != "") {
+      $("#task").hide();
     } else {
-      $("#task").css("display", "none");
+      $("#task").show();
     }
   }
 
@@ -99,8 +98,10 @@ class NewUserTimelog extends React.Component {
         <Select
           className="form-control"
           id="cards_dropdown"
+          defaultValue={this.state.card}
           onChange={this.handleCardChange}
         >
+          <option value="">Select Trello card</option>
           {this.state.trelloCards.map(option =>
           <option key={option} value={option}>{option}</option>)}
         </Select>

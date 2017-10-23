@@ -5,6 +5,8 @@ class Timelog < ApplicationRecord
   validates :user_id, presence: true
   validates :start_time, presence: true
   validates :duration, presence: true, numericality: { greater_than: 0 }
+  validates :task, presence: true, unless: ->(timelog){timelog.trello_card.present?}
+  validates :trello_card, presence: true, unless: ->(timelog){timelog.task.present?}
 
   before_save :set_end_time
 

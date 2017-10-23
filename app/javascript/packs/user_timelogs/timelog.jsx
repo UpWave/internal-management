@@ -80,9 +80,9 @@ class Timelog extends React.Component {
     const endTime =
       moment(this.props.timelog.end_time).tz('Atlantic/Reykjavik').format('YYYY/MM/DD, HH:mm');
 
-    let card_or_task = null;
+    let cardOrTask = null;
     if (this.state.task != null) {
-      card_or_task = this.state.editable ?
+      cardOrTask = this.state.editable ?
         (<input
           type="text"
           className="form-control"
@@ -92,7 +92,7 @@ class Timelog extends React.Component {
         :
         this.props.timelog.task;
     } else {
-      card_or_task = this.state.editable ?
+      cardOrTask = this.state.editable ?
         (<Select
           value={this.state.value}
           className="form-control"
@@ -110,7 +110,7 @@ class Timelog extends React.Component {
       <tr>
         <td>{startTime}</td>
         <td>{duration}</td>
-        <td>{card_or_task}</td>
+        <td>{cardOrTask}</td>
         <td>{endTime}</td>
         <td>
           <button
