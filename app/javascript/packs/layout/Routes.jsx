@@ -9,7 +9,7 @@ import UserTimelogs from '../user_timelogs/body';
 import AdminVacations from '../admin_vacations/body';
 import UserProfile from '../user_profile/body';
 import AdminInvoices from '../admin_invoices/body';
-import NewUser from '../admin_users/new_user';
+import NewUser from '../admin_users/new_user/new_user';
 import Notes from '../admin_comments/body';
 import NewUserTimelog from '../user_timelogs/new_timelog';
 import NewAdminTimelog from '../admin_timelogs/new_timelog';
