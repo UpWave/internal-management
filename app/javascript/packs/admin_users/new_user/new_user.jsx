@@ -1,71 +1,56 @@
 import React from 'react';
-import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
-import Fetch from '../Fetch';
+import Fetch from '../../Fetch';
+import Roles from './roles';
+import Statuses from './statuses';
 
 class NewUser extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      roles: [],
-      statuses: [],
-      value: '0',
       role: 'member',
       status: 'active',
       email: '',
       password: '',
     };
-    this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
-    this.clearFields = this.clearFields.bind(this);
     this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
+    this.roleChanged = this.roleChanged.bind(this);
+    this.statusChanged = this.statusChanged.bind(this);
   }
 
-  componentWillMount() {
-    Fetch.json('/api/v1/admin/roles')
-      .then((data) => {
-        this.setState({ roles: data });
-      });
-    Fetch.json('/api/v1/admin/statuses')
-      .then((data) => {
-        this.setState({ statuses: data });
-      });
+  roleChanged(role) {
+    this.setState({ role });
   }
 
-  handleClick() {
-    const user = {
-      email: this.state.email,
-      password: this.state.password,
-      role: this.state.role,
-      status: this.state.status,
-    };
-    this.handleCreateNewUser(user);
+  statusChanged(status) {
+    this.setState({ status });
   }
 
-
-  handleCreateNewUser(newUser) {
+  handleCreateNewUser() {
     Fetch.postJSON('/api/v1/admin/users', {
-      user: newUser,
+      user: {
+        email: this.state.email,
+        password: this.state.password,
+        role: this.state.role,
+        status: this.state.status,
+      },
     })
       .then(() => {
         this.msg.success('Successfully created new user');
-        this.clearFields();
+        this.setState({
+          password: '',
+          email: '',
+        });
       }).catch((errorResponse) => {
         this.msg.error(errorResponse.errors);
       });
   }
 
-  clearFields() {
-    this.setState({
-      password: '',
-      email: '',
-    });
-  }
-
   handleKeyPressed(event) {
     if ((event.charCode === 13) && (document.getElementById('new-user-button').style.visibility === 'visible')) {
-      this.handleClick();
+      this.handleCreateNewUser();
     }
   }
 
@@ -78,30 +63,17 @@ class NewUser extends React.Component {
     });
   }
 
-
   render() {
     return (
       <div className="form-group well col-md-4 col-md-offset-4" id="new_user">
         <h2>Create new user!</h2>
-        <Select
-          className="form-control"
-          onChange={e => this.setState({ role: e.target.value })}
-          defaultValue={this.state.value}
-        >
-          <option value="0" disabled hidden>Select role</option>
-          {this.state.roles.map(option =>
-            <option key={option} value={option}>{option}</option>)}
-        </Select>
+        <Roles
+          roleChanged={this.roleChanged}
+        />
         <br />
-        <Select
-          className="form-control"
-          onChange={e => this.setState({ status: e.target.value })}
-          defaultValue={this.state.value}
-        >
-          <option value="0" disabled hidden>Select status</option>
-          {this.state.statuses.map(option =>
-            <option key={option} value={option}>{option}</option>)}
-        </Select>
+        <Statuses
+          statusChanged={this.statusChanged}
+        />
         <br />
         <label htmlFor="input-mail">Email:</label><br />
         <input
@@ -136,7 +108,7 @@ class NewUser extends React.Component {
               :
               { visibility: 'hidden' }
           }
-          onClick={this.handleClick}
+          onClick={this.handleCreateNewUser}
         >
           Create
         </button>
