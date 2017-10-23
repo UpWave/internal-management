@@ -35,10 +35,10 @@ class Comments extends React.Component {
     ));
     return (
       <div id="comments">
-          <h2 className="text-center">Comments</h2>
-          <div>
-            {comments}
-          </div>
+        <h2 className="text-center">Comments</h2>
+        <div>
+          {comments}
+        </div>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );

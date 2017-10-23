@@ -25,11 +25,11 @@ class Notes extends React.Component {
     Fetch.json(`/api/v1/admin/user/users/${this.state.userId}/comments`)
       .then((data) => {
         this.setState({
-          comments: data
+          comments: data,
         });
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    });
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleCreate() {
@@ -38,34 +38,34 @@ class Notes extends React.Component {
       user_id: this.state.userId,
     })
       .then(() => {
-        this.msg.success(`Successfully added comment`);
-        this.setState({ body: ""});
+        this.msg.success('Successfully added comment');
+        this.setState({ body: '' });
         this.loadComments();
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    })
+        this.msg.error(errorResponse.errors);
+      });
   }
 
-  handleUpdate(comment){
+  handleUpdate(comment) {
     Fetch.putJSON(`/api/v1/admin/user/users/${this.props.userId}/comments/${comment.id}`, {
       body: comment.body,
     })
       .then(() => {
-        this.msg.success(`Successfully updated comment`);
+        this.msg.success('Successfully updated comment');
         this.loadComments();
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    })
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleDelete(id) {
     Fetch.deleteJSON(`/api/v1/admin/user/users/${this.props.userId}/comments/${id}`)
       .then(() => {
-        this.msg.success(`Comment deleted`);
+        this.msg.success('Comment deleted');
         this.loadComments();
       }).catch(() => {
-      this.loadComments();
-    })
+        this.loadComments();
+      });
   }
 
   handleChange(event) {
@@ -76,12 +76,12 @@ class Notes extends React.Component {
     return (
       <div className="well col-md-6 col-md-offset-3">
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-
         <div>
-          <input className="form-control" type="text" value={this.state.body} onChange={this.handleChange} /><br />
-          <button className="btn btn-success" onClick={this.handleCreate}>Add comment</button><br />
+          <input className="form-control" type="text" value={this.state.body} onChange={this.handleChange} />
+          <br />
+          <button className="btn btn-success" onClick={this.handleCreate}>Add comment</button>
+          <br />
         </div>
-
         <Comments
           key={this.state.comments.length.toString()}
           comments={this.state.comments}

@@ -124,7 +124,7 @@ class UserTimelogs extends React.Component {
 
   handleUpdate(timelog) {
     Fetch.putJSON(`/api/v1/timelogs/${timelog.id}`, {
-      timelog: timelog,
+      timelog,
     })
       .then(() => {
         this.msg.success('Successfully updated timelog');

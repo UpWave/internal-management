@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Comment extends React.Component {
   constructor(props, context) {
@@ -21,7 +22,7 @@ class Comment extends React.Component {
     if (this.state.editable) {
       const commentId = this.props.id;
       const body = this.state.body;
-      const comment = { id: commentId, body: body };
+      const comment = { id: commentId, body };
       this.props.handleUpdate(comment);
     }
     this.setState({ editable: !this.state.editable });
@@ -56,10 +57,17 @@ class Comment extends React.Component {
           onClick={this.handleBack}
         >
           Back
-        </button><br/> <br/> <br/>
+        </button>
       </div>
     );
   }
 }
+
+Comment.propTypes = {
+  id: PropTypes.number.isRequired,
+  body: PropTypes.string.isRequired,
+  handleUpdate: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+};
 
 export default Comment;
