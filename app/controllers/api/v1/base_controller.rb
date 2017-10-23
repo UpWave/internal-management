@@ -6,7 +6,6 @@ class Api::V1::BaseController < ApplicationController
 
   private
     def user_not_authorized
-      flash[:alert] = "Access denied"
-      redirect_to root_path
+      render json: { errors: "Access denied" }, status: 422
     end
 end

@@ -8,16 +8,18 @@ class Timelog extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
-      value: '0',
+      board: this.props.timelog.trello_board,
       card: this.props.timelog.trello_card,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
+      boardCards: this.props.trelloData[this.props.timelog.trello_board],
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
+    this.boardChange = this.boardChange.bind(this);
   }
 
   handleDelete() {
@@ -30,14 +32,23 @@ class Timelog extends React.Component {
       const startTime = this.state.startTime;
       const duration = this.state.duration;
       const trelloCard = this.state.card;
-      const timelog = { id, start_time: startTime, duration, trello_card: trelloCard };
+      const trelloBoard = this.state.board;
+      const timelog = {
+        id,
+        start_time: startTime,
+        duration,
+        trello_card: trelloCard,
+        trello_board: trelloBoard,
+      };
       this.props.handleUpdate(timelog);
     }
     this.setState({ editable: !this.state.editable });
   }
 
   handleBack() {
-    this.setState({ editable: !this.state.editable });
+    this.setState({
+      editable: false,
+    });
   }
 
   handleStartDateChange(event) {
@@ -46,6 +57,14 @@ class Timelog extends React.Component {
 
   handleDurationChange(event) {
     this.setState({ duration: event.target.value });
+  }
+
+  boardChange(event) {
+    this.setState({
+      board: event.target.value,
+      boardCards: this.props.trelloData[event.target.value],
+      card: this.props.trelloData[event.target.value][0] || null,
+    });
   }
 
   render() {
@@ -67,14 +86,24 @@ class Timelog extends React.Component {
       />)
       :
       this.props.timelog.duration;
+    const trelloBoard = this.state.editable ?
+      (<Select
+        defaultValue={this.state.board}
+        className="form-control"
+        onChange={this.boardChange}
+      >
+        {Object.keys(this.props.trelloData).map(option =>
+          <option key={option} value={option}>{option}</option>)}
+      </Select>)
+      :
+      this.props.timelog.trello_board;
     const trelloCard = this.state.editable ?
       (<Select
-        value={this.state.value}
+        defaultValue={this.state.card}
         className="form-control"
         onChange={e => this.setState({ card: e.target.value })}
       >
-        <option value="0" disabled hidden>Select trello card</option>
-        {this.props.trelloCards.map(option =>
+        {this.state.boardCards.map(option =>
           <option key={option} value={option}>{option}</option>)}
       </Select>)
       :
@@ -86,6 +115,7 @@ class Timelog extends React.Component {
       <tr>
         <td>{startTime}</td>
         <td>{duration}</td>
+        <td>{trelloBoard}</td>
         <td>{trelloCard}</td>
         <td>{endTime}</td>
         <td>
@@ -120,11 +150,12 @@ Timelog.propTypes = {
   timelog: PropTypes.shape({
     id: PropTypes.number,
     trello_card: PropTypes.string,
+    trello_board: PropTypes.string,
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
   }).isRequired,
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
+  trelloData: PropTypes.shape().isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

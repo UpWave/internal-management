@@ -11,7 +11,7 @@
   end
 
   def create?
-    @current_user.admin? || (@timelog.user_id == @current_user.id)
+    @timelog.user_id == @current_user.id
   end
 
   def update?
@@ -23,7 +23,7 @@
   end
 
   def new?
-    @current_user.admin? || (@timelog.user_id == @current_user.id)
+    @timelog.user_id == @current_user.id
   end
-  
+
 end

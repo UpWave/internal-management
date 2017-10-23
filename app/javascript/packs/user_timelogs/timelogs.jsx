@@ -21,7 +21,7 @@ class Timelogs extends React.Component {
       <Timelog
         id={timelog.id}
         key={timelog.id.toString()}
-        trelloCards={this.props.trelloCards}
+        trelloData={this.props.trelloData}
         timelog={timelog}
         handleDelete={this.handleDelete}
         handleUpdate={this.onUpdate}
@@ -33,7 +33,8 @@ class Timelogs extends React.Component {
           <tr>
             <th>Start time</th>
             <th>Duration</th>
-            <th>Trello card</th>
+            <th>Board</th>
+            <th>Card</th>
             <th>End time</th>
             <th>Action</th>
           </tr>
@@ -50,11 +51,12 @@ Timelogs.propTypes = {
   timelogs: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     trello_card: PropTypes.string,
+    trello_board: PropTypes.string,
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
   })).isRequired,
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
+  trelloData: PropTypes.shape().isRequired,
   onUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

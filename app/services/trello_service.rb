@@ -11,20 +11,22 @@ class TrelloService
     @trello_member = Trello::Member.find(current_user.identities.where(:provider => "trello").pluck("uid").first)
   end
 
-  def cards
-    trello_cards = []
-    @trello_member.cards.each { |card| trello_cards << card.name }
-    trello_cards
+  def boards_with_cards
+    response = Hash.new
+    @trello_member.boards.each do |board|
+      cards = []
+      board.cards.each do |card|
+        if card.member_ids.include?(@trello_member.id)
+          cards << card.name
+        end
+      end
+      response[board.name] = cards
+    end
+    response
   end
 
-  def boards
-    trello_boards = []
-    @trello_member.boards.each { |board| trello_boards << board.name }
-    trello_boards
-  end
-
-  def member
-    trello_member = @trello_member
+  def member_id
+    @trello_member.id
   end
 
 end

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-normalized-select';
 import moment from 'moment';
 
 class Timelog extends React.Component {
@@ -8,7 +7,7 @@ class Timelog extends React.Component {
     super(props, context);
     this.state = {
       editable: false,
-      value: '0',
+      board: this.props.timelog.trello_board,
       card: this.props.timelog.trello_card,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
@@ -29,8 +28,11 @@ class Timelog extends React.Component {
       const id = this.props.timelog.id;
       const startTime = this.state.startTime;
       const duration = this.state.duration;
-      const trelloCard = this.state.card;
-      const timelog = { id, start_time: startTime, duration, trello_card: trelloCard };
+      const timelog = {
+        id,
+        start_time: startTime,
+        duration,
+      };
       this.props.handleUpdate(timelog);
     }
     this.setState({ editable: !this.state.editable });
@@ -45,7 +47,7 @@ class Timelog extends React.Component {
   }
 
   handleBack() {
-    this.setState({ editable: !this.state.editable });
+    this.setState({ editable: false });
   }
 
   render() {
@@ -67,18 +69,8 @@ class Timelog extends React.Component {
       />)
       :
       this.props.timelog.duration;
-    const trelloCard = this.state.editable ?
-      (<Select
-        className="form-control"
-        value={this.state.value}
-        onChange={e => this.setState({ card: e.target.value })}
-      >
-        <option value="0" disabled hidden>Select trello card</option>
-        {this.props.trelloCards.map(option =>
-          <option key={option} value={option}>{option}</option>)}
-      </Select>)
-      :
-      this.props.timelog.trello_card;
+    const trelloBoard = this.props.timelog.trello_board;
+    const trelloCard = this.props.timelog.trello_card;
     const endTime =
       moment(this.props.timelog.end_time).format('YYYY/MM/DD, HH:mm');
 
@@ -86,6 +78,7 @@ class Timelog extends React.Component {
       <tr>
         <td>{startTime}</td>
         <td>{duration}</td>
+        <td>{trelloBoard}</td>
         <td>{trelloCard}</td>
         <td>{endTime}</td>
         <td>
@@ -120,11 +113,11 @@ Timelog.propTypes = {
   timelog: PropTypes.shape({
     id: PropTypes.number,
     trello_card: PropTypes.string,
+    trello_board: PropTypes.string,
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
   }).isRequired,
-  trelloCards: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
 import { ProgressBar } from 'react-fetch-progressbar';
+import { Link } from 'react-router-dom';
 import Timelogs from './timelogs';
 import Fetch from '../Fetch';
-import { Link } from 'react-router-dom';
 
 class UserTimelogs extends React.Component {
   constructor(props, context) {
@@ -42,14 +42,14 @@ class UserTimelogs extends React.Component {
   }
 
   loadTrello() {
-    Fetch.json('/api/v1/timelogs/trello_cards')
+    Fetch.json('/api/v1/profile/trello_boards')
       .then((data) => {
-        this.setState({ trelloCards: data });
+        this.setState({ trelloData: data });
         this.setState({ loadingFinished: true });
       }).catch(() => {
-        this.setState({ trelloCards: false });
+        this.setState({ trelloData: false });
         this.setState({ loadingFinished: true });
-    });
+      });
   }
 
   loadTimelogs() {
@@ -129,6 +129,8 @@ class UserTimelogs extends React.Component {
       .then(() => {
         this.msg.success('Successfully updated timelog');
         this.loadTimelogs();
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
       });
   }
 
@@ -247,7 +249,7 @@ class UserTimelogs extends React.Component {
       (<div className="w3l-table-info">
         <Timelogs
           key="timelogs"
-          trelloCards={this.state.trelloCards || []}
+          trelloData={this.state.trelloData || {}}
           timelogs={this.state.timelogs || []}
           handleSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
@@ -256,7 +258,7 @@ class UserTimelogs extends React.Component {
       </div>)
       :
       null;
-    const trelloCards = (this.state.trelloCards);
+    const trelloData = (this.state.trelloData);
     const loadingFinished = (this.state.loadingFinished);
     const mainComponent = (loadingFinished) ?
       (<div className="agile-grids">
@@ -273,7 +275,7 @@ class UserTimelogs extends React.Component {
       :
       null;
     function renderAll() {
-      if (loadingFinished && (trelloCards === false)) {
+      if (loadingFinished && (trelloData === false)) {
         return (<div>
           <h1>To create timelogs connect your <a href="/users/auth/trello">Trello</a> first
             and add cards to your boards</h1>

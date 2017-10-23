@@ -1,8 +1,8 @@
 import React from 'react';
 import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
-import Fetch from '../Fetch';
 import { Redirect } from 'react-router';
+import Fetch from '../Fetch';
 
 class NewAdminTimelog extends React.Component {
   constructor(props, context) {
@@ -31,11 +31,10 @@ class NewAdminTimelog extends React.Component {
         this.setState({ trelloCards: data });
       }).catch(() => {
         this.setState({ trelloCards: false });
-    });
+      });
   }
 
   handleClick() {
-
     const startTime = new Date(this.state.startTime);
     const duration = (parseInt(this.state.hours || 0, 10) * 60) + parseInt(this.state.minutes || 0, 10);
     const trelloCard = this.state.card || this.state.trelloCards[0];
@@ -52,7 +51,7 @@ class NewAdminTimelog extends React.Component {
         this.setState({ redirect: true });
       }).catch((e) => {
         this.msg.error(e.errors);
-    });
+      });
   }
 
   handleStartDateChange(event) {
@@ -69,10 +68,10 @@ class NewAdminTimelog extends React.Component {
   }
 
   render() {
-    if (this.state.redirect){
+    if (this.state.redirect) {
       return (
-        <Redirect to={"/admin/users/" + this.state.userId + "/timelogs"} />
-      )
+        <Redirect to={'/admin/users/' + this.state.userId + '/timelogs'} />
+      );
     }
 
     return (

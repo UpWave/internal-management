@@ -1,9 +1,7 @@
-require 'trello'
 class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_user
   before_action :load_timelog, only: [:update, :destroy]
-  before_action :load_trello_service, only: [:trello_cards]
 
   def index
     respond_to do |format|
@@ -24,24 +22,6 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
 
   def count_timelogs
     respond_with filtered_timelogs.count
-  end
-
-  def trello_cards
-    if @trello_service
-      respond_with @trello_service.cards
-    else
-      render json: { errors: 'Trello connection error' }, status: 422
-    end
-  end
-
-  def create
-    @timelog = @user.timelogs.build(timelogs_params)
-    authorize @timelog
-    if @timelog.save
-      respond_with :api, :v1, @timelog
-    else
-      render json: { errors: @timelog.errors.full_messages }, status: 422
-    end
   end
 
   def update
@@ -67,15 +47,7 @@ class Api::V1::Admin::User::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :user_id, :trello_card)
-    end
-
-    def load_trello_service
-      if @user.has_trello?
-        @trello_service = TrelloService.new(@user)
-      else
-        @trello_service = nil
-      end
+      params.require(:timelog).permit(:start_time, :duration, :user_id)
     end
 
     def load_timelog
