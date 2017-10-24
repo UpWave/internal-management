@@ -10,26 +10,50 @@ class NewUserTimelog extends React.Component {
     super(props, context);
     this.state = {
       redirect: false,
-      card: this.props.trelloData[Object.keys(this.props.trelloData)[0]][0],
       startTime: 0,
-      board: Object.keys(this.props.trelloData)[0],
-      boardCards: this.props.trelloData[Object.keys(this.props.trelloData)[0]],
+      trelloData: [],
+      board: '',
+      card: '',
+      boardCards: [],
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleHoursChange = this.handleHoursChange.bind(this);
     this.handleMinutesChange = this.handleMinutesChange.bind(this);
+    this.handleTaskDescriptionChange = this.handleTaskDescriptionChange.bind(this);
     this.boardChange = this.boardChange.bind(this);
+    this.loadTrello = this.loadTrello.bind(this);
+  }
+
+  componentWillMount() {
+    this.loadTrello();
+  }
+
+  loadTrello() {
+    Fetch.json('/api/v1/profile/trello_boards')
+      .then(function(data) {
+        this.setState({
+          trelloData: data,
+          // board: Object.keys(data), // [0]
+          boardCards: data[Object.keys(data)[0]],
+        });
+        this.setState({ loadingFinished: true });
+      }.bind(this)).catch(() => {
+        this.setState({ trelloData: false });
+        this.setState({ loadingFinished: true });
+    });
   }
 
   handleClick() {
     const startTime = this.state.startTime;
     const duration = (this.state.hours * 60) + parseInt(this.state.minutes, 10);
+    const taskDescription = this.state.taskDescription;
     const trelloCard = this.state.card;
     const trelloBoard = this.state.board;
     Fetch.postJSON('/api/v1/timelogs', {
       timelog: {
-        start_time: startTime.toISOString(),
+        start_time: startTime,
+        task_description: taskDescription,
         duration,
         trello_card: trelloCard,
         trello_board: trelloBoard,
@@ -56,11 +80,25 @@ class NewUserTimelog extends React.Component {
   }
 
   boardChange(event) {
-    this.setState({
-      board: event.target.value,
-      boardCards: this.props.trelloData[event.target.value],
-      card: this.props.trelloData[event.target.value][0] || null,
-    });
+    if (event.target.value !== '') {
+      $("#task").hide();
+    } else {
+      $("#task").show();
+      this.setState({ card: null });
+    }
+    this.setState({ board: event.target.value });
+    this.setState({ boardCards: this.state.trelloData[event.target.value] });
+    this.setState({ card: this.state.trelloData[event.target.value][0] || null });
+
+  }
+
+  handleTaskDescriptionChange(event) {
+    this.setState({ taskDescription: event.target.value });
+    if (event.target.value.length > 0){
+      $("#cards_dropdown").hide();
+    } else {
+      $("#cards_dropdown").show();
+    }
   }
 
   render() {
@@ -70,6 +108,19 @@ class NewUserTimelog extends React.Component {
       );
     }
 
+    const cards = this.state.board != "" ?
+      (
+        <Select
+          className="form-control"
+          onChange={e => this.setState({ card: e.target.value })}
+        >
+          {/*<option value="">Select card</option>*/}
+          {this.state.boardCards.map(option =>
+            <option key={option} value={option}>{option}</option>)}
+        </Select>
+      )
+        :
+        null;
     return (
       <div id="new_timelog" className="row">
         <div className="col-md-4">
@@ -79,32 +130,42 @@ class NewUserTimelog extends React.Component {
             type="datetime-local"
             onChange={this.handleStartDateChange}
           />
+          <br/>
           <input
             className="form-control"
             type="number"
             onChange={this.handleHoursChange}
             placeholder="Enter duration in hours"
           />
+          <br/>
           <input
             className="form-control"
             type="number"
             onChange={this.handleMinutesChange}
             placeholder="Enter duration in minutes"
           />
-          <Select
+          <br/>
+          <textarea
             className="form-control"
-            onChange={this.boardChange}
-          >
-            {Object.keys(this.props.trelloData).map(option =>
-              <option key={option} value={option}>{option}</option>)}
-          </Select>
-          <Select
-            className="form-control"
-            onChange={e => this.setState({ card: e.target.value })}
-          >
-            {this.state.boardCards.map(option =>
-              <option key={option} value={option}>{option}</option>)}
-          </Select>
+            id="task"
+            height="20"
+            onChange={this.handleTaskDescriptionChange}
+            placeholder="Describe the task you've been working on"
+          />
+          <br/>
+          <div id="cards_dropdown">
+            <Select
+              className="form-control"
+              defaultValue="Select Trello board"
+              onChange={this.boardChange}
+            >
+              <option value=''>Select Trello board</option>
+              {Object.keys(this.state.trelloData).map(option =>
+                <option key={option} value={option}>{option}</option>)}
+            </Select>
+            <br/>
+            {cards}
+          </div>
           <br />
           <button
             className="btn btn-success"

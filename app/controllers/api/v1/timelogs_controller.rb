@@ -46,7 +46,7 @@ class Api::V1::TimelogsController < Api::V1::BaseController
 
   private
     def timelogs_params
-      params.require(:timelog).permit(:start_time, :duration, :trello_card, :trello_board)
+      params.require(:timelog).permit(:start_time, :duration, :trello_card, :trello_board, :task_description)
     end
 
     def filtered_timelogs
