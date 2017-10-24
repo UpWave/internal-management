@@ -125,9 +125,9 @@ class Body extends React.Component {
             <div className="col-md-5">
               <h2>Info</h2>
               <h3>
-                {firstName || (<span style={{color: "grey", float: "left"}}>No first name</span>)}
+                {firstName || (<span style={{ color: "grey", float: "left" }}>No first name</span>) }
                 <span style={{ paddingLeft: '10px' }} />
-                {lastName || (<span style={{color: "grey"}}>No last name</span>)}
+                {lastName || (<span style={{ color: "grey" }}>No last name</span>) }
               </h3>
               <button
                 className="btn btn-default"
