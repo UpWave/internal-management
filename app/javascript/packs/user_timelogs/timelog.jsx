@@ -94,7 +94,7 @@ class Timelog extends React.Component {
       />)
       :
       this.props.timelog.duration;
-    const trelloBoard = this.state.editable && this.state.card != null ?
+    const trelloBoard = this.state.editable && this.state.card != "" ?
       (<Select
         defaultValue={this.state.board}
         className="form-control"

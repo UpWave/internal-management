@@ -34,7 +34,6 @@ class NewUserTimelog extends React.Component {
       .then(function(data) {
         this.setState({
           trelloData: data,
-          // board: Object.keys(data), // [0]
           boardCards: data[Object.keys(data)[0]],
         });
         this.setState({ loadingFinished: true });
@@ -114,7 +113,6 @@ class NewUserTimelog extends React.Component {
           className="form-control"
           onChange={e => this.setState({ card: e.target.value })}
         >
-          {/*<option value="">Select card</option>*/}
           {this.state.boardCards.map(option =>
             <option key={option} value={option}>{option}</option>)}
         </Select>
