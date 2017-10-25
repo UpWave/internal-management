@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
+      resources :evaluations, only: [:index]
       resource :profile do
         resources :trello_boards, only: [:index]
       end
@@ -54,6 +55,8 @@ Rails.application.routes.draw do
                 get :count_timelogs
               end
             end
+            resources :evaluations
+            resources :goals
             resources :salaries
             resources :invoices
             resources :comments

@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :user_skills, dependent: :destroy
   has_many :skills, through: :user_skills, dependent: :destroy
   has_many :comments, dependent: :destroy, foreign_key: :author_id
+  has_many :evaluations, dependent: :destroy
 
   def has_trello?
     identities.pluck("provider").include?("trello")
