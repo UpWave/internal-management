@@ -25,7 +25,6 @@ class Routes extends React.Component {
         <Route exact path="/admin/vacations" component={AdminVacations} />
         <Route exact path="/admin/new_user" component={NewUser} />
         <Route exact path="/admin/users/:user_id/notes" component={Notes} />
-        <Route exact path="/admin/:user_id/new_timelog" component={NewAdminTimelog} />
       </div>);
     const memberRoutes =
       (<div>

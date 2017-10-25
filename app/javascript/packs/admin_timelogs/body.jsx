@@ -1,17 +1,13 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 import AlertContainer from 'react-alert';
-import { Link } from 'react-router-dom';
 import Timelogs from './timelogs';
 import Fetch from '../Fetch';
 
 class AdminTimelogs extends React.Component {
   constructor(props, context) {
     super(props, context);
-    // regex for parsing user_id from URL
-    this.userIdPattern = /users\/\d+/g;
-    // parsing user_id from current URL
-    this.userId = window.location.href.match(this.userIdPattern)[0].replace('users/', '');
+    this.userId = this.props.match.params.user_id;
     this.state = {
       timelogs: [],
       page: 0,
@@ -278,9 +274,6 @@ class AdminTimelogs extends React.Component {
                   .concat(this.state.endTime)}
               ><button className="btn btn-primary">Download CSV</button></a>
             </div>
-          </div>
-          <div>
-            <Link to={'/admin/'+ this.userId + '/new_timelog'} className="btn btn-success">Add New Timelog</Link>
           </div>
         </div>
       </div>);
