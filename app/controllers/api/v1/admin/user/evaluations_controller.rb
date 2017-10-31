@@ -5,16 +5,19 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
 
   def index
     @evaluations = @user.evaluations
+    authorize @evaluations
     respond_with @evaluations
   end
 
   def show
     @evaluation = Evaluation.includes(:goals).find(params[:id])
+    authorize @evaluation
     respond_with @evaluation, json: {evaluation: @evaluation, goals: @evaluation.goals}
   end
 
   def create
     @evaluation = Evaluation.new(evaluation_params)
+    authorize @evaluation
     if @evaluation.save
       respond_with @evaluation, json: @evaluation
     else
@@ -23,6 +26,7 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
   end
 
   def update
+    authorize @evaluation
     if @evaluation.update_attributes(evaluation_params)
       respond_with @evaluation, json: @evaluation
     else
@@ -31,6 +35,7 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
   end
 
   def destroy
+    authorize @evaluation
     if @evaluation.destroy
       render json: { }, status: 200
     else
