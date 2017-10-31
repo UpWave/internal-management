@@ -3,11 +3,14 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
   before_action :load_user, only: [:index, :create]
   before_action :load_evaluation, only: [:update, :destroy]
 
-  # ADD AUTHORIZE BEFORE EACH ACTION
-
   def index
     @evaluations = @user.evaluations
     respond_with @evaluations
+  end
+
+  def show
+    @evaluation = Evaluation.includes(:goals).find(params[:id])
+    respond_with @evaluation, json: {evaluation: @evaluation, goals: @evaluation.goals}
   end
 
   def create
@@ -19,7 +22,7 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
     end
   end
 
-  def udpate
+  def update
     if @evaluation.update_attributes(evaluation_params)
       respond_with @evaluation, json: @evaluation
     else
@@ -37,6 +40,10 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
 
 
   private
+
+  def evaluation_params
+    params.require(:evaluation).permit(:due_date, :user_id, goals_attributes: [:id, :name, :mark, :_destroy])
+  end
 
   def load_evaluation
     @evaluation = Evaluation.find(params[:id])

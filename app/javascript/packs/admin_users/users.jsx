@@ -56,6 +56,7 @@ class Users extends React.Component {
               <th>Skills</th>
               <th>Salary</th>
               <th>Notes</th>
+              <th>Evaluations</th>
             </tr>
           </thead>
           <tbody>

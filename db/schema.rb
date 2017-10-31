@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025104831) do
+ActiveRecord::Schema.define(version: 20171027133713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,13 +29,14 @@ ActiveRecord::Schema.define(version: 20171025104831) do
     t.date "due_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "goals_count", default: 0
     t.index ["user_id"], name: "index_evaluations_on_user_id"
   end
 
   create_table "goals", force: :cascade do |t|
     t.bigint "evaluation_id"
     t.string "name", null: false
-    t.integer "mark", null: false
+    t.integer "mark"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["evaluation_id"], name: "index_goals_on_evaluation_id"

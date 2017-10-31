@@ -73,9 +73,19 @@ class Sidebar extends React.Component {
             <i className="fa fa-calendar-check-o" /><span>Timelogs</span><div className="clearfix" />
           </Link>
         </li>
+        <li>
+          <Link to="/user/evaluations">
+            <i className="fa fa-calendar-check-o" /><span>Evaluations</span><div className="clearfix" />
+          </Link>
+        </li>
         {googleLink}
         {trelloLink}
         {signOutLink}
+        <li>
+          <Link to="/admin/vacations">
+            <i className="fa fa-plane" /><span>Users vacations</span><div className="clearfix" />
+          </Link>
+        </li>
       </div>
     );
 

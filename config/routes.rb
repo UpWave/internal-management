@@ -56,7 +56,7 @@ Rails.application.routes.draw do
               end
             end
             resources :evaluations
-            resources :goals
+            resources :goals, only: [:update, :destroy]
             resources :salaries
             resources :invoices
             resources :comments

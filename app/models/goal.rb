@@ -1,6 +1,6 @@
 class Goal < ApplicationRecord
-  belongs_to :evaluation
+  belongs_to :evaluation, counter_cache: true
 
-  validates :name, :mark, :evaluation_id, presence: true
-  validates :mark, inclusion: {in: 1..10}
+  validates :name, presence: true
+  validates :mark, inclusion: {in: 1..10}, allow_blank: true
 end
