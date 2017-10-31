@@ -204,6 +204,7 @@ class NewAdminEvaluation extends React.Component {
             <input
               className="form-control"
               type="date"
+              min={new Date().toJSON().slice(0,10)}
               onChange={e => this.handleDueDateChange(e)}
             />
             <br/>
