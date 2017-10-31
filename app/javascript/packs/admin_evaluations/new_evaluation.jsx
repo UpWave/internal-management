@@ -100,7 +100,6 @@ class NewAdminEvaluation extends React.Component {
     this.setState({ evaluation: this.state.evaluation });
   }
 
-
   render() {
     if (this.state.redirect) {
       return (
@@ -127,6 +126,13 @@ class NewAdminEvaluation extends React.Component {
           <tr key={index}>
             <td>{goal.name}</td>
             <td>{goal.mark}</td>
+            <td>
+              <button
+                className="btn btn-danger"
+                  onClick={e => this.handleRemoveGoal(goal)}>
+                Delete
+              </button>
+            </td>
           </tr>
         );
       } else {
@@ -142,6 +148,7 @@ class NewAdminEvaluation extends React.Component {
           <tr>
             <th>Name</th>
             <th>Mark</th>
+            <th>Remove</th>
           </tr>
           </thead>
           <tbody>
