@@ -134,22 +134,29 @@ class NewAdminEvaluation extends React.Component {
       }
     });
 
+    const table = this.state.evaluation.goals_attributes.length > 1 ?
+      (<div>
+        <h3>Evaluation goals:</h3>
+        <table id="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Mark</th>
+          </tr>
+          </thead>
+          <tbody>
+          {goals}
+          </tbody>
+        </table>
+      </div>)
+      :
+      null;
+
     const marks = Array(10).fill(0).map((e,i)=>i+1);
     return (
       <div>
         <div>
-          <h3>Evaluation goals:</h3>
-          <table id="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Mark</th>
-              </tr>
-            </thead>
-            <tbody>
-              {goals}
-            </tbody>
-          </table>
+          {table}
         </div>
 
         <div className="row">

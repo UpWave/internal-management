@@ -157,7 +157,7 @@ class User extends React.Component {
           <Link
             to={'/admin/users/'.concat(this.props.user.id).concat('/evaluations')}
           >
-            <i className="fa fa fa-comment-o fa-3x" />
+            <i className="fa fa fa-check-square-o fa-3x" />
           </Link>
         </td>
       </tr>

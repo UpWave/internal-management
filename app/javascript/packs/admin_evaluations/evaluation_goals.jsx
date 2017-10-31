@@ -142,6 +142,7 @@ class EvaluationGoals extends React.Component {
                         defaultValue={goal.mark}
                         onChange={this.handleMarkChange}
                       >
+                        <option key='0' value='0'>Choose mark</option>
                         {marks.map(option =>
                           <option key={option} value={option}>{option}</option>)}
                       </Select>

@@ -75,7 +75,7 @@ class Sidebar extends React.Component {
         </li>
         <li>
           <Link to="/user/evaluations">
-            <i className="fa fa-calendar-check-o" /><span>Evaluations</span><div className="clearfix" />
+            <i className="fa fa-check-square-o" /><span>Evaluations</span><div className="clearfix" />
           </Link>
         </li>
         {googleLink}
