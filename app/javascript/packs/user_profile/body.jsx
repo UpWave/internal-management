@@ -90,6 +90,7 @@ class Body extends React.Component {
       (<input
         className="form-control"
         type="text"
+        placeholder="First name"
         onChange={this.handleNameChange}
         defaultValue={this.state.user.first_name}
       />)
@@ -99,6 +100,7 @@ class Body extends React.Component {
       (<input
         className="form-control"
         type="text"
+        placeholder="Last name"
         onChange={this.handleLastNameChange}
         defaultValue={this.state.user.last_name}
       />)
@@ -123,9 +125,9 @@ class Body extends React.Component {
             <div className="col-md-5">
               <h2>Info</h2>
               <h3>
-                {firstName}
+                {firstName || (<span style={{ color: 'grey', float: 'left' }}>No first name</span>) }
                 <span style={{ paddingLeft: '10px' }} />
-                {lastName}
+                {lastName || (<span style={{ color: 'grey' }}>No last name</span>) }
               </h3>
               <button
                 className="btn btn-default"
