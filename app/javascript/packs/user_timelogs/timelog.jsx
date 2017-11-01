@@ -94,7 +94,7 @@ class Timelog extends React.Component {
       />)
       :
       this.props.timelog.duration;
-    const trelloBoard = this.state.editable && this.state.card != "" ?
+    const trelloBoard = this.state.editable && this.state.card !== '' ?
       (<Select
         defaultValue={this.state.board}
         className="form-control"
@@ -178,6 +178,7 @@ Timelog.propTypes = {
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
+    task_description: PropTypes.string,
   }).isRequired,
   trelloData: PropTypes.shape().isRequired,
   handleUpdate: PropTypes.func.isRequired,

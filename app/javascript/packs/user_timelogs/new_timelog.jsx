@@ -80,23 +80,22 @@ class NewUserTimelog extends React.Component {
 
   boardChange(event) {
     if (event.target.value !== '') {
-      $("#task").hide();
+      $('#task').hide();
     } else {
-      $("#task").show();
+      $('#task').show();
       this.setState({ card: null });
     }
     this.setState({ board: event.target.value });
     this.setState({ boardCards: this.state.trelloData[event.target.value] });
     this.setState({ card: this.state.trelloData[event.target.value][0] || null });
-
   }
 
   handleTaskDescriptionChange(event) {
     this.setState({ taskDescription: event.target.value });
     if (event.target.value.length > 0){
-      $("#cards_dropdown").hide();
+      $('#cards_dropdown').hide();
     } else {
-      $("#cards_dropdown").show();
+      $('#cards_dropdown').show();
     }
   }
 
@@ -107,7 +106,7 @@ class NewUserTimelog extends React.Component {
       );
     }
 
-    const cards = this.state.board != "" ?
+    const cards = this.state.board !== '' ?
       (
         <Select
           className="form-control"
@@ -117,8 +116,8 @@ class NewUserTimelog extends React.Component {
             <option key={option} value={option}>{option}</option>)}
         </Select>
       )
-        :
-        null;
+      :
+      null;
     return (
       <div id="new_timelog" className="row">
         <div className="col-md-4">

@@ -138,6 +138,7 @@ Timelog.propTypes = {
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
+    task_description: PropTypes.string,
   }).isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
