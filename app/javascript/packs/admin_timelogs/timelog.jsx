@@ -9,6 +9,7 @@ class Timelog extends React.Component {
       editable: false,
       board: this.props.timelog.trello_board,
       card: this.props.timelog.trello_card,
+      taskDescription: this.props.timelog.task_description,
       startTime: this.props.timelog.start_time,
       duration: this.props.timelog.duration,
     };
@@ -16,6 +17,7 @@ class Timelog extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
+    this.handleTaskDescriptionChange = this.handleTaskDescriptionChange.bind(this);
     this.handleBack = this.handleBack.bind(this);
   }
 
@@ -26,12 +28,14 @@ class Timelog extends React.Component {
   handleEdit() {
     if (this.state.editable) {
       const id = this.props.timelog.id;
+      const taskDescription = this.state.taskDescription;
       const startTime = this.state.startTime;
       const duration = this.state.duration;
       const timelog = {
         id,
         start_time: startTime,
         duration,
+        task_description: taskDescription,
       };
       this.props.handleUpdate(timelog);
     }
@@ -44,6 +48,10 @@ class Timelog extends React.Component {
 
   handleDurationChange(event) {
     this.setState({ duration: event.target.value });
+  }
+
+  handleTaskDescriptionChange(event) {
+    this.setState({ taskDescription: event.target.value });
   }
 
   handleBack() {
@@ -70,16 +78,29 @@ class Timelog extends React.Component {
       :
       this.props.timelog.duration;
     const trelloBoard = this.props.timelog.trello_board;
-    const trelloCard = this.props.timelog.trello_card;
     const endTime =
       moment(this.props.timelog.end_time).format('YYYY/MM/DD, HH:mm');
+    let cardOrTaskDescription = null;
+    if (this.state.taskDescription != null) {
+      cardOrTaskDescription = this.state.editable ?
+        (<input
+          type="text"
+          className="form-control"
+          onChange={this.handleTaskDescriptionChange}
+          defaultValue={this.state.taskDescription}
+        />)
+        :
+        this.state.taskDescription;
+    } else {
+      cardOrTaskDescription = this.props.timelog.trello_card;
+    }
 
     return (
       <tr>
         <td>{startTime}</td>
         <td>{duration}</td>
         <td>{trelloBoard}</td>
-        <td>{trelloCard}</td>
+        <td>{cardOrTaskDescription}</td>
         <td>{endTime}</td>
         <td>
           <button
@@ -117,6 +138,7 @@ Timelog.propTypes = {
     duration: PropTypes.number,
     start_time: PropTypes.string,
     end_time: PropTypes.string,
+    task_description: PropTypes.string,
   }).isRequired,
   handleUpdate: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,

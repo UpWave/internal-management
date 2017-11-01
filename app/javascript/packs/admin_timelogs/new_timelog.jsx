@@ -70,7 +70,7 @@ class NewAdminTimelog extends React.Component {
   render() {
     if (this.state.redirect) {
       return (
-        <Redirect to={'/admin/users/' + this.state.userId + '/timelogs'} />
+        <Redirect to={`/admin/users/${this.state.userId}'/timelogs`} />
       );
     }
 
