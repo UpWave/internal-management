@@ -39,8 +39,8 @@ class NewAdminEvaluation extends React.Component {
   }
 
   componentDidMount() {
-    $("#add-goal").hide();
-    $("#submit").hide();
+    $('#add-goal').hide();
+    $('#submit').hide();
   }
 
   handleSubmit() {
@@ -57,31 +57,31 @@ class NewAdminEvaluation extends React.Component {
         this.msg.success('Successfully created evaluation!');
         this.setState({ redirect: true });
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    });
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleDueDateChange(e) {
-    let evaluation = this.state.evaluation;
+    const evaluation = this.state.evaluation;
     evaluation.dueDate = e.target.value;
     this.setState({ evaluation: this.state.evaluation });
   }
 
   handleGoalNameChange(e) {
-    let goal = this.emptyGoal;
+    const goal = this.emptyGoal;
     goal.name = e.target.value;
-    this.setState({ goalName: e.target.value});
+    this.setState({ goalName: e.target.value });
     if (goal.name.length > 0) {
-      $("#add-goal").show();
+      $('#add-goal').show();
     } else {
-      $("#add-goal").hide();
+      $('#add-goal').hide();
     }
   }
 
   handleMarkChange(e) {
-    let goal = this.emptyGoal;
-    goal.mark = parseInt(e.target.value);
-    this.setState({ goalMark: e.target.value});
+    const goal = this.emptyGoal;
+    goal.mark = parseInt(e.target.value, 10);
+    this.setState({ goalMark: e.target.value });
   }
 
   handleAddGoal() {
@@ -91,8 +91,8 @@ class NewAdminEvaluation extends React.Component {
       .goals_attributes
       .push(Object.assign({}, this.emptyGoal));
     this.setState({ evaluation: this.state.evaluation });
-    this.setState({ goalName: "" });
-    this.setState({ goalMark: "" });
+    this.setState({ goalName: '' });
+    this.setState({ goalMark: '' });
   }
 
   handleRemoveGoal(goal) {
@@ -103,7 +103,7 @@ class NewAdminEvaluation extends React.Component {
   render() {
     if (this.state.redirect) {
       return (
-        <Redirect to={'/admin/users/' + this.userId + '/evaluations'} />
+        <Redirect to={`/admin/users/${this.userId}/evaluations`} />
       );
     }
 
@@ -123,20 +123,19 @@ class NewAdminEvaluation extends React.Component {
     const goals = this.state.evaluation.goals_attributes.map((goal, index) => {
       if (goal._destroy === false) {
         return (
-          <tr key={index}>
+          <tr>
             <td>{goal.name}</td>
             <td>{goal.mark}</td>
             <td>
               <button
                 className="btn btn-danger"
-                  onClick={e => this.handleRemoveGoal(goal)}>
+                onClick={e => this.handleRemoveGoal(goal)}
+              >
                 Delete
               </button>
             </td>
           </tr>
         );
-      } else {
-        null;
       }
     });
 
@@ -145,21 +144,21 @@ class NewAdminEvaluation extends React.Component {
         <h3>Evaluation goals:</h3>
         <table id="table">
           <thead>
-          <tr>
-            <th>Name</th>
-            <th>Mark</th>
-            <th>Remove</th>
-          </tr>
+            <tr>
+              <th>Name</th>
+              <th>Mark</th>
+              <th>Remove</th>
+            </tr>
           </thead>
           <tbody>
-          {goals}
+            {goals}
           </tbody>
         </table>
       </div>)
       :
       null;
 
-    const marks = Array(10).fill(0).map((e,i)=>i+1);
+    const marks = Array(10).fill(0).map((e, i) => i + 1);
     return (
       <div>
         <div>
@@ -177,7 +176,7 @@ class NewAdminEvaluation extends React.Component {
                 value={this.state.goalName}
                 onChange={this.handleGoalNameChange}
               />
-              <br/>
+              <br />
               <Select
                 className="form-control"
                 value={this.state.goalMark}
@@ -188,7 +187,7 @@ class NewAdminEvaluation extends React.Component {
                   <option key={option} value={option}>{option}</option>)}
               </Select>
             </div>
-            <br/>
+            <br />
             <button
               id="add-goal"
               className="btn btn-success"
@@ -207,11 +206,11 @@ class NewAdminEvaluation extends React.Component {
               min={new Date().toJSON().slice(0,10)}
               onChange={e => this.handleDueDateChange(e)}
             />
-            <br/>
+            <br />
             {submitButton}
           </div>
         </div>
-        <Link to={'/admin/users/'+ this.userId + '/evaluations'} className="btn btn-success" style={{"marginTop": "20px"}}>Back</Link>
+        <Link to={`/admin/users/${this.userId}/evaluations`} className="btn btn-success" style={{ marginTop: 20 }}>Back</Link>
       </div>
     );
   }

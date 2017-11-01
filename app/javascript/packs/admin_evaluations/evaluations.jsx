@@ -31,11 +31,11 @@ class Evaluations extends React.Component {
     return (
       <table id="table">
         <thead>
-        <tr>
-          <th>Due Date</th>
-          <th>Goals</th>
-          <th>Actions</th>
-        </tr>
+          <tr>
+            <th>Due Date</th>
+            <th>Goals</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
           {evaluations}

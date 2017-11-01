@@ -12,8 +12,8 @@ class EvaluationGoals extends React.Component {
     this.id = this.props.match.params.id;
     this.state = {
       editableDate: false,
-      evaluation: "",
-      goals:[],
+      evaluation: '',
+      goals: [],
     };
     this.loadEvaluation = this.loadEvaluation.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -70,11 +70,11 @@ class EvaluationGoals extends React.Component {
       evaluation
     })
       .then(() => {
-        this.msg.success(`Successfully updated due date`);
+        this.msg.success('Successfully updated due date');
         this.loadEvaluation();
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    });
+        this.msg.error(errorResponse.errors);
+      });
   }
 
   handleMarkChange(e) {
@@ -86,9 +86,9 @@ class EvaluationGoals extends React.Component {
   }
 
   handleGoalEdit(id) {
-      const goal = {
-        name: this.state.name,
-        mark: this.state.mark
+    const goal = {
+      name: this.state.name,
+      mark: this.state.mark
     };
     this.handleGoalUpdate(goal, id);
   }
@@ -98,43 +98,53 @@ class EvaluationGoals extends React.Component {
       goal
     })
       .then(() => {
-        this.msg.success(`Successfully updated goal`);
+        this.msg.success('Successfully updated goal');
         this.loadEvaluation();
       }).catch((errorResponse) => {
-      this.msg.error(errorResponse.errors);
-    });
+        this.msg.error(errorResponse.errors);
+      });
   }
 
 
   render() {
     const dueDate = this.state.editableDate ?
       (<div>
-        <input className="form-control" type="date" onChange={this.handleDueDateChange} defaultValue={this.state.evaluation.due_date} />
+        <input
+          className="form-control"
+          type="date"
+          onChange={this.handleDueDateChange}
+          defaultValue={this.state.evaluation.due_date}
+        />
       </div>)
       :
       (<div>
         <text className="lead">{this.state.evaluation.due_date}</text><br />
       </div>);
 
-    const marks = Array(10).fill(0).map((e,i)=>i+1);
+    const marks = Array(10).fill(0).map((e, i) => i + 1);
 
     const goalsTable = this.state.goals.length > 0 ?
       (<div className="agile-grids">
-          <div className="agile-tables">
-            <div className="w3l-table-info">
-              <table>
-                <thead>
+        <div className="agile-tables">
+          <div className="w3l-table-info">
+            <table>
+              <thead>
                 <tr>
                   <th>Name</th>
                   <th>Mark</th>
                   <th>Actions</th>
                 </tr>
-                </thead>
-                <tbody>
-                { this.state.goals.map((goal) =>
-                  <tr key={goal.id}>
+              </thead>
+              <tbody>
+                { this.state.goals.map(goal =>
+                  (<tr key={goal.id}>
                     <td>
-                      <input className="form-control" type="text" onChange={this.handleNameChange} defaultValue={goal.name} />
+                      <input
+                        className="form-control"
+                        type="text"
+                        onChange={this.handleNameChange}
+                        defaultValue={goal.name}
+                      />
                     </td>
                     <td>
                       <Select
@@ -148,21 +158,26 @@ class EvaluationGoals extends React.Component {
                       </Select>
                     </td>
                     <td>
-                      <button className="btn btn-danger" onClick={() => {this.handleDelete(goal.id)}}>Delete</button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => { this.handleDelete(goal.id); }}
+                      >
+                      Delete
+                      </button>
                       <button
                         className="btn btn-info"
-                        onClick={() => {this.handleGoalEdit(goal.id)}}
+                        onClick={() => { this.handleGoalEdit(goal.id); }}
                       >
                         Submit
                       </button>
                     </td>
-                  </tr>
+                  </tr>)
                 )}
-                </tbody>
-              </table>
-            </div>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
       )
       :
       null;

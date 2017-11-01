@@ -51,12 +51,12 @@ class AdminEvaluations extends React.Component {
       (<div className="agile-grids">
         <div className="agile-tables">
           <div className="w3l-table-info">
-          <Evaluations
-            userId={this.userId}
-            evaluations={this.state.evaluations}
-            handleDelete={this.handleDelete}
-            onUpdate={this.handleUpdate.bind(this)}
-          />
+            <Evaluations
+              userId={this.userId}
+              evaluations={this.state.evaluations}
+              handleDelete={this.handleDelete}
+              onUpdate={this.handleUpdate.bind(this)}
+            />
           </div>
         </div>
       </div>)
@@ -66,7 +66,7 @@ class AdminEvaluations extends React.Component {
     return (
       <div>
         {evaluationsTable}
-        <Link to={'/admin/users/'+ this.userId + '/new_evaluation'} className="btn btn-success">Add New Evaluation</Link>
+        <Link to={`/admin/users/${this.userId}/new_evaluation`} className="btn btn-success">Add New Evaluation</Link>
         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );

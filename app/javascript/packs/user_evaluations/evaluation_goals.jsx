@@ -10,8 +10,8 @@ class UserEvaluationGoals extends React.Component {
     this.userId = this.props.match.params.user_id;
     this.id = this.props.match.params.id;
     this.state = {
-      evaluation: "",
-      goals:[],
+      evaluation: '',
+      goals: [],
     };
     this.loadEvaluation = this.loadEvaluation.bind(this);
   }
@@ -38,31 +38,31 @@ class UserEvaluationGoals extends React.Component {
 
     const goalsTable = this.state.goals.length > 0 ?
       (<div className="agile-grids">
-          <div className="agile-tables">
-            <div className="w3l-table-info">
-              <table>
-                <thead>
+        <div className="agile-tables">
+          <div className="w3l-table-info">
+            <table>
+              <thead>
                 <tr>
                   <th>Name</th>
                   <th>Mark</th>
                 </tr>
-                </thead>
-                <tbody>
-                { this.state.goals.map((goal) =>
-                  <tr key={goal.id}>
+              </thead>
+              <tbody>
+                { this.state.goals.map(goal =>
+                  (<tr key={goal.id}>
                     <td>
                       <p className="lead">{goal.name}</p>
                     </td>
                     <td>
                       <p className="lead">{goal.mark}</p>
                     </td>
-                  </tr>
+                  </tr>)
                 )}
-                </tbody>
-              </table>
-            </div>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
       )
       :
       null;
@@ -73,7 +73,7 @@ class UserEvaluationGoals extends React.Component {
         {goalsTable}
 
         <Link
-          to={`/user/evaluations/`}
+          to={'/user/evaluations/'}
           className="btn btn-success"
         >
           Back

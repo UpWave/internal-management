@@ -1,6 +1,6 @@
 import React from 'react';
-import Fetch from '../Fetch';
 import { Link } from 'react-router-dom';
+import Fetch from '../Fetch';
 
 
 class UserEvaluations extends React.Component {
@@ -16,13 +16,13 @@ class UserEvaluations extends React.Component {
     this.loadEvaluations();
   }
 
-  loadEvaluations () {
+  loadEvaluations() {
     Fetch.json('/api/v1/evaluations')
       .then((data) => {
         this.setState({ evaluations: data });
       }).catch(() => {
-      this.setState({ evaluations: false });
-    });
+        this.setState({ evaluations: false });
+      });
   }
 
 
@@ -30,31 +30,33 @@ class UserEvaluations extends React.Component {
     const evaluations = this.state.evaluations.length > 0 ?
       (<div>
         <h3>Your evaluations</h3>
-          <table id="table">
-            <thead>
+        <table id="table">
+          <thead>
             <tr>
               <th>Due Date</th>
               <th>Goals</th>
             </tr>
-            </thead>
-            <tbody>
-            {this.state.evaluations.map((evaluation) =>
-              <tr key={evaluation.id}>
+          </thead>
+          <tbody>
+            {this.state.evaluations.map(evaluation =>
+              (<tr key={evaluation.id}>
                 <td>{evaluation.due_date}</td>
                 <td>
                   <Link
-                    to={'/user/evaluations/'+ evaluation.id + '/goals/'}
-                    className="btn btn-success">{evaluation.goals_count}
+                    to={`/user/evaluations/${evaluation.id}/goals/`}
+                    className="btn btn-success"
+                  >
+                    {evaluation.goals_count}
                   </Link>
                 </td>
-              </tr>
+              </tr>)
             )}
-            </tbody>
-          </table>
-        </div>)
+          </tbody>
+        </table>
+      </div>)
       :
       (<div>
-          <h3>No evaluations yet</h3>
+        <h3>No evaluations yet</h3>
       </div>);
 
     return (

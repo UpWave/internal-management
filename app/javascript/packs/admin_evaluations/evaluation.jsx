@@ -42,7 +42,12 @@ class Evaluation extends React.Component {
   render() {
     const dueDate = this.state.editable ?
       (<div>
-        <input className="form-control" type="date" onChange={this.handleDueDateChange} defaultValue={this.props.evaluation.due_date} />
+        <input
+          className="form-control"
+          type="date"
+          onChange={this.handleDueDateChange}
+          defaultValue={this.props.evaluation.due_date}
+        />
       </div>)
       :
       (<div>
@@ -51,22 +56,22 @@ class Evaluation extends React.Component {
 
 
     return (
-        <tr>
-          <td>{dueDate}</td>
-          <td><Link to={'/admin/users/'+ this.props.evaluation.user_id + '/evaluation/' + this.props.evaluation.id} className="btn btn-success">{this.props.evaluation.goals_count}</Link></td>
-          <td>
-            <button className="btn btn-danger" onClick={this.handleDelete}>Delete</button>
-            <button className="btn btn-info" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
-            <button
-              className="btn btn-default"
-              id="back-button"
-              style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
-              onClick={this.handleBack}
-            >
+      <tr>
+        <td>{dueDate}</td>
+        <td><Link to={`/admin/users/${this.props.evaluation.user_id}/evaluation/${this.props.evaluation.id}`} className="btn btn-success">{this.props.evaluation.goals_count}</Link></td>
+        <td>
+          <button className="btn btn-danger" onClick={this.handleDelete}>Delete</button>
+          <button className="btn btn-info" onClick={this.handleEdit}> {this.state.editable ? 'Submit' : 'Edit' } </button>
+          <button
+            className="btn btn-default"
+            id="back-button"
+            style={this.state.editable ? { visibility: 'visible' } : { visibility: 'hidden' }}
+            onClick={this.handleBack}
+          >
               Back
-            </button>
-          </td>
-        </tr>
+          </button>
+        </td>
+      </tr>
     );
   }
 }
