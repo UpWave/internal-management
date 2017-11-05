@@ -1,7 +1,7 @@
 class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
   before_action :authenticate_user!
   before_action :load_user, only: [:index, :create]
-  before_action :load_evaluation, only: [:update, :destroy]
+  before_action :load_evaluation, only: [:update, :destroy, :show]
 
   def index
     @evaluations = @user.evaluations
@@ -10,14 +10,12 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
   end
 
   def show
-    @evaluation = Evaluation.includes(:goals).find(params[:id])
-    authorize @evaluation
     respond_with @evaluation, json: { evaluation: @evaluation,
                                       goals: @evaluation.goals }
   end
 
   def create
-    @evaluation = Evaluation.new(evaluation_params)
+    @evaluation = @user.evaluations.build(evaluation_params)
     authorize @evaluation
     if @evaluation.save
       respond_with @evaluation, json: @evaluation
@@ -38,7 +36,7 @@ class Api::V1::Admin::User::EvaluationsController < Api::V1::BaseController
     if @evaluation.destroy
       render json: { }, status: 200
     else
-      render json: { errors: "Something went wrong" }, status: 422
+      render json: { errors: 'Something went wrong' }, status: 422
     end
   end
 

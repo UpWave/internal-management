@@ -1,4 +1,4 @@
-class Api::V1::Admin::User::GoalsController < Api::V1::BaseController
+class Api::V1::Admin::User::Evaluation::GoalsController < Api::V1::BaseController
   before_action :load_goal
 
   def update
@@ -13,10 +13,10 @@ class Api::V1::Admin::User::GoalsController < Api::V1::BaseController
     if @goal.destroy
       render json: { }, status: 200
     else
-      render json: { errors: "Something went wrong" }, status: 422
+      render json: { errors: 'Something went wrong' }, status: 422
     end
   end
-  
+
   private
 
   def goal_params

@@ -17,11 +17,11 @@ class UserEvaluations extends React.Component {
   }
 
   loadEvaluations() {
-    Fetch.json('/api/v1/evaluations')
+    Fetch.json('/api/v1/profile/evaluations')
       .then((data) => {
         this.setState({ evaluations: data });
       }).catch(() => {
-        this.setState({ evaluations: false });
+        this.setState({ evaluations: [] });
       });
   }
 

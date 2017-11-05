@@ -1,9 +1,11 @@
 import React from 'react';
-import Select from 'react-normalized-select';
 import AlertContainer from 'react-alert';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Fetch from '../Fetch';
+import GoalsTable from './goals_table'
+import Form from './form'
+
 
 class NewAdminEvaluation extends React.Component {
   constructor(props, context) {
@@ -35,11 +37,10 @@ class NewAdminEvaluation extends React.Component {
   }
 
   componentWillMount() {
-    this.state.evaluation.goals_attributes[0]._destroy = true;
+    this.state.evaluation.goals_attributes.shift();
   }
 
   componentDidMount() {
-    $('#add-goal').hide();
     $('#submit').hide();
   }
 
@@ -48,7 +49,6 @@ class NewAdminEvaluation extends React.Component {
     const evaluationGoals = this.state.evaluation.goals_attributes;
     Fetch.postJSON(`/api/v1/admin/user/users/${this.userId}/evaluations`, {
       evaluation: {
-        user_id: this.userId,
         due_date: dueDate,
         goals_attributes: evaluationGoals,
       },
@@ -71,11 +71,6 @@ class NewAdminEvaluation extends React.Component {
     const goal = this.emptyGoal;
     goal.name = e.target.value;
     this.setState({ goalName: e.target.value });
-    if (goal.name.length > 0) {
-      $('#add-goal').show();
-    } else {
-      $('#add-goal').hide();
-    }
   }
 
   handleMarkChange(e) {
@@ -90,7 +85,6 @@ class NewAdminEvaluation extends React.Component {
       .evaluation
       .goals_attributes
       .push(Object.assign({}, this.emptyGoal));
-    this.setState({ evaluation: this.state.evaluation });
     this.setState({ goalName: '' });
     this.setState({ goalMark: '' });
   }
@@ -107,110 +101,30 @@ class NewAdminEvaluation extends React.Component {
       );
     }
 
-    const submitButton = this.state.evaluation.goals_attributes.length > 1 && this.state.evaluation.dueDate !== '' ?
-      (
-        <button
-          id="submit"
-          className="btn btn-success"
-          onClick={this.handleSubmit}
-        >
-          Create Evaluation
-        </button>
-      )
-      :
-      null;
-
-    const goals = this.state.evaluation.goals_attributes.map((goal, index) => {
-      if (goal._destroy === false) {
-        return (
-          <tr>
-            <td>{goal.name}</td>
-            <td>{goal.mark}</td>
-            <td>
-              <button
-                className="btn btn-danger"
-                onClick={e => this.handleRemoveGoal(goal)}
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        );
-      }
-    });
-
-    const table = this.state.evaluation.goals_attributes.length > 1 ?
-      (<div>
-        <h3>Evaluation goals:</h3>
-        <table id="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Mark</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            {goals}
-          </tbody>
-        </table>
-      </div>)
-      :
-      null;
-
-    const marks = Array(10).fill(0).map((e, i) => i + 1);
     return (
       <div>
         <div>
-          {table}
+          <GoalsTable
+            goals={this.state.evaluation.goals_attributes}
+            handleRemoveGoal={this.handleRemoveGoal}
+          />
         </div>
 
-        <div className="row">
-          <div className="col-md-4">
-            <h3>Add new Goal:</h3>
-            <div className="goals-fieldset">
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Goal Name"
-                value={this.state.goalName}
-                onChange={this.handleGoalNameChange}
-              />
-              <br />
-              <Select
-                className="form-control"
-                value={this.state.goalMark}
-                onChange={this.handleMarkChange}
-              >
-                <option key='0' value='0'>Choose mark</option>)
-                {marks.map(option =>
-                  <option key={option} value={option}>{option}</option>)}
-              </Select>
-            </div>
-            <br />
-            <button
-              id="add-goal"
-              className="btn btn-success"
-              onClick={this.handleAddGoal}>
-              + Add Goal
-            </button>
-
-            <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-          </div>
-
-          <div className="col-md-4">
-            <h3>Evaluation due date:</h3>
-            <input
-              className="form-control"
-              type="date"
-              min={new Date().toJSON().slice(0, 10)}
-              onChange={e => this.handleDueDateChange(e)}
-            />
-            <br />
-            {submitButton}
-          </div>
+        <div>
+          <Form
+            goalName={this.state.goalName}
+            handleGoalNameChange={this.handleGoalNameChange}
+            goalMark={this.state.goalMark}
+            handleMarkChange={this.handleMarkChange}
+            handleAddGoal={this.handleAddGoal}
+            handleDueDateChange={this.handleDueDateChange}
+            handleSubmit={this.handleSubmit}
+            evaluation={this.state.evaluation}
+            goalName={this.state.goalName}
+          />
         </div>
         <Link to={`/admin/users/${this.userId}/evaluations`} className="btn btn-success" style={{ marginTop: 20 }}>Back</Link>
+        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
       </div>
     );
   }

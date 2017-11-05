@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AlertContainer from 'react-alert';
 import { Link } from 'react-router-dom';
 import Fetch from '../Fetch';
-
+import Goals from './goals'
 
 class UserEvaluationGoals extends React.Component {
   constructor(props, context) {
@@ -22,12 +23,12 @@ class UserEvaluationGoals extends React.Component {
 
   loadEvaluation() {
     Fetch.json(`/api/v1/admin/user/users/${this.userId}/evaluations/${this.id}`)
-      .then(function(data) {
+      .then(data => (
         this.setState({
           evaluation: data.evaluation,
           goals: data.goals,
-        });
-      }.bind(this));
+        })
+      ));
   }
 
   render() {
@@ -36,41 +37,12 @@ class UserEvaluationGoals extends React.Component {
         <text className="lead">{this.state.evaluation.due_date}</text><br />
       </div>);
 
-    const goalsTable = this.state.goals.length > 0 ?
-      (<div className="agile-grids">
-        <div className="agile-tables">
-          <div className="w3l-table-info">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Mark</th>
-                </tr>
-              </thead>
-              <tbody>
-                { this.state.goals.map(goal =>
-                  (<tr key={goal.id}>
-                    <td>
-                      <p className="lead">{goal.name}</p>
-                    </td>
-                    <td>
-                      <p className="lead">{goal.mark}</p>
-                    </td>
-                  </tr>)
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      )
-      :
-      null;
-
     return (
       <div>
         <h3>Evaluation - {dueDate}</h3>
-        {goalsTable}
+        <Goals
+          goals={this.state.goals}
+        />
 
         <Link
           to={'/user/evaluations/'}
@@ -83,5 +55,9 @@ class UserEvaluationGoals extends React.Component {
     );
   }
 }
+
+UserEvaluationGoals.propTypes = {
+  loadEvaluation: PropTypes.func.isRequired,
+};
 
 export default UserEvaluationGoals;

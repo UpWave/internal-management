@@ -32,16 +32,16 @@ class EvaluationGoals extends React.Component {
 
   loadEvaluation() {
     Fetch.json(`/api/v1/admin/user/users/${this.userId}/evaluations/${this.id}`)
-      .then(function(data) {
+      .then((data) => {
         this.setState({
           evaluation: data.evaluation,
           goals: data.goals,
         });
-      }.bind(this));
+      });
   }
 
   handleDelete(goalId) {
-    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.userId}/goals/`.concat(goalId))
+    Fetch.deleteJSON(`/api/v1/admin/user/users/${this.userId}/evaluation/goals/${goalId}`)
       .then(() => {
         this.loadEvaluation();
       });
@@ -94,7 +94,7 @@ class EvaluationGoals extends React.Component {
   }
 
   handleGoalUpdate(goal, id) {
-    Fetch.putJSON(`/api/v1/admin/user/users/${this.userId}/goals/${id}`, {
+    Fetch.putJSON(`/api/v1/admin/user/users/${this.userId}/evaluation/goals/${id}`, {
       goal
     })
       .then(() => {

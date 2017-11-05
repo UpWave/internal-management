@@ -6,9 +6,11 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
-      resources :evaluations, only: [:index]
       resource :profile do
         resources :trello_boards, only: [:index]
+      end
+      namespace :profile do
+        resources :evaluations, only: [:index]
       end
       resources :vacations
       namespace :vacation_types do
@@ -56,7 +58,9 @@ Rails.application.routes.draw do
               end
             end
             resources :evaluations
-            resources :goals, only: [:update, :destroy]
+            namespace :evaluation do
+              resources :goals, only: [:update, :destroy]
+            end
             resources :salaries
             resources :invoices
             resources :comments

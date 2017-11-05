@@ -42,6 +42,8 @@ class AdminEvaluations extends React.Component {
       .then(() => {
         this.msg.success('Evaluation updated');
         this.loadEvaluations();
+      }).catch((errorResponse) => {
+        this.msg.error(errorResponse.errors);
       });
   }
 
