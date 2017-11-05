@@ -13,6 +13,11 @@ import NewUser from '../admin_users/new_user';
 import Notes from '../admin_comments/body';
 import NewUserTimelog from '../user_timelogs/new_timelog';
 import NewAdminTimelog from '../admin_timelogs/new_timelog';
+import UserEvaluations from '../user_evaluations/evaluations';
+import AdminEvaluations from '../admin_evaluations/body';
+import EvaluationGoals from '../admin_evaluations/evaluation_goals';
+import NewAdminEvaluation from '../admin_evaluations/new_evaluation';
+import UserEvaluationGoals from '../user_evaluations/evaluation_goals';
 
 class Routes extends React.Component {
   render() {
@@ -26,6 +31,9 @@ class Routes extends React.Component {
         <Route exact path="/admin/new_user" component={NewUser} />
         <Route exact path="/admin/users/:user_id/notes" component={Notes} />
         <Route exact path="/admin/:user_id/new_timelog" component={NewAdminTimelog} />
+        <Route exact path="/admin/users/:user_id/evaluations" component={AdminEvaluations} />
+        <Route exact path="/admin/users/:user_id/evaluation/:id" component={EvaluationGoals} />
+        <Route exact path="/admin/users/:user_id/new_evaluation" component={NewAdminEvaluation} />
       </div>);
     const memberRoutes =
       (<div>
@@ -33,6 +41,8 @@ class Routes extends React.Component {
         <Route exact path="/user/vacations" component={UserVacations} />
         <Route exact path="/user/timelogs" component={UserTimelogs} />
         <Route exact path="/user/new_timelog" component={NewUserTimelog} />
+        <Route exact path="/user/evaluations" component={UserEvaluations} />
+        <Route exact path="/user/evaluations/:id/goals" component={UserEvaluationGoals} />
       </div>);
     const guestRoutes =
       <div />;

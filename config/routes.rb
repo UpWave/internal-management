@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       resource :profile do
         resources :trello_boards, only: [:index]
       end
+      namespace :profile do
+        resources :evaluations, only: [:index]
+      end
       resources :vacations
       namespace :vacation_types do
         resources :types, only: [:index]
@@ -53,6 +56,10 @@ Rails.application.routes.draw do
               collection do
                 get :count_timelogs
               end
+            end
+            resources :evaluations
+            namespace :evaluation do
+              resources :goals, only: [:update, :destroy]
             end
             resources :salaries
             resources :invoices
